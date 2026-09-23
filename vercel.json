@@ -1,8 +1,6 @@
 {
   "rewrites": [
-    {
-      "source": "/((?!feed\\.html|avatares|favicon|api|images|logos|.*\\..*).*)",
-      "destination": "/feed.html?u=$1"
-    }
+    { "source": "/cta", "destination": "/cta.html" },
+    { "source": "/((?!cta|feed\\.html|avatares|favicon|api|images|logos|.*\\..*).*)", "destination": "/feed.html?u=$1" }
   ]
 }
