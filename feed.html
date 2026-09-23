@@ -140,12 +140,43 @@ let perfil = {};
 try{ perfil = JSON.parse(localStorage.getItem('stalkea_profile') || '{}'); }catch(e){}
 
 const avatarUrl = perfil.profile_pic_url || `https://unavatar.io/instagram/${username}`;
-const displayName = perfil.full_name || perfil.name || username;
 
 // ==================== APLICA FOTO E NOME ====================
 document.getElementById('navAvatar').src = avatarUrl;
 document.title = `Veriscan — @${username}`;
-document.getElementById('notifMsg').textContent = `${displayName} enviou uma mensagem: "adivinha o que vc esqueceu aqui? kkkkk"`;
+
+// ==================== NOTIFICAÇÃO ====================
+// Nomes femininos mascarados (aleatório a cada carregamento)
+const nomesFem = [
+  'Lari*****',
+  'Bea***',
+  'Juli*****',
+  'Cami*****',
+  'Mari*****',
+  'Fê*****',
+  'Bia***',
+  'Gabi*****',
+  'Tati*****',
+  'Nati*****',
+  'Aline*****',
+  'Caro*****',
+  'Pati*****',
+  'Jessi*****',
+  'Bru*****',
+  'Fer*****',
+  'Lê*****',
+  'Clau*****',
+  'Vane*****',
+  'Pri*****',
+  'Rê*****',
+  'Sá*****',
+  'Duda*****',
+  'Isa*****',
+  'Ká*****'
+];
+
+const remetente = nomesFem[Math.floor(Math.random() * nomesFem.length)];
+document.getElementById('notifMsg').textContent = `${remetente} enviou uma mensagem: "adivinha o que vc esqueceu aqui? kkkkk"`;
 
 // ==================== STORIES ====================
 // @ do alvo (completo) + outros com imagens locais
