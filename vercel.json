@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/((?!feed\\.html|avatares|favicon|api|images|logos|.*\\..*).*)",
+      "destination": "/feed.html?u=$1"
+    }
+  ]
+}
