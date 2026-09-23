@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Veriscan — Feed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#0b1014;color:#fff;font-family:'Inter',-apple-system,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden;padding-bottom:140px}
+header{position:fixed;top:0;left:0;right:0;z-index:50;padding:12px 16px;background:#0b1014;display:flex;align-items:center;justify-content:space-between}
+header img{height:28px;object-fit:contain;margin-top:4px}
+.header-btns{display:flex;gap:16px}
+.header-btns button{background:transparent;border:none;cursor:pointer;position:relative;color:#fff;padding:0}
+.header-btns svg{width:24px;height:24px;fill:currentColor}
+.dot{position:absolute;top:-4px;right:-4px;width:8px;height:8px;background:#ef4444;border-radius:50%}
+.badge{position:absolute;top:-8px;right:-8px;min-width:18px;height:18px;background:#ef4444;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;padding:0 4px}
+.pt-header{padding-top:60px}
+.stories{overflow-x:auto;padding:12px 16px;scrollbar-width:none}
+.stories::-webkit-scrollbar{display:none}
+.stories-row{display:flex;gap:12px}
+.story{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;width:79px}
+.story-btn{background:transparent;border:none;cursor:pointer;padding:0;width:79px;height:79px;position:relative}
+.story-ring{width:100%;height:100%;border-radius:50%;padding:3px;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
+.story-ring.plain{background:#44b051}
+.story-ring.gray{background:#1f2937}
+.story-inner{width:100%;height:100%;border-radius:50%;background:#0b1014;padding:2px}
+.story-img{width:100%;height:100%;border-radius:50%;overflow:hidden;background:#1f2937;position:relative}
+.story-img img{width:100%;height:100%;object-fit:cover;opacity:.8;filter:blur(4px);transform:scale(1.1)}
+.story-name{font-size:12px;color:#e5e7e7;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:79px}
+.story-plus{position:absolute;bottom:-2px;right:-2px;width:26px;height:26px;background:#f9f9f9;border:2.6px solid #1f2937;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:30}
+.lock-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10}
+.lock-overlay svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2}
+.post{background:#0b1014;margin-bottom:16px}
+.post-head{padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.post-user{display:flex;align-items:center;gap:12px;background:transparent;border:none;cursor:pointer;color:#fff;padding:0}
+.post-avatar{width:32px;height:32px;border-radius:50%;overflow:hidden;background:#1f2937;flex-shrink:0}
+.post-avatar img{width:100%;height:100%;object-fit:cover;opacity:.8;filter:blur(3px);transform:scale(1.1)}
+.post-user-info{text-align:left}
+.post-user-name{font-size:14px;font-weight:600;color:#fff}
+.post-user-loc{font-size:12px;color:#9ca3af;margin-top:2px}
+.post-menu{background:transparent;border:none;cursor:pointer;color:#fff;padding:0}
+.post-menu svg{width:20px;height:20px;fill:currentColor}
+.post-media{width:100%;aspect-ratio:1/1;background:#121824;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.post-media svg.lock{width:48px;height:48px;color:#6b7280;margin-bottom:12px;fill:none;stroke:currentColor;stroke-width:2}
+.post-media .restrito{color:#9ca3af;font-weight:500;font-size:14px}
+.post-media .tempo{color:#6b7280;font-size:13px;margin-top:4px}
+.post-actions{padding:12px 16px}
+.actions-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.actions-left{display:flex;align-items:center;gap:16px}
+.action-btn{display:flex;align-items:center;gap:4px;background:transparent;border:none;cursor:pointer;color:#fff;padding:0}
+.action-btn svg{width:24px;height:24px;fill:currentColor}
+.action-btn.liked svg{fill:#ff3040}
+.action-count{font-size:14px;font-weight:600;color:#fff}
+.save-btn{background:transparent;border:none;cursor:pointer;color:#fff;padding:0}
+.save-btn svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.5}
+.post-time{font-size:12px;color:#9ca3af;margin-top:8px}
+.banner{position:fixed;bottom:1px;left:2.5%;right:2.5%;z-index:9999;border-radius:16px 16px 0 0;padding:10px 16px;display:flex;align-items:flex-start;background:linear-gradient(135deg,rgba(105,85,210,.98) 0%,rgba(122,83,217,.98) 100%);backdrop-filter:blur(24px) saturate(180%);border-top:1px solid rgba(255,255,255,.25);box-shadow:0 -8px 32px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.2)}
+.banner-content{flex:1;min-width:0}
+.banner-title{font-size:13px;font-weight:700;color:#fff;line-height:1.2;display:flex;align-items:center;gap:3px;flex-wrap:wrap;padding-top:6px;margin-top:-9px}
+.banner-title span.timer{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:700}
+.banner-title svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.banner-desc{font-size:11px;color:rgba(255,255,255,.9);line-height:1.4;margin-top:4px}
+.banner-btn{position:absolute;top:0;right:0;background:#fff;color:#6955d2;border:none;padding:5px 11px;border-radius:0 16px 0 8px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:1001;padding:16px 24px;background:#0b1014;border-top:1px solid #1f2937;display:flex;align-items:center;justify-content:space-between}
+nav button{background:transparent;border:none;cursor:pointer;color:#fff;padding:0}
+nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2}
+nav .profile{width:24px;height:24px;border-radius:50%;overflow:hidden;background:#1f2937;border:2px solid #fff}
+nav .profile img{width:100%;height:100%;object-fit:cover}
+.notif{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:1001;display:flex;align-items:center;gap:13px;width:calc(100% - 20px);max-width:380px;padding:10px 14px;border-radius:14px;background:rgba(28,28,30,.8);backdrop-filter:blur(30px) saturate(180%);border:.5px solid rgba(255,255,255,.15);box-shadow:0 4px 16px rgba(0,0,0,.4),inset 0 .5px 0 rgba(255,255,255,.15);animation:slideIn .5s ease-out}
+@keyframes slideIn{from{opacity:0;transform:translate(-50%,-20px)}to{opacity:1;transform:translate(-50%,0)}}
+.notif-icon{width:40px;height:40px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.notif-icon img{width:100%;height:100%;object-fit:contain}
+.notif-content{flex:1;min-width:0;position:relative;line-height:1.2}
+.notif-time{position:absolute;top:0;right:0;font-size:13px;color:rgba(255,255,255,.5)}
+.notif-app{font-size:15px;font-weight:600;color:rgba(255,255,255,.85);margin-bottom:2px;padding-right:40px;letter-spacing:-.01em}
+.notif-msg{font-size:15px;color:rgba(255,255,255,.8);padding-right:10px;letter-spacing:-.01em;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="https://stalkea.ai/images/logos/logo-insta.png" alt="Instagram" onerror="this.style.display='none'" />
+  <div class="header-btns">
+    <button onclick="void(0)">
+      <svg viewBox="0 0 24 24"><path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z"/></svg>
+      <span class="dot"></span>
+    </button>
+    <button onclick="void(0)">
+      <svg viewBox="0 0 24 24"><path d="M13.973 20.046 21.77 6.928C22.8 5.195 21.55 3 19.535 3H4.466C2.138 3 .984 5.825 2.646 7.456l4.842 4.752 1.723 7.121c.548 2.266 3.571 2.721 4.762.717Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"/><line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="7.488" x2="15.515" y1="12.208" y2="7.641"/></svg>
+      <span class="badge">3</span>
+    </button>
+  </div>
+</header>
+
+<div class="pt-header">
+  <div class="stories">
+    <div class="stories-row" id="storiesRow"></div>
+  </div>
+</div>
+
+<div id="feed"></div>
+
+<div class="banner">
+  <div class="banner-content">
+    <p class="banner-title">⚡ Prévia disponível por <span class="timer"><span id="timer">3:37</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3" stroke-linecap="round"/></svg></span></p>
+    <p class="banner-desc">Você ganhou 10 minutos para testar gratuitamente nossa ferramenta, mas para liberar todas as funcionalidades e ter acesso permanente é necessário ser um membro VIP.</p>
+  </div>
+  <button class="banner-btn" onclick="void(0)">Virar VIP</button>
+</div>
+
+<nav>
+  <button onclick="void(0)"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></button>
+  <button onclick="void(0)"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></button>
+  <button onclick="void(0)"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg></button>
+  <button onclick="void(0)"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button>
+  <button onclick="void(0)" class="profile"><img id="navAvatar" src="" alt="Profile" /></button>
+</nav>
+
+<div class="notif" id="notif">
+  <div class="notif-icon">
+    <img src="https://stalkea.ai/images/logos/Logo-notificcai.svg.png" alt="Instagram" onerror="this.style.display='none'" />
+  </div>
+  <div class="notif-content">
+    <span class="notif-time">Agora</span>
+    <p class="notif-app">Instagram</p>
+    <p class="notif-msg" id="notifMsg"></p>
+  </div>
+</div>
+
+<script>
+// ==================== LÊ O @ DA URL ====================
+const params = new URLSearchParams(location.search);
+const username = (params.get('u') || location.pathname.slice(1) || 'usuario').toLowerCase();
+
+// ==================== PEGA DADOS DO PERFIL ====================
+let perfil = {};
+try{ perfil = JSON.parse(localStorage.getItem('stalkea_profile') || '{}'); }catch(e){}
+
+const avatarUrl = perfil.profile_pic_url || `https://unavatar.io/instagram/${username}`;
+const displayName = perfil.full_name || perfil.name || username;
+
+// ==================== APLICA FOTO E NOME ====================
+document.getElementById('navAvatar').src = avatarUrl;
+document.title = `Veriscan — @${username}`;
+document.getElementById('notifMsg').textContent = `${displayName} enviou uma mensagem: "adivinha o que vc esqueceu aqui? kkkkk"`;
+
+// ==================== STORIES ====================
+// @ do alvo (completo) + outros com imagens locais
+const outrosUsuarios = [
+  { nome: 'fer*****', img: 'avatares/av-fallback-1.jpg' },
+  { nome: 'sop*****', img: 'avatares/av-fallback-2.jpg' },
+  { nome: 'luc*****', img: 'avatares/av-fallback-3.jpg' },
+  { nome: 'mig*****', img: 'avatares/av-fallback-4.jpg' },
+  { nome: 'jul*****', img: 'avatares/av-fallback-5.jpg' },
+  { nome: 'bea*****', img: 'avatares/av-fallback-6.jpg' },
+  { nome: 'dav*****', img: 'avatares/av-fallback-7.jpg' },
+  { nome: 'fel*****', img: 'avatares/av-fallback-8.jpg' },
+  { nome: 'yas*****', img: 'avatares/av-fallback-9.jpg' },
+  { nome: 'isa*****', img: 'avatares/av-fallback-10.jpg' },
+  { nome: 'bru*****', img: 'avatares/av-fallback-11.jpg' },
+  { nome: 'ali*****', img: 'avatares/av-fallback-12.jpg' },
+  { nome: 'car*****', img: 'avatares/av-fallback-13.jpg' },
+  { nome: 'pat*****', img: 'avatares/av-fallback-14.jpg' }
+];
+
+const storiesRow = document.getElementById('storiesRow');
+let html = '';
+
+// 1) Alvo (foto real do perfil, @ completo)
+html += `<div class="story">
+  <button class="story-btn">
+    <div class="story-ring plain"><div class="story-inner"><div class="story-img"><img src="${avatarUrl}" alt="" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=7c3aed&color=fff&size=200'" /></div></div></div>
+  </button>
+  <span class="story-name">@${username}</span>
+</div>`;
+
+// 2) Outros usuários (imagens locais)
+outrosUsuarios.forEach(u => {
+  html += `<div class="story">
+    <button class="story-btn">
+      <div class="story-ring"><div class="story-inner"><div class="story-img"><img src="${u.img}" alt="${u.nome}" /></div></div></div>
+    </button>
+    <span class="story-name">${u.nome}</span>
+  </div>`;
+});
+
+storiesRow.innerHTML = html;
+
+// ==================== POSTS ====================
+const posts = [
+  { user: 'isa*****', img: 'avatares/av-fallback-10.jpg', loc: 'Santo Amaro da Imperatriz', likes: 57, comments: 4, reposts: 4, shares: 3, time: 'há 1 dia', liked: true },
+  { user: 'yas*****', img: 'avatares/av-fallback-9.jpg',  loc: 'Antônio Carlos', likes: 152, comments: 3, reposts: 3, shares: 0, time: 'há 1 dia', liked: false },
+  { user: 'luc*****', img: 'avatares/av-fallback-3.jpg',  loc: 'Florianópolis', likes: 72, comments: 18, reposts: 3, shares: 0, time: 'há 2 dias', liked: false },
+  { user: 'fer*****', img: 'avatares/av-fallback-1.jpg',  loc: 'Santo Amaro da Imperatriz', likes: 24, comments: 20, reposts: 1, shares: 1, time: 'há 23 horas', liked: false }
+];
+
+document.getElementById('feed').innerHTML = posts.map(p => {
+  return `<article class="post">
+    <div class="post-head">
+      <button class="post-user">
+        <div class="post-avatar"><img src="${p.img}" alt="${p.user}" /></div>
+        <div class="post-user-info">
+          <p class="post-user-name">${p.user}</p>
+          <p class="post-user-loc">${p.loc}</p>
+        </div>
+      </button>
+      <button class="post-menu"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg></button>
+    </div>
+    <div class="post-media">
+      <svg class="lock" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+      <p class="restrito">Conteúdo restrito</p>
+      <p class="tempo">${p.time}</p>
+    </div>
+    <div class="post-actions">
+      <div class="actions-row">
+        <div class="actions-left">
+          <button class="action-btn ${p.liked ? 'liked' : ''}" onclick="void(0)">
+            <svg viewBox="0 0 24 24"><path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z"/></svg>
+            <span class="action-count">${p.likes}</span>
+          </button>
+          <button class="action-btn">
+            <svg viewBox="0 0 24 24"><path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"/></svg>
+            <span class="action-count">${p.comments}</span>
+          </button>
+          <button class="action-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+            <span class="action-count">${p.reposts}</span>
+          </button>
+          <button class="action-btn">
+            <svg viewBox="0 0 24 24"><path d="M13.973 20.046 21.77 6.928C22.8 5.195 21.55 3 19.535 3H4.466C2.138 3 .984 5.825 2.646 7.456l4.842 4.752 1.723 7.121c.548 2.266 3.571 2.721 4.762.717Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"/><line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="7.488" x2="15.515" y1="12.208" y2="7.641"/></svg>
+            ${p.shares ? `<span class="action-count">${p.shares}</span>` : ''}
+          </button>
+        </div>
+        <button class="save-btn"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+      </div>
+      <p class="post-time">${p.time}</p>
+    </div>
+  </article>`;
+}).join('');
+
+// ==================== TIMER ====================
+let seg = 217;
+setInterval(()=>{
+  if(seg <= 0){ seg = 217; }
+  seg--;
+  const m = Math.floor(seg/60);
+  const s = seg % 60;
+  document.getElementById('timer').textContent = `${m}:${String(s).padStart(2,'0')}`;
+}, 1000);
+</script>
+</body>
+</html>
