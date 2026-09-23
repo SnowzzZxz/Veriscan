@@ -30,8 +30,6 @@ header img{height:28px;object-fit:contain;margin-top:4px}
 .story-img img{width:100%;height:100%;object-fit:cover;opacity:.8;filter:blur(4px);transform:scale(1.1)}
 .story-name{font-size:12px;color:#e5e7e7;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:79px}
 .story-plus{position:absolute;bottom:-2px;right:-2px;width:26px;height:26px;background:#f9f9f9;border:2.6px solid #1f2937;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:30}
-.lock-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10}
-.lock-overlay svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2}
 .post{background:#0b1014;margin-bottom:16px}
 .post-head{padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
 .post-user{display:flex;align-items:center;gap:12px;background:transparent;border:none;cursor:pointer;color:#fff;padding:0}
@@ -77,6 +75,31 @@ nav .profile img{width:100%;height:100%;object-fit:cover}
 .notif-time{position:absolute;top:0;right:0;font-size:13px;color:rgba(255,255,255,.5)}
 .notif-app{font-size:15px;font-weight:600;color:rgba(255,255,255,.85);margin-bottom:2px;padding-right:40px;letter-spacing:-.01em}
 .notif-msg{font-size:15px;color:rgba(255,255,255,.8);padding-right:10px;letter-spacing:-.01em;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+
+/* ==================== MODAL VIP ==================== */
+.vip-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:10000;display:none;align-items:center;justify-content:center;padding:20px;animation:fadeIn .3s ease-out}
+.vip-overlay.show{display:flex}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.vip-modal{width:100%;max-width:400px;background:linear-gradient(160deg,rgba(20,16,40,.98) 0%,rgba(28,20,58,.98) 100%);border:1px solid rgba(168,85,247,.35);border-radius:24px;padding:28px 24px 24px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 60px rgba(124,58,237,.25),inset 0 1px 0 rgba(255,255,255,.1);animation:popIn .4s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:hidden}
+@keyframes popIn{from{opacity:0;transform:scale(.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.vip-modal::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(168,85,247,.15) 0%,transparent 60%);pointer-events:none;animation:rotateGlow 8s linear infinite}
+@keyframes rotateGlow{to{transform:rotate(360deg)}}
+.vip-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.08);border:none;color:#9ca3af;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:2}
+.vip-close:hover{background:rgba(255,255,255,.15);color:#fff}
+.vip-icon{width:64px;height:64px;margin:0 auto 16px;border-radius:20px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 32px rgba(124,58,237,.45),inset 0 1px 0 rgba(255,255,255,.3);position:relative;z-index:1}
+.vip-icon svg{width:32px;height:32px;stroke:#fff;fill:none;stroke-width:2}
+.vip-title{font-size:24px;font-weight:800;color:#fff;margin-bottom:10px;letter-spacing:-.02em;position:relative;z-index:1}
+.vip-title span{background:linear-gradient(135deg,#a855f7 0%,#6366f1 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.vip-desc{font-size:14px;color:rgba(255,255,255,.7);line-height:1.5;margin-bottom:22px;position:relative;z-index:1}
+.vip-benefits{text-align:left;margin-bottom:24px;position:relative;z-index:1;background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.15);border-radius:14px;padding:14px}
+.vip-benefit{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.85);padding:5px 0}
+.vip-benefit svg{width:16px;height:16px;stroke:#a855f7;fill:none;stroke-width:3;flex-shrink:0}
+.vip-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;border:none;border-radius:16px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);color:#fff;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 12px 32px rgba(124,58,237,.45),inset 0 1px 0 rgba(255,255,255,.25);transition:all .25s;position:relative;z-index:1}
+.vip-btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(124,58,237,.6)}
+.vip-btn:active{transform:scale(.98)}
+.vip-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.5}
+.vip-timer{margin-top:14px;font-size:12px;color:rgba(255,255,255,.5);position:relative;z-index:1}
+.vip-timer b{color:#a855f7;font-weight:700}
 </style>
 </head>
 <body>
@@ -105,10 +128,10 @@ nav .profile img{width:100%;height:100%;object-fit:cover}
 
 <div class="banner">
   <div class="banner-content">
-    <p class="banner-title">⚡ Prévia disponível por <span class="timer"><span id="timer">3:37</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3" stroke-linecap="round"/></svg></span></p>
+    <p class="banner-title">⚡ Prévia disponível por <span class="timer"><span id="timer">10:00</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3" stroke-linecap="round"/></svg></span></p>
     <p class="banner-desc">Você ganhou 10 minutos para testar gratuitamente nossa ferramenta, mas para liberar todas as funcionalidades e ter acesso permanente é necessário ser um membro VIP.</p>
   </div>
-  <button class="banner-btn" onclick="void(0)">Virar VIP</button>
+  <button class="banner-btn" onclick="abrirModalVIP()">Virar VIP</button>
 </div>
 
 <nav>
@@ -130,6 +153,29 @@ nav .profile img{width:100%;height:100%;object-fit:cover}
   </div>
 </div>
 
+<!-- ==================== MODAL VIP ==================== -->
+<div class="vip-overlay" id="vipOverlay">
+  <div class="vip-modal">
+    <button class="vip-close" onclick="fecharModalVIP()">×</button>
+    <div class="vip-icon">
+      <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+    </div>
+    <h2 class="vip-title">Desbloqueie <span>Acesso VIP</span></h2>
+    <p class="vip-desc">Seu tempo de teste terminou. Para ver <b>fotos reais</b>, <b>stories completos</b> e o <b>feed sem censura</b>, vire VIP agora.</p>
+    <div class="vip-benefits">
+      <div class="vip-benefit"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Acesso completo ao perfil do alvo</div>
+      <div class="vip-benefit"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Stories e posts sem censura</div>
+      <div class="vip-benefit"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Downloads ilimitados</div>
+      <div class="vip-benefit"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> 100% anônimo e sem rastros</div>
+    </div>
+    <button class="vip-btn" onclick="irParaVIP()">
+      <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+      Virar VIP Agora
+    </button>
+    <p class="vip-timer">Oferta expira em <b id="vipTimer">10:00</b></p>
+  </div>
+</div>
+
 <script>
 // ==================== LÊ O @ DA URL ====================
 const params = new URLSearchParams(location.search);
@@ -141,45 +187,20 @@ try{ perfil = JSON.parse(localStorage.getItem('stalkea_profile') || '{}'); }catc
 
 const avatarUrl = perfil.profile_pic_url || `https://unavatar.io/instagram/${username}`;
 
-// ==================== APLICA FOTO E NOME ====================
+// ==================== APLICA FOTO ====================
 document.getElementById('navAvatar').src = avatarUrl;
 document.title = `Veriscan — @${username}`;
 
 // ==================== NOTIFICAÇÃO ====================
-// Nomes femininos mascarados (aleatório a cada carregamento)
 const nomesFem = [
-  'Lari*****',
-  'Bea***',
-  'Juli*****',
-  'Cami*****',
-  'Mari*****',
-  'Fê*****',
-  'Bia***',
-  'Gabi*****',
-  'Tati*****',
-  'Nati*****',
-  'Aline*****',
-  'Caro*****',
-  'Pati*****',
-  'Jessi*****',
-  'Bru*****',
-  'Fer*****',
-  'Lê*****',
-  'Clau*****',
-  'Vane*****',
-  'Pri*****',
-  'Rê*****',
-  'Sá*****',
-  'Duda*****',
-  'Isa*****',
-  'Ká*****'
+  'Lari*****','Bea***','Juli*****','Cami*****','Mari*****','Fê*****','Bia***','Gabi*****',
+  'Tati*****','Nati*****','Aline*****','Caro*****','Pati*****','Jessi*****','Bru*****','Fer*****',
+  'Lê*****','Clau*****','Vane*****','Pri*****','Rê*****','Sá*****','Duda*****','Isa*****','Ká*****'
 ];
-
 const remetente = nomesFem[Math.floor(Math.random() * nomesFem.length)];
 document.getElementById('notifMsg').textContent = `${remetente} enviou uma mensagem: "adivinha o que vc esqueceu aqui? kkkkk"`;
 
 // ==================== STORIES ====================
-// @ do alvo (completo) + outros com imagens locais
 const outrosUsuarios = [
   { nome: 'fer*****', img: 'avatares/av-fallback-1.jpg' },
   { nome: 'sop*****', img: 'avatares/av-fallback-2.jpg' },
@@ -200,7 +221,6 @@ const outrosUsuarios = [
 const storiesRow = document.getElementById('storiesRow');
 let html = '';
 
-// 1) Alvo (foto real do perfil, @ completo)
 html += `<div class="story">
   <button class="story-btn">
     <div class="story-ring plain"><div class="story-inner"><div class="story-img"><img src="${avatarUrl}" alt="" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=7c3aed&color=fff&size=200'" /></div></div></div>
@@ -208,7 +228,6 @@ html += `<div class="story">
   <span class="story-name">@${username}</span>
 </div>`;
 
-// 2) Outros usuários (imagens locais)
 outrosUsuarios.forEach(u => {
   html += `<div class="story">
     <button class="story-btn">
@@ -272,15 +291,67 @@ document.getElementById('feed').innerHTML = posts.map(p => {
   </article>`;
 }).join('');
 
-// ==================== TIMER ====================
-let seg = 217;
-setInterval(()=>{
-  if(seg <= 0){ seg = 217; }
-  seg--;
+// ==================== TIMER (10:00 regressivo) ====================
+let seg = 600;
+function atualizarTimer(){
   const m = Math.floor(seg/60);
   const s = seg % 60;
-  document.getElementById('timer').textContent = `${m}:${String(s).padStart(2,'0')}`;
+  const txt = `${m}:${String(s).padStart(2,'0')}`;
+  document.getElementById('timer').textContent = txt;
+  const vt = document.getElementById('vipTimer');
+  if(vt) vt.textContent = txt;
+}
+setInterval(()=>{
+  if(seg > 0){
+    seg--;
+    atualizarTimer();
+  } else {
+    if(!modalAberto) abrirModalVIP();
+  }
 }, 1000);
+atualizarTimer();
+
+// ==================== MODAL VIP ====================
+let modalAberto = false;
+let ultimoFechamento = 0;
+const COOLDOWN = 30000;
+
+const overlay = document.getElementById('vipOverlay');
+
+function abrirModalVIP(){
+  if(modalAberto) return;
+  modalAberto = true;
+  overlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function fecharModalVIP(){
+  modalAberto = false;
+  ultimoFechamento = Date.now();
+  overlay.classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function irParaVIP(){
+  // Vai pra página de checkout com o @ do alvo na URL
+  window.location.href = '/cta?u=' + encodeURIComponent(username);
+}
+
+overlay.addEventListener('click', (e) => {
+  if(e.target === overlay) fecharModalVIP();
+});
+
+document.addEventListener('click', (e) => {
+  if(overlay.contains(e.target)) return;
+  if(e.target.closest('.banner-btn')) return;
+  if(modalAberto) return;
+  if(Date.now() - ultimoFechamento < COOLDOWN) return;
+  abrirModalVIP();
+});
+
+setTimeout(() => {
+  if(!modalAberto) abrirModalVIP();
+}, 15000);
 </script>
 </body>
 </html>
