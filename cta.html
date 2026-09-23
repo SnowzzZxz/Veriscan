@@ -285,7 +285,6 @@ h1.main-title{font-size:clamp(22px,7vw,35px);font-weight:700;line-height:1.2;tex
       <li class="benefit-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>2 bônus surpresa avaliados em R$120,00</span></li>
     </ul>
 
-    <!-- ⚠️ TROCA ESSE LINK PELO SEU CHECKOUT. {USER} é substituído pelo @ do alvo -->
     <a id="btnComprar" class="btn-buy" href="#" target="_blank">
       <span>Acessar tudo agora mesmo</span>
       <span class="sub">Acesso liberado em até 2 minutos</span>
@@ -297,7 +296,7 @@ h1.main-title{font-size:clamp(22px,7vw,35px);font-weight:700;line-height:1.2;tex
 
     <div class="testimonial">
       <div class="testimonial-head">
-        <div class="testimonial-avatar"><img src="avatares/av-fallback-3.jpg" alt="" /></div>
+        <div class="testimonial-avatar"><img src="avatares/depoimento-3.jpg" alt="" /></div>
         <div><div class="testimonial-name">Marcosvianad</div><div class="testimonial-time">3h</div></div>
       </div>
       <p class="testimonial-text">Achei q era golpe mas testei msm assim. Paguei, em 3 min recebi o acesso. Tava tudo lá: directs, fotos q ele apagava, até a localização funcionou. Valeu cada centavo.</p>
@@ -305,7 +304,7 @@ h1.main-title{font-size:clamp(22px,7vw,35px);font-weight:700;line-height:1.2;tex
 
     <div class="testimonial">
       <div class="testimonial-head">
-        <div class="testimonial-avatar"><img src="avatares/av-fallback-6.jpg" alt="" /></div>
+        <div class="testimonial-avatar"><img src="avatares/depoimento-1.jpg" alt="" /></div>
         <div><div class="testimonial-name">Gieselferreira_34</div><div class="testimonial-time">5h</div></div>
       </div>
       <p class="testimonial-text">O acesso foi super rapido. Paguei no pix e em menos de 2 min já tava vendo tudo. Os stories "melhores amigos" q ele postava escondido de mim. Sistema funciona msm de verdade.</p>
@@ -313,7 +312,7 @@ h1.main-title{font-size:clamp(22px,7vw,35px);font-weight:700;line-height:1.2;tex
 
     <div class="testimonial">
       <div class="testimonial-head">
-        <div class="testimonial-avatar"><img src="avatares/av-fallback-10.jpg" alt="" /></div>
+        <div class="testimonial-avatar"><img src="avatares/depoimento-2.jpg" alt="" /></div>
         <div><div class="testimonial-name">o__prozind34</div><div class="testimonial-time">1d</div></div>
       </div>
       <p class="testimonial-text">Na versão completa testei com @ do boy e vi um monte de coisa. Localização, fotos escondidas, até conversas apagadas. Foi exatamente como mostrou.</p>
@@ -375,16 +374,11 @@ h1.main-title{font-size:clamp(22px,7vw,35px);font-weight:700;line-height:1.2;tex
 </div>
 
 <script>
-// ==================== URL DO CHECKOUT ====================
-// ⚠️ TROCA ESSA URL PELO SEU LINK DE PAGAMENTO
-// O {USER} é substituído automaticamente pelo @ do alvo
 const CHECKOUT_URL = 'https://seu-checkout.com/pagar?ref={USER}';
 
-// ==================== LÊ O @ DA URL ====================
 const params = new URLSearchParams(location.search);
 const username = (params.get('u') || location.pathname.slice(1) || 'usuario').toLowerCase();
 
-// ==================== PEGA DADOS DO PERFIL ====================
 let perfil = {};
 try{ perfil = JSON.parse(localStorage.getItem('stalkea_profile') || '{}'); }catch(e){}
 
@@ -398,7 +392,6 @@ function fmt(n){
   return String(n);
 }
 
-// ==================== PREENCHE OS DADOS ====================
 document.getElementById('profileAvatar').src = avatarUrl;
 document.getElementById('profileName').textContent = displayName;
 document.getElementById('profileUser').textContent = '@' + username;
@@ -417,7 +410,6 @@ document.getElementById('nomeTimer').textContent = displayName;
 
 document.querySelectorAll('.nomeAlvo').forEach(el => { el.textContent = displayName; });
 
-// ==================== GRID DE MÍDIAS ====================
 const avatares = ['av-fallback-1','av-fallback-2','av-fallback-3','av-fallback-5','av-fallback-7','av-fallback-9','av-fallback-11'];
 const grid = document.getElementById('mediaGrid');
 grid.innerHTML = avatares.map((n, i) => `
@@ -432,18 +424,15 @@ grid.innerHTML = avatares.map((n, i) => `
   </div>
 `).join('');
 
-// ==================== LINK DO CHECKOUT ====================
 const checkoutUrl = CHECKOUT_URL.replace('{USER}', encodeURIComponent(username));
 document.getElementById('btnComprar').href = checkoutUrl;
 
-// ==================== FAQ ====================
 document.querySelectorAll('.faq-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     btn.parentElement.classList.toggle('active');
   });
 });
 
-// ==================== TIMER 10 min ====================
 let seg = 600;
 setInterval(() => {
   if(seg > 0) seg--;
