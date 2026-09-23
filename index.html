@@ -63,11 +63,16 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 .loading p{color:rgba(255,255,255,.6);font-size:14px}
 .error-box{background:#1a0808;border:1px solid #3d1414;border-radius:12px;padding:14px;color:#ff4d4d;font-size:13px;text-align:center;display:none;margin-top:16px}
 .error-box.show{display:block;animation:fadeIn .3s}
-.analysis-card{width:100%;max-width:384px;text-align:left}
-.analysis-logo{display:flex;justify-content:center;margin-bottom:48px}.analysis-logo img{width:180px;height:60px;object-fit:contain}
-.analysis-field{margin-bottom:16px}.analysis-input{width:100%;padding:12px 14px;background:#0c1011;border:1px solid #374151;border-radius:4px;color:#f3f4f6;font-size:14px;font-family:inherit}.analysis-mask{font-family:'SF Mono',Menlo,Consolas,monospace;font-size:12px;letter-spacing:1px;color:#a855f7}
-.analysis-status{background:#0c1011;border:1px solid #1f2937;border-radius:8px;padding:12px;margin-top:12px;display:flex;align-items:center;gap:12px}.analysis-icon{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#4a37b6,#ab58f4);display:flex;align-items:center;justify-content:center;flex-shrink:0}.analysis-icon svg{width:12px;height:12px;animation:spin .9s linear infinite}.analysis-copy{flex:1;min-width:0}.analysis-title{font-size:14px;font-weight:500;color:#9ca3af;margin-bottom:4px}.analysis-desc{font-size:12px;color:#6b7280}
-.analysis-progress-wrap{position:relative;width:100%;height:40px;margin-top:16px}.analysis-button{width:100%;height:100%;background:#0098ff;color:#fff;border:0;border-radius:4px;font-size:14px;font-weight:500;font-family:inherit;position:relative;overflow:hidden}.analysis-progress{position:absolute;bottom:0;left:0;height:2px;width:0;background:rgba(249,249,249,.6);transition:width .3s linear}.analysis-help{text-align:center;margin-top:24px;color:#3b82f6;font-size:14px}.analysis-divider{display:flex;align-items:center;margin:24px 0}.analysis-divider:before,.analysis-divider:after{content:'';flex:1;height:1px;background:#374151}.analysis-divider span{padding:0 16px;color:#9ca3af;font-size:14px;font-weight:500}.analysis-demo{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:8px;background:transparent;border:0;color:#3b82f6;font:500 14px inherit;cursor:not-allowed;opacity:.8}.analysis-demo svg{width:20px;height:20px}.analysis-footer{text-align:center;margin-top:32px;padding-top:24px;border-top:1px solid #374151;color:#9ca3af;font-size:14px}.analysis-footer strong{color:#3b82f6;font-weight:500;margin-left:4px}.analysis-note{text-align:center;margin-top:10px;color:#6b7280;font-size:11px;line-height:1.4}
+.hack-inner{width:100%;max-width:384px;margin:0 auto}
+.hack-inner .logo{margin-bottom:32px}
+.hack-inner .logo img{width:180px;height:60px;object-fit:contain;margin:auto}
+.field{margin-bottom:16px}
+.input-fake{width:100%;padding:12px 14px;background:#0c1011;border:1px solid #374151;border-radius:4px;color:#f3f4f6;font-size:14px;font-family:inherit;text-align:left}
+.status-card{background:#0c1011;border:1px solid #1f2937;border-radius:8px;padding:12px;margin-top:12px;display:flex;align-items:center;gap:12px;text-align:left}
+.status-icon{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#4a37b6,#ab58f4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.status-icon svg{width:12px;height:12px;animation:spin 1s linear infinite}
+.status-text{flex:1;min-width:0}.status-title{font-size:14px;font-weight:500;color:#9ca3af;margin-bottom:4px}.status-desc{font-size:12px;color:#6b7280}
+.btn-wrap{position:relative;width:100%;height:40px;margin-top:16px}.btn-wrap .btn{height:100%;padding:0;background:#0098ff;border-radius:4px;cursor:not-allowed;box-shadow:none}.btn-progress{position:absolute;bottom:0;left:0;height:2px;background:rgba(249,249,249,.6);transition:width .3s linear;opacity:0}
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
@@ -143,18 +148,18 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 </div>
 </div>
 
-<div class="screen" id="screen-analysis">
-<div class="analysis-card">
-<div class="analysis-logo"><img src="https://stalkea.ai/images/logos/logo-insta.png" alt="Instagram" onerror="this.style.display='none'" /></div>
-<div class="analysis-field"><input class="analysis-input" id="analysis-user" type="text" readonly /></div>
-<div class="analysis-field"><input class="analysis-input analysis-mask" id="analysis-mask" type="text" value="Processando: **************" readonly aria-label="Processamento da demonstração" /></div>
-<div class="analysis-status"><div class="analysis-icon"><svg fill="none" stroke="#fff" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg></div><div class="analysis-copy"><p class="analysis-title" id="analysis-title">Análise educativa em andamento</p><p class="analysis-desc" id="analysis-desc">Preparando visualização do perfil...</p></div></div>
-<div class="analysis-progress-wrap"><button class="analysis-button" type="button" disabled>Carregando...<span class="analysis-progress" id="analysis-progress"></span></button></div>
-<div class="analysis-help">Ajuda da demonstração (inativa)</div>
-<div class="analysis-divider"><span>OU</span></div>
-<button class="analysis-demo" type="button" disabled><span>Continuar no modo demonstração</span></button>
-<div class="analysis-footer"><span>Ambiente educativo privado</span><strong>Simulação local.</strong></div>
-<p class="analysis-note">Nenhuma senha ou credencial é solicitada, armazenada ou enviada.</p>
+<div class="screen" id="screen-hacking">
+<div class="glass-card" style="position:relative;overflow:hidden">
+<div class="hack-inner">
+<div class="logo"><img src="https://stalkea.ai/images/logos/logo-insta.png" alt="Instagram" onerror="this.style.display='none'" /></div>
+<div class="field"><input type="text" class="input-fake" id="targetUser" readonly /></div>
+<div class="status-card">
+<div class="status-icon"><svg fill="none" stroke="#fff" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg></div>
+<div class="status-text"><p class="status-title" id="status-title">Analisando perfil </p><p class="status-desc" id="status-desc">Preparando dados disponíveis...</p></div>
+</div>
+<div class="btn-wrap"><button class="btn" disabled><span>Carregando...</span><div class="btn-progress" id="btnProgress"></div></button></div>
+<div class="link"><span class="status-desc">versão de teste ativa.</span></div>
+</div>
 </div>
 </div>
 
@@ -201,29 +206,28 @@ $('btn-corrigir').addEventListener('click',()=>{$('u-confirm').style.display='no
 $('btn-confirmar').addEventListener('click',()=>{
 localStorage.setItem('stalkea_user',username);
 localStorage.setItem('stalkea_profile',JSON.stringify(profileData));
-showAnalysis();
+hack()
 });
 
-function showAnalysis(){
-show('screen-analysis');
-$('analysis-user').value='@'+username;
+function hack(){
+show('screen-hacking');
+$('targetUser').value='@'+username;
 let progress=0;
-const bar=$('analysis-progress');
-const mask=$('analysis-mask');
+const progressBar=$('btnProgress');
+progressBar.style.opacity='1';
 const interval=setInterval(()=>{
 progress=Math.min(100,progress+Math.random()*4+1);
-bar.style.width=progress+'%';
-mask.value='Processando: '+'*'.repeat(Math.max(1,Math.ceil(progress/8)));
-if(progress>=35)$('analysis-desc').textContent='Consultando informações públicas...';
-if(progress>=70)$('analysis-desc').textContent='Organizando a demonstração...';
+progressBar.style.width=progress+'%';
+if(progress>=35)$('status-desc').textContent='Consultando informações ...';
+if(progress>=70)$('status-desc').textContent='Organizando o feed...';
 if(progress>=100){
 clearInterval(interval);
-$('analysis-title').textContent='Análise concluída';
-$('analysis-desc').textContent='Demonstração pronta.';
+$('status-title').textContent='Análise concluída';
+$('status-desc').textContent='Redirecionando para o perfil...';
+setTimeout(()=>{window.location.href='feed.html?u='+encodeURIComponent(username)},800);
 }
-},150);
+},150)
 }
 </script>
 </body>
 </html>
-
