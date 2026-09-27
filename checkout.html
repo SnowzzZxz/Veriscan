@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<!-- 🔒 APLICA O TEMA ANTES DE QUALQUER CSS CARREGAR (evita flash branco) -->
+<script>
+  (function(){
+    try {
+      var t = localStorage.getItem('checkout_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch(e) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  })();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Checkout</title>
@@ -70,6 +81,10 @@
     --tab-text: #f1f5f9;
     --tab-border: rgba(255,255,255,.12);
   }
+
+  /* Cor do fundo imediata (evita piscar) */
+  html { background: #0b1014; }
+  html[data-theme="light"] { background: #F8FAFC; }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -315,11 +330,9 @@
      BOTÃO DE TEMA
      ============================================ -->
 <button class="b2-theme-toggle" id="theme-toggle" aria-label="Alternar tema">
-  <!-- Lua (aparece no tema claro) -->
   <svg class="icon-moon" viewBox="0 0 24 24">
     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
   </svg>
-  <!-- Sol (aparece no tema escuro) -->
   <svg class="icon-sun" viewBox="0 0 24 24">
     <circle cx="12" cy="12" r="4"/>
     <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
@@ -502,18 +515,8 @@
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script>
 /* =====================================================
-   TEMA — aplica ANTES de qualquer outra coisa
-   (evita "flash" branco ao carregar)
-   ===================================================== */
-(function(){
-  const saved = localStorage.getItem('checkout_theme');
-  // Se o user já escolheu, respeita. Senão, padrão escuro.
-  const tema = saved || 'dark';
-  document.documentElement.setAttribute('data-theme', tema);
-})();
-
-/* =====================================================
    BOTÃO DE TEMA — alternar claro/escuro
+   (o tema inicial já foi aplicado no <head>)
    ===================================================== */
 (function(){
   const btn = document.getElementById('theme-toggle');
