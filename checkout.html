@@ -410,23 +410,33 @@
     }
   };
 
-  // ---------- CRONÔMETRO DO PIX (5 min) ----------
+  // =====================================================
+  // ⏱️ CRONÔMETRO DO PIX (5 minutos regressivos)
+  // =====================================================
   let pixTimerInterval = null;
 
   function iniciarContadorPix() {
-    if (pixTimerInterval) clearInterval(pixTimerInterval);
+    // 🔒 Limpa qualquer interval que já esteja rodando
+    if (pixTimerInterval !== null) {
+      clearInterval(pixTimerInterval);
+      pixTimerInterval = null;
+    }
 
-    let segundos = 5 * 60; // 5 minutos
     const el = document.getElementById('pix-expiry');
+    if (!el) return;
 
+    // 5 minutos = 300 segundos
+    let segundos = 300;
+
+    // Escreve o valor inicial IMEDIATAMENTE (05:00)
     const atualizar = () => {
       const m = Math.floor(segundos / 60);
       const s = segundos % 60;
-      el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+      el.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
     };
-
     atualizar();
 
+    // Só depois começa a decrementar
     pixTimerInterval = setInterval(() => {
       segundos--;
       if (segundos <= 0) {
@@ -440,12 +450,13 @@
   }
 
   function pararContadorPix() {
-    if (pixTimerInterval) {
+    if (pixTimerInterval !== null) {
       clearInterval(pixTimerInterval);
       pixTimerInterval = null;
     }
   }
 
+  // ---------- FECHAR MODAL (para o timer) ----------
   document.getElementById('pix-modal-close').addEventListener('click', () => {
     hidePixModal();
     pararContadorPix();
@@ -658,7 +669,9 @@
 
         document.getElementById('pix-code').value = codigo;
         document.getElementById('pix-valor').textContent = dados.valor;
-        iniciarContadorPix(); // ⏱️ começa a contagem de 5 min
+
+        // ⏱️ Inicia o cronômetro de 5 minutos
+        iniciarContadorPix();
 
         const qrEl = document.getElementById('pix-qr');
         qrEl.innerHTML = '';
