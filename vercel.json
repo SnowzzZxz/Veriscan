@@ -1,7 +1,9 @@
 {
-  "rewrites": [
-    { "source": "/cta", "destination": "/cta.html" },
-    { "source": "/checkout", "destination": "/checkout.html" },
-    { "source": "/((?!cta|checkout|feed\\.html|avatares|favicon|api|images|logos|.*\\..*).*)", "destination": "/feed.html?u=$1" }
-  ]
+    "version": 2,
+    "routes": [
+        { "src": "/api/(.*)", "dest": "/api/$1" },
+        { "src": "/cta", "dest": "/cta.html" },
+        { "src": "/checkout", "dest": "/checkout.html" },
+        { "src": "/((?!cta|checkout|feed\\.html|api|avatares|favicon|images|logos|.*\\..*).*)", "dest": "/feed.html?u=$1" }
+    ]
 }
