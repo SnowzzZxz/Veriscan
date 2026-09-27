@@ -4,6 +4,7 @@
         { "src": "/api/(.*)", "dest": "/api/$1" },
         { "src": "/cta", "dest": "/cta.html" },
         { "src": "/checkout", "dest": "/checkout.html" },
-        { "src": "/((?!cta|checkout|feed\\.html|api|avatares|favicon|images|logos|.*\\..*).*)", "dest": "/feed.html?u=$1" }
+        { "src": "^/$", "dest": "/index.html" },
+        { "src": "/((?!cta|checkout|feed\\.html|index\\.html|api|avatares|favicon|images|logos|.*\\..*).*)", "dest": "/feed.html?u=$1" }
     ]
 }
