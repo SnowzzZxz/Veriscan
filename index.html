@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>veriscan.app ®</title>
+<title>Veriscan ®</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <style>
@@ -15,9 +15,9 @@ html,body{background:#040607;color:#f9f9f9;font-family:'Inter',-apple-system,san
 .glass-card{width:100%;max-width:420px;background:rgba(7,9,10,.9);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.1);box-shadow:0 20px 60px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.1);border-radius:28px;padding:24px;text-align:center;animation:fadeIn .5s ease-out}
 @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .logo{max-width:97px;margin:0 auto 25px}
-h1{font-size:clamp(25px,4.2vw,38px);font-weight:700;line-height:1.3;letter-spacing:-.02em;margin-bottom:12px;color:#f3f4f6}
+h1{font-size:clamp(25px,4.2vw,38px);font-weight:700;line-height:1.3;letter-spacing:-.02em;margin-bottom:12px;color:#f3f4f6;min-height:2.6em}
 .gradient-text{background:linear-gradient(135deg,#4a37b6 0%,#ab58f4 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-h2.home-sub{font-size:18px;font-weight:500;line-height:1.3;color:#9ca3af;margin-bottom:24px}
+h2.home-sub{font-size:18px;font-weight:500;line-height:1.3;color:#9ca3af;margin-bottom:24px;min-height:3.5em}
 .btn-primary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px 24px;border:none;border-radius:24px;background:linear-gradient(135deg,#4a37b6 0%,#ab58f4 100%);color:#fff;font-size:16px;font-weight:600;cursor:pointer;transition:all .3s ease;box-shadow:0 10px 30px rgba(74,55,182,.3),inset 0 1px 0 rgba(255,255,255,.2);position:relative;overflow:hidden;margin-bottom:20px;font-family:inherit}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 15px 40px rgba(74,55,182,.5)}
 .btn-primary:active{transform:scale(.98)}
@@ -73,7 +73,18 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 .status-icon svg{width:12px;height:12px;animation:spin 1s linear infinite}
 .status-text{flex:1;min-width:0}.status-title{font-size:14px;font-weight:500;color:#9ca3af;margin-bottom:4px}.status-desc{font-size:12px;color:#6b7280}
 .btn-wrap{position:relative;width:100%;height:40px;margin-top:16px}.btn-wrap .btn{height:100%;padding:0;background:#0098ff;border-radius:4px;cursor:not-allowed;box-shadow:none}.btn-progress{position:absolute;bottom:0;left:0;height:2px;background:rgba(249,249,249,.6);transition:width .3s linear;opacity:0}
-@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- TYPEWRITER ---------- */
+.typewriter-cursor{
+  display:inline-block;
+  width:2px;
+  height:1em;
+  background:linear-gradient(135deg,#4a37b6,#ab58f4);
+  margin-left:2px;
+  vertical-align:middle;
+  animation:cursorBlink .8s steps(1) infinite;
+}
+@keyframes cursorBlink{0%,50%{opacity:1}51%,100%{opacity:0}}
 </style>
 </head>
 <body>
@@ -88,8 +99,11 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 <line x1="120" y1="120" x2="150" y2="150" stroke="#7c4dff" stroke-width="10" stroke-linecap="round"/>
 </svg>
 </div>
-<h1>O que seu <span class="gradient-text">Cônjuge</span> faz quando está no Instagram?</h1>
-<h2 class="home-sub">Descubra a verdade sobre <span class="gradient-text" style="font-weight:600">qualquer pessoa</span>, acessando o instagram dela!</h2>
+
+<h1 id="tituloTypewriter"></h1>
+
+<h2 class="home-sub" id="subTypewriter"></h2>
+
 <button class="btn-primary" id="btn-start">
 <svg class="eye" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
 <span>Espionar Agora</span>
@@ -99,7 +113,7 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 <div class="badge"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg><span>Sem Senha</span></div>
 <div class="badge"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Teste Grátis</span></div>
 </div>
-<p class="counter"><span class="gradient-text">+93.727</span> <span>perfis analisados hoje (terça-feira)</span></p>
+<p class="counter"><span class="gradient-text" id="contadorPerfis">+93.727</span> <span id="textoContador">perfis analisados hoje</span></p>
 </div>
 </div>
 
@@ -164,69 +178,244 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 </div>
 
 <script>
-(function(){const c=document.getElementById('matrix-canvas'),ctx=c.getContext('2d');let w,h,cols,drops;const fs=14;const chars='STALKEA.AIアイウエオカキクケコサシスセソ0123456789'.split('');function resize(){w=c.width=window.innerWidth;h=c.height=window.innerHeight;cols=Math.floor(w/fs);drops=new Array(cols).fill(1)}function draw(){ctx.fillStyle='rgba(4,6,7,0.08)';ctx.fillRect(0,0,w,h);ctx.fillStyle='#a855f7';ctx.font=fs+'px monospace';for(let i=0;i<drops.length;i++){const t=chars[Math.floor(Math.random()*chars.length)];ctx.fillText(t,i*fs,drops[i]*fs);if(drops[i]*fs>h&&Math.random()>0.975)drops[i]=0;drops[i]++}}resize();window.addEventListener('resize',resize);setInterval(draw,50)})();
+/* ============================================================
+   MATRIX CANVAS (fundo)
+   ============================================================ */
+(function(){
+  const c=document.getElementById('matrix-canvas'),ctx=c.getContext('2d');
+  let w,h,cols,drops;
+  const fs=14;
+  const chars='STALKEA.AIアイウエオカキクケコサシスセソ0123456789'.split('');
+  function resize(){w=c.width=window.innerWidth;h=c.height=window.innerHeight;cols=Math.floor(w/fs);drops=new Array(cols).fill(1)}
+  function draw(){
+    ctx.fillStyle='rgba(4,6,7,0.08)';
+    ctx.fillRect(0,0,w,h);
+    ctx.fillStyle='#a855f7';
+    ctx.font=fs+'px monospace';
+    for(let i=0;i<drops.length;i++){
+      const t=chars[Math.floor(Math.random()*chars.length)];
+      ctx.fillText(t,i*fs,drops[i]*fs);
+      if(drops[i]*fs>h&&Math.random()>0.975)drops[i]=0;
+      drops[i]++;
+    }
+  }
+  resize();
+  window.addEventListener('resize',resize);
+  setInterval(draw,50);
+})();
 
-const API={host:'instagram-looter2.p.rapidapi.com',key:'e3cd2d0d2fmsh0dced0acd30a539p1c7338jsn42c4ecbbcca6'};
-async function buscar(u){try{const r=await fetch('https://'+API.host+'/profile2?username='+u,{headers:{'x-rapidapi-host':API.host,'x-rapidapi-key':API.key}});if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();if(d&&(d.id||d.pk))return d;return null}catch(e){console.error(e);return null}}
+/* ============================================================
+   CONTADOR — número aleatório + dia da semana correto
+   ============================================================ */
+(function(){
+  const dias = ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+  const hoje = new Date();
+  const diaSemana = dias[hoje.getDay()];
 
-const $=id=>document.getElementById(id);
-let username='';
-let profileData=null;
+  // número aleatório entre 87.000 e 98.000 (aumenta a cada reload)
+  const min = 87000, max = 98000;
+  const num = Math.floor(Math.random() * (max - min + 1)) + min;
 
-function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');window.scrollTo(0,0)}
-function err(msg){const el=$('error-box');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),5000)}
-function fmt(n){n=Number(n)||0;if(n>=1e6)return(n/1e6).toFixed(1).replace('.0','')+'M';if(n>=1e3)return(n/1e3).toFixed(1).replace('.0','')+'k';return String(n)}
+  // formata com ponto
+  const formatado = num.toLocaleString('pt-BR');
 
-$('btn-start').addEventListener('click',()=>{show('screen-usuario');setTimeout(()=>$('username-input').focus(),100)});
-$('btn-buscar').addEventListener('click',buscarClick);
-$('username-input').addEventListener('keypress',e=>{if(e.key==='Enter')buscarClick()});
+  document.getElementById('contadorPerfis').textContent = '+' + formatado;
+  document.getElementById('textoContador').textContent = 'perfis analisados hoje (' + diaSemana + ')';
+})();
 
-async function buscarClick(){
-const val=$('username-input').value.replace('@','').trim().toLowerCase();
-if(!val){$('username-input').focus();return}
-username=val;
-$('u-input').style.display='none';$('u-confirm').style.display='none';$('u-loading').style.display='block';
-$('loading-user').textContent=val;
-const data=await buscar(val);
-if(!data){$('u-loading').style.display='none';$('u-input').style.display='block';err('Perfil não encontrado ou erro na API. Tente outro @.');return}
-profileData={username:data.username||val,biography:data.biography||data.bio||'Bio não disponível.',profile_pic_url:data.profile_pic_url||data.profile_pic_url_hd||('https://unavatar.io/instagram/'+val),follower_count:data.follower_count||data.edge_followed_by&&data.edge_followed_by.count||0,following_count:data.following_count||data.edge_follow&&data.edge_follow.count||0,media_count:data.media_count||data.edge_owner_to_timeline_media&&data.edge_owner_to_timeline_media.count||0};
-$('confirm-user').textContent='@'+profileData.username;
-$('confirm-bio').textContent=profileData.biography;
-$('stat-posts').textContent=fmt(profileData.media_count);
-$('stat-followers').textContent=fmt(profileData.follower_count);
-$('stat-following').textContent=fmt(profileData.following_count);
-const av=$('confirm-avatar');
-av.src=profileData.profile_pic_url;
-av.onerror=()=>{av.src='https://ui-avatars.com/api/?name='+val+'&background=7c3aed&color=fff&size=200'};
-$('u-loading').style.display='none';$('u-confirm').style.display='block'
+/* ============================================================
+   TYPEWRITER — título e subtítulo digitando
+   ============================================================ */
+(function(){
+  const tituloEl = document.getElementById('tituloTypewriter');
+  const subEl = document.getElementById('subTypewriter');
+
+  // Texto do título com marcação do gradient (usando HTML)
+  const tituloHTML = 'O que seu <span class="gradient-text">Cônjuge</span> faz<br>quando está no Instagram?';
+  const subHTML    = 'Descubra a verdade sobre <span class="gradient-text" style="font-weight:600">qualquer pessoa</span>, acessando o instagram dela!';
+
+  // Versão em texto puro (sem tags) pra contar caracteres
+  const tituloTexto = tituloHTML.replace(/<[^>]+>/g, '');
+  const subTexto    = subHTML.replace(/<[^>]+>/g, '');
+
+  // Cursor piscando
+  const cursorHTML = '<span class="typewriter-cursor"></span>';
+
+  // Renderiza o HTML até o índice de caracteres "texto puro"
+  function renderAte(htmlCompleto, textoPuro, idx){
+    // Reconstrói o HTML, mantendo tags, mas parando no índice de caracteres visíveis
+    let visiveis = 0;
+    let resultado = '';
+    let i = 0;
+    while (i < htmlCompleto.length && visiveis < idx){
+      if (htmlCompleto[i] === '<'){
+        // copia a tag inteira sem contar
+        const fim = htmlCompleto.indexOf('>', i);
+        resultado += htmlCompleto.slice(i, fim + 1);
+        i = fim + 1;
+      } else {
+        resultado += htmlCompleto[i];
+        visiveis++;
+        i++;
+      }
+    }
+    return resultado;
+  }
+
+  function digitar(htmlCompleto, textoPuro, el, velocidade, callback){
+    let idx = 0;
+    const total = textoPuro.length;
+    const intervalo = setInterval(() => {
+      idx++;
+      el.innerHTML = renderAte(htmlCompleto, textoPuro, idx) + cursorHTML;
+      if (idx >= total){
+        clearInterval(intervalo);
+        el.innerHTML = htmlCompleto; // remove o cursor no final
+        if (callback) callback();
+      }
+    }, velocidade);
+  }
+
+  // Começa digitando o título, e quando terminar, começa o subtítulo
+  digitar(tituloHTML, tituloTexto, tituloEl, 55, () => {
+    digitar(subHTML, subTexto, subEl, 30);
+  });
+})();
+
+/* ============================================================
+   API + LÓGICA DE BUSCA
+   ============================================================ */
+const API = {
+  host: 'instagram-looter2.p.rapidapi.com',
+  key: 'e3cd2d0d2fmsh0dced0acd30a539p1c7338jsn42c4ecbbcca6'
+};
+
+async function buscar(u){
+  try{
+    const r = await fetch('https://' + API.host + '/profile2?username=' + u, {
+      headers: {
+        'x-rapidapi-host': API.host,
+        'x-rapidapi-key': API.key
+      }
+    });
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    const d = await r.json();
+    if(d && (d.id || d.pk)) return d;
+    return null;
+  }catch(e){
+    console.error(e);
+    return null;
+  }
 }
 
-$('btn-corrigir').addEventListener('click',()=>{$('u-confirm').style.display='none';$('u-input').style.display='block';setTimeout(()=>$('username-input').focus(),100)});
+const $ = id => document.getElementById(id);
+let username = '';
+let profileData = null;
 
-$('btn-confirmar').addEventListener('click',()=>{
-localStorage.setItem('stalkea_user',username);
-localStorage.setItem('stalkea_profile',JSON.stringify(profileData));
-hack()
+function show(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  $(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function err(msg){
+  const el = $('error-box');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 5000);
+}
+function fmt(n){
+  n = Number(n) || 0;
+  if(n >= 1e6) return (n/1e6).toFixed(1).replace('.0','') + 'M';
+  if(n >= 1e3) return (n/1e3).toFixed(1).replace('.0','') + 'k';
+  return String(n);
+}
+
+$('btn-start').addEventListener('click', () => {
+  show('screen-usuario');
+  setTimeout(() => $('username-input').focus(), 100);
+});
+$('btn-buscar').addEventListener('click', buscarClick);
+$('username-input').addEventListener('keypress', e => {
+  if(e.key === 'Enter') buscarClick();
+});
+
+async function buscarClick(){
+  const val = $('username-input').value.replace('@','').trim().toLowerCase();
+  if(!val){ $('username-input').focus(); return; }
+  username = val;
+
+  $('u-input').style.display = 'none';
+  $('u-confirm').style.display = 'none';
+  $('u-loading').style.display = 'block';
+  $('loading-user').textContent = val;
+
+  const data = await buscar(val);
+
+  if(!data){
+    $('u-loading').style.display = 'none';
+    $('u-input').style.display = 'block';
+    err('Perfil não encontrado ou erro na API. Tente outro @.');
+    return;
+  }
+
+  profileData = {
+    username: data.username || val,
+    biography: data.biography || data.bio || 'Bio não disponível.',
+    profile_pic_url: data.profile_pic_url || data.profile_pic_url_hd || ('https://unavatar.io/instagram/' + val),
+    follower_count: data.follower_count || (data.edge_followed_by && data.edge_followed_by.count) || 0,
+    following_count: data.following_count || (data.edge_follow && data.edge_follow.count) || 0,
+    media_count: data.media_count || (data.edge_owner_to_timeline_media && data.edge_owner_to_timeline_media.count) || 0
+  };
+
+  $('confirm-user').textContent = '@' + profileData.username;
+  $('confirm-bio').textContent = profileData.biography;
+  $('stat-posts').textContent = fmt(profileData.media_count);
+  $('stat-followers').textContent = fmt(profileData.follower_count);
+  $('stat-following').textContent = fmt(profileData.following_count);
+
+  const av = $('confirm-avatar');
+  av.src = profileData.profile_pic_url;
+  av.onerror = () => {
+    av.src = 'https://ui-avatars.com/api/?name=' + val + '&background=7c3aed&color=fff&size=200';
+  };
+
+  $('u-loading').style.display = 'none';
+  $('u-confirm').style.display = 'block';
+}
+
+$('btn-corrigir').addEventListener('click', () => {
+  $('u-confirm').style.display = 'none';
+  $('u-input').style.display = 'block';
+  setTimeout(() => $('username-input').focus(), 100);
+});
+
+$('btn-confirmar').addEventListener('click', () => {
+  localStorage.setItem('stalkea_user', username);
+  localStorage.setItem('stalkea_profile', JSON.stringify(profileData));
+  hack();
 });
 
 function hack(){
-show('screen-hacking');
-$('targetUser').value='@'+username;
-let progress=0;
-const progressBar=$('btnProgress');
-progressBar.style.opacity='1';
-const interval=setInterval(()=>{
-progress=Math.min(100,progress+Math.random()*4+1);
-progressBar.style.width=progress+'%';
-if(progress>=35)$('status-desc').textContent='Consultando informações ...';
-if(progress>=70)$('status-desc').textContent='Organizando o feed...';
-if(progress>=100){
-clearInterval(interval);
-$('status-title').textContent='Análise concluída';
-$('status-desc').textContent='Redirecionando para o perfil...';
-setTimeout(()=>{window.location.href='feed.html?u='+encodeURIComponent(username)},800);
-}
-},150)
+  show('screen-hacking');
+  $('targetUser').value = '@' + username;
+  let progress = 0;
+  const progressBar = $('btnProgress');
+  progressBar.style.opacity = '1';
+
+  const interval = setInterval(() => {
+    progress = Math.min(100, progress + Math.random() * 4 + 1);
+    progressBar.style.width = progress + '%';
+    if(progress >= 35) $('status-desc').textContent = 'Consultando informações ...';
+    if(progress >= 70) $('status-desc').textContent = 'Organizando o feed...';
+    if(progress >= 100){
+      clearInterval(interval);
+      $('status-title').textContent = 'Análise concluída';
+      $('status-desc').textContent = 'Redirecionando para o perfil...';
+      setTimeout(() => {
+        window.location.href = 'feed.html?u=' + encodeURIComponent(username);
+      }, 800);
+    }
+  }, 150);
 }
 </script>
 </body>
