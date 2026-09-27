@@ -301,9 +301,6 @@
       </div>
       <button type="button" class="b2-copy-btn" id="pix-copy-btn" onclick="copyPix(true)">Copiar código PIX</button>
     </div>
-    <p style="text-align:center;font-size:.75rem;font-weight:600;margin-top:.75rem;color:#22C55E">
-      Pagamento 100% seguro via PIX
-    </p>
   </div>
 </div>
 
@@ -412,6 +409,7 @@
 
   // =====================================================
   // ⏱️ CRONÔMETRO DO PIX (5 minutos regressivos)
+  // Fecha o modal automaticamente ao chegar em 00:00
   // =====================================================
   let pixTimerInterval = null;
 
@@ -443,6 +441,10 @@
         clearInterval(pixTimerInterval);
         pixTimerInterval = null;
         el.textContent = '00:00';
+
+        // 🔒 Fecha o modal automaticamente ao expirar
+        hidePixModal();
+        mostrarToast('PIX expirado. Gere um novo para continuar.', 'erro');
         return;
       }
       atualizar();
