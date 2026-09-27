@@ -344,7 +344,6 @@
     e.target.value = v;
   });
 
-  // Máscara do número do cartão: 0000 0000 0000 0000
   const cardNumber = document.getElementById('card-number');
   cardNumber.addEventListener('input', e => {
     let v = e.target.value.replace(/\D/g, '').slice(0, 16);
@@ -352,7 +351,6 @@
     e.target.value = v;
   });
 
-  // Máscara da validade: MM/AA (mês primeiro, depois ano)
   const cardExpiry = document.getElementById('card-expiry');
   cardExpiry.addEventListener('input', e => {
     let v = e.target.value.replace(/\D/g, '').slice(0, 4);
@@ -360,7 +358,6 @@
     e.target.value = v;
   });
 
-  // CVV: só números, exatamente 3 dígitos
   const cardCvv = document.getElementById('card-cvv');
   cardCvv.addEventListener('input', e => {
     e.target.value = e.target.value.replace(/\D/g, '').slice(0, 3);
@@ -413,9 +410,52 @@
     }
   };
 
-  document.getElementById('pix-modal-close').addEventListener('click', hidePixModal);
+  // ---------- CRONÔMETRO DO PIX (5 min) ----------
+  let pixTimerInterval = null;
+
+  function iniciarContadorPix() {
+    if (pixTimerInterval) clearInterval(pixTimerInterval);
+
+    let segundos = 5 * 60; // 5 minutos
+    const el = document.getElementById('pix-expiry');
+
+    const atualizar = () => {
+      const m = Math.floor(segundos / 60);
+      const s = segundos % 60;
+      el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    };
+
+    atualizar();
+
+    pixTimerInterval = setInterval(() => {
+      segundos--;
+      if (segundos <= 0) {
+        clearInterval(pixTimerInterval);
+        pixTimerInterval = null;
+        el.textContent = '00:00';
+        return;
+      }
+      atualizar();
+    }, 1000);
+  }
+
+  function pararContadorPix() {
+    if (pixTimerInterval) {
+      clearInterval(pixTimerInterval);
+      pixTimerInterval = null;
+    }
+  }
+
+  document.getElementById('pix-modal-close').addEventListener('click', () => {
+    hidePixModal();
+    pararContadorPix();
+  });
+
   document.getElementById('pix-modal').addEventListener('click', e => {
-    if (e.target === e.currentTarget) hidePixModal();
+    if (e.target === e.currentTarget) {
+      hidePixModal();
+      pararContadorPix();
+    }
   });
 
   // ---------- TOAST ----------
@@ -618,8 +658,7 @@
 
         document.getElementById('pix-code').value = codigo;
         document.getElementById('pix-valor').textContent = dados.valor;
-        document.getElementById('pix-expiry').textContent =
-          new Date(Date.now() + 5 * 60 * 1000).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        iniciarContadorPix(); // ⏱️ começa a contagem de 5 min
 
         const qrEl = document.getElementById('pix-qr');
         qrEl.innerHTML = '';
