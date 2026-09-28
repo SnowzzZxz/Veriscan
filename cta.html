@@ -36,6 +36,7 @@ h1.main-title{font-size:clamp(22px,7vw,35px);font-weight:700;line-height:1.2;tex
 .stat b{color:#f9f9f9;font-weight:700}
 .stat span{color:#9ca3af;font-size:13px;margin-top:4px}
 .profile-bio{color:#d1d5db;font-size:15px;line-height:1.5;white-space:pre-line;margin-bottom:16px}
+.profile-bio.oculto{display:none}
 
 .badge-box{background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(124,58,237,.15));border:1px solid rgba(139,92,246,.3);border-radius:16px;padding:20px;margin:0 auto 24px;text-align:center}
 .badge-title{color:#f9f9f9;font-weight:700;font-size:clamp(15px,3.5vw,18px);display:inline-block;animation:glow 2.5s ease-in-out infinite;text-shadow:0 0 10px rgba(16,185,129,.3)}
@@ -170,7 +171,7 @@ h1.main-title{font-size:clamp(22px,7vw,35px);font-weight:700;line-height:1.2;tex
         </div>
       </div>
     </div>
-    <p class="profile-bio" id="profileBio">Bio não disponível.</p>
+    <p class="profile-bio oculto" id="profileBio"></p>
   </div>
 
   <div class="badge-box">
@@ -398,7 +399,19 @@ document.getElementById('profileUser').textContent = '@' + username;
 document.getElementById('statPosts').textContent = fmt(perfil.media_count);
 document.getElementById('statFollowers').textContent = fmt(perfil.follower_count);
 document.getElementById('statFollowing').textContent = fmt(perfil.following_count);
-document.getElementById('profileBio').textContent = perfil.biography || 'Bio não disponível.';
+
+/* 🔥 BIO: só mostra se existir, senão esconde completamente */
+(function(){
+  const bioEl = document.getElementById('profileBio');
+  const bioTxt = (perfil.biography || '').trim();
+  if (bioTxt && bioTxt !== 'Bio não disponível.') {
+    bioEl.textContent = bioTxt;
+    bioEl.classList.remove('oculto');
+  } else {
+    bioEl.textContent = '';
+    bioEl.classList.add('oculto');
+  }
+})();
 
 document.getElementById('mapAvatar').src = avatarUrl;
 document.getElementById('mapUser').textContent = '@' + username;
