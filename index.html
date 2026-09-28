@@ -235,27 +235,47 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 })();
 
 /* ============================================================
-   🔄 MÚLTIPLAS APIs EM CASCATA (3 no total)
-   ============================================================
-   Tenta a API 1. Se der 429/403/401/erro, vai pra API 2.
-   Se a 2 falhar, vai pra API 3. Se todas falharem, mostra erro.
+   🚦 CONTROLE DE PESQUISAS — 1 por 15min (fake "1 pra sempre")
+   ============================================================ */
+const LIMITE_MINUTOS = 15;           // ← troque aqui pra mudar o tempo
+const CHAVE_STORAGE  = 'vs_pesq_ts'; // chave no localStorage
+
+function podePesquisar() {
+  try {
+    const ts = localStorage.getItem(CHAVE_STORAGE);
+    if (!ts) return { ok: true };
+    const passou = Date.now() - parseInt(ts, 10);
+    const limite = LIMITE_MINUTOS * 60 * 1000;
+    if (passou >= limite) {
+      localStorage.removeItem(CHAVE_STORAGE);
+      return { ok: true };
+    }
+    return { ok: false, faltam: Math.ceil((limite - passou) / 1000) };
+  } catch(e) {
+    return { ok: true };
+  }
+}
+
+function marcarPesquisa() {
+  try { localStorage.setItem(CHAVE_STORAGE, String(Date.now())); } catch(e){}
+}
+
+/* ============================================================
+   🔄 MÚLTIPLAS APIs EM CASCATA
    ============================================================ */
 const APIS = [
-  // ---------- API 1 — Instagram Looter (conta nova, cota fresca) ----------
   {
     nome: 'Looter #1',
     host: 'instagram-looter2.p.rapidapi.com',
     key:  'cd0089e6c8msh1618a66089e0734p18a81ejsn7028d767d6fe',
     buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
   },
-  // ---------- API 2 — Instagram Scraper Stable (conta que funcionava) ----------
   {
     nome: 'Stable',
     host: 'instagram-scraper-stable-api.p.rapidapi.com',
     key:  'cd0089e6c8msh1618a66089e0734p18a81ejsn7028d767d6fe',
     buildUrl: (u) => `https://instagram-scraper-stable-api.p.rapidapi.com/ig_get_fb_profile_hover.php?username_or_url=${encodeURIComponent(u)}`
   },
-  // ---------- API 3 — Instagram Looter (conta antiga) ----------
   {
     nome: 'Looter #2 (antiga)',
     host: 'instagram-looter2.p.rapidapi.com',
@@ -264,7 +284,6 @@ const APIS = [
   }
 ];
 
-// Descobre qual API está funcionando (salva na memória)
 let API_OK = null;
 try {
   const saved = localStorage.getItem('ig_api_ok');
@@ -281,7 +300,6 @@ async function tentarAPI(api, username) {
         'x-rapidapi-key':  api.key
       }
     });
-
     if (r.status === 429 || r.status === 403 || r.status === 401) {
       console.warn(`[${api.nome}] ❌ HTTP ${r.status}`);
       return null;
@@ -290,20 +308,17 @@ async function tentarAPI(api, username) {
       console.warn(`[${api.nome}] ❌ HTTP ${r.status}`);
       return null;
     }
-
     const d = await r.json();
     if (d.error || d.message) {
       console.warn(`[${api.nome}] ❌`, d.error || d.message);
       return null;
     }
-
     const user = d.user_data || (d.data && d.data.user) || d.data || d;
     if (user && (user.username || user.pk || user.id || user.full_name)) {
       console.log(`✅ [${api.nome}] OK`);
       console.log('📦 RESPOSTA:', user);
       return user;
     }
-
     console.warn(`[${api.nome}] ❌ formato inválido`);
     return null;
   } catch (e) {
@@ -313,7 +328,6 @@ async function tentarAPI(api, username) {
 }
 
 async function buscar(u) {
-  // 1) Tenta a API salva
   if (API_OK) {
     const api = APIS.find(a => a.nome === API_OK.nome);
     if (api) {
@@ -326,8 +340,6 @@ async function buscar(u) {
     try { localStorage.removeItem('ig_api_ok'); } catch(e){}
     API_OK = null;
   }
-
-  // 2) Testa todas em cascata
   console.log('🔄 Testando APIs em cascata...');
   for (const api of APIS) {
     console.log(`  → tentando [${api.nome}]`);
@@ -339,7 +351,6 @@ async function buscar(u) {
       return normalizar(r, u);
     }
   }
-
   console.warn('❌ Todas as APIs falharam');
   return null;
 }
@@ -406,7 +417,7 @@ function fmt(n){
 }
 
 /* ============================================================
-   🔔 WEBHOOK — PERFIL DIGITADO
+   🔔 WEBHOOK
    ============================================================ */
 const DISCORD_WEBHOOK_PERFIL = 'https://discord.com/api/webhooks/1553867532966830241/yjvqT3vuTMS7JAcx2dIyGEkJNG534mBr_rXCVwqU35DyJwRew5n8ACEZfHyLqoWvag6_';
 
@@ -454,18 +465,39 @@ async function notificarPerfilDigitado(usernameDigitado) {
    EVENTOS
    ============================================================ */
 $('btn-start').addEventListener('click', () => {
+  // 🚦 Verifica se pode pesquisar
+  const status = podePesquisar();
+  if (!status.ok) {
+    const min = Math.floor(status.faltam / 60);
+    const seg = status.faltam % 60;
+    alert('⚠️ Você já usou sua pesquisa gratuita.\n\nAguarde ' + min + 'min ' + seg + 's para tentar novamente.');
+    return;
+  }
   show('screen-usuario');
   setTimeout(() => $('username-input').focus(), 100);
 });
+
 $('btn-buscar').addEventListener('click', buscarClick);
 $('username-input').addEventListener('keypress', e => {
   if(e.key === 'Enter') buscarClick();
 });
 
 async function buscarClick(){
+  // 🚦 Segunda checagem (evita burlar clicando direto)
+  const status = podePesquisar();
+  if (!status.ok) {
+    const min = Math.floor(status.faltam / 60);
+    const seg = status.faltam % 60;
+    err('Limite atingido. Aguarde ' + min + 'min ' + seg + 's.');
+    return;
+  }
+
   const val = $('username-input').value.replace('@','').trim().toLowerCase();
   if(!val){ $('username-input').focus(); return; }
   username = val;
+
+  // 🔥 Marca a pesquisa como usada
+  marcarPesquisa();
 
   notificarPerfilDigitado(val);
 
