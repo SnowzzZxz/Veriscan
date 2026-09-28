@@ -5,7 +5,6 @@
 const DISCORD_PIX_APROVADO = 'https://discord.com/api/webhooks/1553603832603217971/PKsNHVIYchZi_O8uYSpHAygEtv2Em_MIT-K9Rf1UBXwSuOD0QzZBV4IxbhARiubMeDbA';
 
 module.exports = async (req, res) => {
-    // ZPay manda POST
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
@@ -20,15 +19,51 @@ module.exports = async (req, res) => {
             return res.status(200).json({ ok: true, ignored: event });
         }
 
-        // ⏭️ FILTRO: ignora eventos com mais de 1 hora (evita spam de vendas antigas)
+        // ⏭️ Filtro: ignora eventos com mais de 1 hora
         if (data.paidAt) {
             const agora = Date.now();
             const pago = new Date(data.paidAt).getTime();
             const diffMinutos = (agora - pago) / 1000 / 60;
             if (diffMinutos > 60) {
-                console.log('⏭️ Evento antigo ignorado:', data.id, Math.round(diffMinutos) + 'min atrás');
+                console.log('⏭️ Evento antigo ignorado:', data.id);
                 return res.status(200).json({ ok: true, ignored: 'old' });
             }
+        }
+
+        // ---------- Extrai dados do message ----------
+        // Formato esperado: "Acesso Completo - Veriscan | @fulano | João Silva | joao@email.com | 123.456.789-00 | (11) 99999-9999"
+        const message = data.message || '';
+        const partes = message.split(' | ').map(s => s.trim()).filter(Boolean);
+
+        // Tenta identificar cada parte
+        let alvo = '—';
+        let nomeCompleto = data.donorName || '—';
+        let email = '—';
+        let cpf = '—';
+        let telefone = '—';
+        let descricao = message;
+
+        partes.forEach(p => {
+            if (p.startsWith('@')) {
+                alvo = p;
+            } else if (p.includes('@') && p.includes('.')) {
+                email = p;
+            } else if (/\d{3}\.\d{3}\.\d{3}-\d{2}/.test(p)) {
+                cpf = p;
+            } else if (/\(\d{2}\)\s*\d{4,5}-?\d{4}/.test(p) || /^\d{10,11}$/.test(p.replace(/\D/g, ''))) {
+                telefone = p;
+            }
+        });
+
+        // Se achou um nome que não é o "Acesso Completo...", usa como nome
+        const nomeLinha = partes.find(p => 
+            !p.startsWith('Acesso Completo') && 
+            !p.startsWith('@') && 
+            !p.includes('@') && 
+            !/\d/.test(p)
+        );
+        if (nomeLinha && nomeLinha !== data.donorName) {
+            nomeCompleto = data.donorName || nomeLinha;
         }
 
         // ---------- Monta os campos do embed ----------
@@ -44,71 +79,49 @@ module.exports = async (req, res) => {
                 inline: true 
             },
             { 
+                name: '🎯 Alvo', 
+                value: alvo, 
+                inline: true 
+            },
+            { 
+                name: '👤 Nome', 
+                value: nomeCompleto, 
+                inline: false 
+            },
+            { 
+                name: '📧 E-mail', 
+                value: email, 
+                inline: true 
+            },
+            { 
+                name: '🪪 CPF', 
+                value: cpf, 
+                inline: true 
+            },
+            { 
+                name: '📱 Telefone', 
+                value: telefone, 
+                inline: true 
+            },
+            { 
                 name: '🆔 ID ZPay', 
                 value: data.id || '—', 
                 inline: false 
             }
         ];
 
-        // 👤 Nome do cliente
-        if (data.donorName) {
-            fields.push({ name: '👤 Cliente', value: data.donorName, inline: true });
+        // Adiciona a descrição completa se quiser
+        if (descricao && descricao.length < 200) {
+            fields.push({ name: '📝 Descrição', value: descricao, inline: false });
         }
 
-        // 📧 Email (se o ZPay mandar)
-        if (data.donorEmail || data.email) {
-            fields.push({ name: '📧 E-mail', value: data.donorEmail || data.email, inline: true });
-        }
-
-        // 📱 Telefone (se o ZPay mandar)
-        if (data.donorPhone || data.phone) {
-            fields.push({ name: '📱 Telefone', value: data.donorPhone || data.phone, inline: true });
-        }
-
-        // 🪪 CPF / documento (se o ZPay mandar)
-        if (data.donorDocument || data.document || data.donorDocument) {
-            fields.push({ name: '🪪 CPF', value: data.donorDocument || data.document, inline: true });
-        }
-
-        // 📝 Descrição / mensagem
-        if (data.message) {
-            fields.push({ name: '📝 Descrição', value: data.message, inline: false });
-        }
-
-        // 🔎 Origem (api, checkout, etc)
-        if (data.origin) {
-            fields.push({ name: '🔎 Origem', value: data.origin, inline: true });
-        }
-
-        // 🆔 ID da transação do cliente (se o ZPay mandar)
-        if (data.clientTransactionId) {
-            fields.push({ name: '🔗 Ref. Cliente', value: data.clientTransactionId, inline: true });
-        }
-
-        // 🕒 Data do pagamento (convertida pro fuso de Brasília)
+        // 🕒 Data do pagamento (Brasília)
         if (data.paidAt) {
             fields.push({
                 name: '🕒 Pago em',
                 value: new Date(data.paidAt).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
                 inline: false
             });
-        }
-
-        // 📅 Data de criação (convertida pro fuso de Brasília)
-        if (data.createdAt) {
-            fields.push({
-                name: '📅 Criado em',
-                value: new Date(data.createdAt).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
-                inline: false
-            });
-        }
-
-        // 🎯 Alvo (se vier no message, tipo "Acesso Completo - Veriscan @fulano")
-        if (data.message && data.message.includes('@')) {
-            const match = data.message.match(/@([\w.\-_]+)/);
-            if (match) {
-                fields.push({ name: '🎯 Alvo', value: '@' + match[1], inline: true });
-            }
         }
 
         // ---------- Envia pro Discord ----------
