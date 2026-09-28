@@ -64,7 +64,7 @@ module.exports = async (req, res) => {
 
         const valor = 'R$ ' + Number(data.amount || 0).toFixed(2).replace('.', ',');
 
-        // ---------- Embed 1: Resumo (topo, bonito) ----------
+        // ---------- Embed 1: Resumo ----------
         const embedResumo = {
             title: '✅ PIX APROVADO',
             description: [
@@ -95,10 +95,10 @@ module.exports = async (req, res) => {
             title: '💳 Detalhes do Pagamento',
             color: 0x0400f0,
             fields: [
-                { name: '💵 Valor',    value: valor,                                     inline: true  },
+                { name: '💵 Valor',    value: valor,                                      inline: true  },
                 { name: '💳 Método',   value: (data.paymentMethod || 'pix').toUpperCase(), inline: true  },
-                { name: '🎯 Alvo',     value: alvo,                                      inline: true  },
-                { name: '🆔 ID ZPay',  value: `\`${data.id || '—'}\``,                   inline: false }
+                { name: '🎯 Alvo',     value: alvo,                                       inline: true  },
+                { name: '🆔 ID ZPay',  value: `\`${data.id || '—'}\``,                    inline: false }
             ]
         };
 
