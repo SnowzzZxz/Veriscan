@@ -49,6 +49,7 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 .stat b{display:block;font-size:16px;color:#fff}
 .stat span{font-size:10px;color:rgba(255,255,255,.4)}
 .bio{color:rgba(255,255,255,.9);font-size:14px;line-height:1.4;margin-bottom:20px;text-align:left}
+.bio.oculto{display:none;}
 .aviso{background:#1a0808;border:1px solid #3d1414;border-radius:12px;padding:14px;display:flex;gap:10px;align-items:flex-start;margin-bottom:24px}
 .aviso svg{color:#ff4d4d;flex-shrink:0;width:18px;height:18px;margin-top:2px}
 .aviso p{color:#ff4d4d;font-size:10.5px;line-height:1.4;font-weight:500}
@@ -136,7 +137,7 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 <div class="stat"><b id="stat-following">0</b><span>seguindo</span></div>
 </div>
 </div>
-<p class="bio" id="confirm-bio">Bio não disponível.</p>
+<p class="bio" id="confirm-bio"></p>
 <div class="aviso">
 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
 <p><b>Aviso:</b> Limite de apenas 1 pesquisa por dispositivo, certifique-se que digitou o usuário corretamente.</p>
@@ -235,16 +236,12 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 
 /* ============================================================
    🔎 BUSCA — RapidAPI Instagram Scraper Stable API
-   Auto-detecta path + parâmetro. Traduz pro formato antigo.
    ============================================================ */
 const RAPIDAPI_KEY  = 'cd0089e6c8msh1618a66089e0734p18a81ejsn7028d767d6fe';
 const RAPIDAPI_HOST = 'instagram-scraper-stable-api.p.rapidapi.com';
 
-// Combinações de path + parâmetro pra testar
 const COMBINACOES = [
-  // Path mais provável (confirmado pela RapidAPI)
   { path: '/ig_get_fb_profile_hover.php', params: ['username_or_url','username_or_id_or_url','username','user','user_or_url'] },
-  // Outros paths prováveis
   { path: '/ig_get_fb_profile_v3.php',    params: ['username_or_url','username_or_id_or_url','username','user'] },
   { path: '/ig_get_fb_profile_v2.php',    params: ['username_or_url','username_or_id_or_url','username','user'] },
   { path: '/ig_get_fb_profile.php',       params: ['username_or_url','username_or_id_or_url','username','user'] },
@@ -272,9 +269,7 @@ async function tentarCombo(path, param, username) {
     });
     if (!r.ok) return null;
     const d = await r.json();
-    // Se tiver erro, ignora
     if (d.error || d.message) return null;
-    // Verifica se tem dados de usuário
     const user = d.user_data || (d.data && d.data.user) || d.data || d;
     if (user && (user.username || user.pk || user.id || user.full_name)) {
       return { path, param, data: user };
@@ -286,22 +281,19 @@ async function tentarCombo(path, param, username) {
 }
 
 async function buscar(u) {
-  // Se já sabemos a combinação, usa direto
   if (COMBO_OK) {
     const r = await tentarCombo(COMBO_OK.path, COMBO_OK.param, u);
     if (r) {
-      console.log('✅ API OK (combo salvo):', COMBO_OK.path, '| param:', COMBO_OK.param);
+      console.log('✅ API OK:', COMBO_OK.path, '| param:', COMBO_OK.param);
+      console.log('📦 RESPOSTA:', r.data);
       return normalizar(r.data, u);
     }
     try { localStorage.removeItem('ig_combo_ok'); } catch(e){}
     COMBO_OK = null;
   }
-
-  // Testa todas as combinações
-  console.log('🔍 Testando combinações path+param...');
+  console.log('🔍 Testando combinações...');
   for (const combo of COMBINACOES) {
     for (const p of combo.params) {
-      console.log(`  → ${combo.path}?${p}=`);
       const r = await tentarCombo(combo.path, p, u);
       if (r) {
         COMBO_OK = { path: combo.path, param: p };
@@ -312,35 +304,49 @@ async function buscar(u) {
       }
     }
   }
-
   console.warn('❌ Nenhuma combinação funcionou');
   return null;
 }
 
 /* ============================================================
-   NORMALIZA — traduz resposta pro formato antigo
+   NORMALIZA — bio só retorna se existir de verdade
    ============================================================ */
 function normalizar(user, usernameFallback) {
-  // Foto
+  const u = user.user || (user.data && user.data.user) || user;
+
+  // FOTO
   let foto = '';
-  if (typeof user.profile_pic_url === 'string') foto = user.profile_pic_url;
-  else if (user.hd_profile_pic_url_info && user.hd_profile_pic_url_info.url) foto = user.hd_profile_pic_url_info.url;
-  else if (user.profile_pic_url_hd) foto = user.profile_pic_url_hd;
-  else if (user.profile_pic_url) foto = user.profile_pic_url;
+  if (typeof u.profile_pic_url === 'string' && u.profile_pic_url.startsWith('http')) foto = u.profile_pic_url;
+  else if (u.hd_profile_pic_url_info && u.hd_profile_pic_url_info.url) foto = u.hd_profile_pic_url_info.url;
+  else if (u.profile_pic_url_hd && typeof u.profile_pic_url_hd === 'string') foto = u.profile_pic_url_hd;
+  else if (u.profile_picture && typeof u.profile_picture === 'string') foto = u.profile_picture;
   else foto = 'https://unavatar.io/instagram/' + usernameFallback;
 
+  // BIO — só pega se existir e tiver conteúdo
+  const bioRaw =
+    u.biography || u.bio || u.about || u.description ||
+    u.biography_text || u.bio_text || u.about_biography ||
+    u.edge_about || u.user?.biography || u.user?.bio || '';
+  const bio = (typeof bioRaw === 'string' && bioRaw.trim() && bioRaw.trim() !== 'null') ? bioRaw.trim() : '';
+
+  // CONTADORES
+  const seguidores = u.follower_count || u.followers_count || u.followers || u.edge_followed_by?.count || 0;
+  const seguindo   = u.following_count || u.following || u.edge_follow?.count || 0;
+  const posts      = u.media_count || u.posts_count || u.posts || u.edge_owner_to_timeline_media?.count || 0;
+  const nome       = u.full_name || u.name || u.username || usernameFallback;
+
   return {
-    username:        user.username || user.user?.username || usernameFallback,
-    full_name:       user.full_name || user.user?.full_name || usernameFallback,
-    biography:       user.biography || user.bio || user.user?.biography || 'Bio não disponível.',
+    username:        u.username || usernameFallback,
+    full_name:       nome,
+    biography:       bio,   // ← string vazia se não tiver
     profile_pic_url: foto,
-    follower_count:  user.follower_count  || user.edge_followed_by?.count || user.user?.follower_count || 0,
-    following_count: user.following_count || user.edge_follow?.count      || user.user?.following_count || 0,
-    media_count:     user.media_count     || user.edge_owner_to_timeline_media?.count || user.user?.media_count || 0,
-    id:              user.id || user.pk || user.user?.id,
-    pk:              user.pk || user.id || user.user?.pk,
-    is_verified:     user.is_verified || false,
-    is_private:      user.is_private  || false
+    follower_count:  seguidores,
+    following_count: seguindo,
+    media_count:     posts,
+    id:              u.id || u.pk,
+    pk:              u.pk || u.id,
+    is_verified:     u.is_verified || false,
+    is_private:      u.is_private  || false
   };
 }
 
@@ -447,10 +453,19 @@ async function buscarClick(){
   profileData = data;
 
   $('confirm-user').textContent = '@' + profileData.username;
-  $('confirm-bio').textContent = profileData.biography;
   $('stat-posts').textContent = fmt(profileData.media_count);
   $('stat-followers').textContent = fmt(profileData.follower_count);
   $('stat-following').textContent = fmt(profileData.following_count);
+
+  // 🔥 BIO: só mostra se tiver conteúdo real
+  const bioEl = $('confirm-bio');
+  if (profileData.biography && profileData.biography.trim()) {
+    bioEl.textContent = profileData.biography;
+    bioEl.classList.remove('oculto');
+  } else {
+    bioEl.textContent = '';
+    bioEl.classList.add('oculto');
+  }
 
   const av = $('confirm-avatar');
   av.src = profileData.profile_pic_url;
