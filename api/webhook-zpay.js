@@ -31,17 +31,14 @@ module.exports = async (req, res) => {
         }
 
         // ---------- Extrai dados do message ----------
-        // Formato esperado: "Acesso Completo - Veriscan | @fulano | João Silva | joao@email.com | 123.456.789-00 | (11) 99999-9999"
         const message = data.message || '';
         const partes = message.split(' | ').map(s => s.trim()).filter(Boolean);
 
-        // Tenta identificar cada parte
         let alvo = '—';
         let nomeCompleto = data.donorName || '—';
         let email = '—';
         let cpf = '—';
         let telefone = '—';
-        let descricao = message;
 
         partes.forEach(p => {
             if (p.startsWith('@')) {
@@ -55,7 +52,6 @@ module.exports = async (req, res) => {
             }
         });
 
-        // Se achou um nome que não é o "Acesso Completo...", usa como nome
         const nomeLinha = partes.find(p => 
             !p.startsWith('Acesso Completo') && 
             !p.startsWith('@') && 
@@ -66,58 +62,48 @@ module.exports = async (req, res) => {
             nomeCompleto = data.donorName || nomeLinha;
         }
 
-        // ---------- Monta os campos do embed ----------
-        const fields = [
-            { 
-                name: '💵 Valor', 
-                value: 'R$ ' + Number(data.amount || 0).toFixed(2).replace('.', ','), 
-                inline: true 
-            },
-            { 
-                name: '💳 Método', 
-                value: (data.paymentMethod || 'pix').toUpperCase(), 
-                inline: true 
-            },
-            { 
-                name: '🎯 Alvo', 
-                value: alvo, 
-                inline: true 
-            },
-            { 
-                name: '👤 Nome', 
-                value: nomeCompleto, 
-                inline: false 
-            },
-            { 
-                name: '📧 E-mail', 
-                value: email, 
-                inline: true 
-            },
-            { 
-                name: '🪪 CPF', 
-                value: cpf, 
-                inline: true 
-            },
-            { 
-                name: '📱 Telefone', 
-                value: telefone, 
-                inline: true 
-            },
-            { 
-                name: '🆔 ID ZPay', 
-                value: data.id || '—', 
-                inline: false 
-            }
-        ];
+        const valor = 'R$ ' + Number(data.amount || 0).toFixed(2).replace('.', ',');
 
-        // Adiciona a descrição completa se quiser
-        if (descricao && descricao.length < 200) {
-            fields.push({ name: '📝 Descrição', value: descricao, inline: false });
-        }
+        // ---------- Embed 1: Resumo (topo, bonito) ----------
+        const embedResumo = {
+            title: '✅ PIX APROVADO',
+            description: [
+                `**${valor}** recebido com sucesso`,
+                ``,
+                `👤 **Cliente:** ${nomeCompleto}`,
+                `🎯 **Alvo:** ${alvo}`
+            ].join('\n'),
+            color: 0x22C55E,
+            timestamp: new Date().toISOString(),
+            footer: { text: '💚 Pagamento confirmado via ZPay' }
+        };
 
-        // 🕒 Data do pagamento (Brasília)
+        // ---------- Embed 2: Dados do cliente ----------
+        const embedCliente = {
+            title: '📋 Dados do Cliente',
+            color: 0x7c4dff,
+            fields: [
+                { name: '👤 Nome',     value: nomeCompleto || '—', inline: true  },
+                { name: '📧 E-mail',   value: email        || '—', inline: false },
+                { name: '🪪 CPF',      value: cpf          || '—', inline: true  },
+                { name: '📱 Telefone', value: telefone     || '—', inline: true  }
+            ]
+        };
+
+        // ---------- Embed 3: Detalhes do pagamento ----------
+        const embedPagamento = {
+            title: '💳 Detalhes do Pagamento',
+            color: 0x0400f0,
+            fields: [
+                { name: '💵 Valor',    value: valor,                                     inline: true  },
+                { name: '💳 Método',   value: (data.paymentMethod || 'pix').toUpperCase(), inline: true  },
+                { name: '🎯 Alvo',     value: alvo,                                      inline: true  },
+                { name: '🆔 ID ZPay',  value: `\`${data.id || '—'}\``,                   inline: false }
+            ]
+        };
+
         if (data.paidAt) {
-            fields.push({
+            embedPagamento.fields.push({
                 name: '🕒 Pago em',
                 value: new Date(data.paidAt).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
                 inline: false
@@ -130,13 +116,7 @@ module.exports = async (req, res) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 username: 'PIX Aprovado 💰',
-                embeds: [{
-                    title: '💰 PIX APROVADO',
-                    color: 0x22C55E,
-                    fields: fields,
-                    footer: { text: 'ZPay Solution' },
-                    timestamp: new Date().toISOString()
-                }]
+                embeds: [embedResumo, embedCliente, embedPagamento]
             })
         });
 
