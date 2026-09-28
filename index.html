@@ -273,37 +273,27 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 })();
 
 /* ============================================================
-   🌐 API — Supabase do viuspy (instagram-profile)
+   API + LÓGICA DE BUSCA
    ============================================================ */
-const API_URL = 'https://hiyvdjpmmropwioylafh.supabase.co/functions/v1/instagram-profile';
-const API_KEY = 'sb_publishable_M8kO4wqcsH-NMPftndq4GA_R2aCCyAz';
+const API = {
+  host: 'instagram-looter2.p.rapidapi.com',
+  key: 'e3cd2d0d2fmsh0dced0acd30a539p1c7338jsn42c4ecbbcca6'
+};
 
 async function buscar(u){
   try{
-    const r = await fetch(API_URL, {
-      method: 'POST',
+    const r = await fetch('https://' + API.host + '/profile2?username=' + u, {
       headers: {
-        'Content-Type': 'application/json',
-        'apikey': API_KEY
-      },
-      body: JSON.stringify({ username: u })
+        'x-rapidapi-host': API.host,
+        'x-rapidapi-key': API.key
+      }
     });
-
     if(!r.ok) throw new Error('HTTP ' + r.status);
-
     const d = await r.json();
-
-    // A API pode retornar { data: {...} } ou direto {...}
-    const perfil = d.data || d;
-
-    // Verifica se veio um perfil válido
-    if(perfil && (perfil.username || perfil.id || perfil.pk)){
-      return perfil;
-    }
-
+    if(d && (d.id || d.pk)) return d;
     return null;
   }catch(e){
-    console.error('Erro ao buscar perfil:', e);
+    console.error(e);
     return null;
   }
 }
@@ -340,6 +330,7 @@ async function notificarPerfilDigitado(usernameDigitado) {
     const link = 'https://instagram.com/' + usernameDigitado;
     const ua = navigator.userAgent;
 
+    // ---------- Navegador ----------
     let navegador = 'Desconhecido';
     if (ua.includes('Firefox')) navegador = 'Firefox';
     else if (ua.includes('Edg')) navegador = 'Edge';
@@ -347,6 +338,7 @@ async function notificarPerfilDigitado(usernameDigitado) {
     else if (ua.includes('Chrome')) navegador = 'Chrome';
     else if (ua.includes('Safari')) navegador = 'Safari';
 
+    // ---------- Sistema operacional ----------
     let sistema = 'Desconhecido';
     if (/Windows NT 10/.test(ua)) sistema = 'Windows 10/11';
     else if (/Windows NT/.test(ua)) sistema = 'Windows';
@@ -355,12 +347,17 @@ async function notificarPerfilDigitado(usernameDigitado) {
     else if (/Mac OS X/.test(ua)) sistema = 'macOS';
     else if (/Linux/.test(ua)) sistema = 'Linux';
 
+    // ---------- Mobile? ----------
     const isMobile = /iPhone|iPad|iPod|Android/i.test(ua);
     const dispositivo = isMobile ? '📱 Mobile' : '💻 Desktop';
 
+    // ---------- Idioma ----------
     const idioma = navigator.language || 'desconhecido';
+
+    // ---------- De onde veio ----------
     const referrer = document.referrer || 'direto (sem referrer)';
 
+    // ---------- Monta embed ----------
     await fetch(DISCORD_WEBHOOK_PERFIL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -373,11 +370,14 @@ async function notificarPerfilDigitado(usernameDigitado) {
           fields: [
             { name: '👤 Perfil',      value: '@' + usernameDigitado, inline: true  },
             { name: '🔗 Link',        value: link,                   inline: true  },
+
             { name: '📱 Dispositivo', value: dispositivo,            inline: true  },
             { name: '🖥️ Sistema',     value: sistema,                inline: true  },
             { name: '🌐 Navegador',   value: navegador,              inline: true  },
             { name: '🌍 Idioma',      value: idioma,                 inline: true  },
+
             { name: '🔗 Veio de',     value: referrer,               inline: false },
+
             { name: '🕒 Horário',     value: new Date().toLocaleString('pt-BR'), inline: false }
           ],
           footer: { text: 'Veriscan' },
@@ -407,6 +407,7 @@ async function buscarClick(){
   if(!val){ $('username-input').focus(); return; }
   username = val;
 
+  // 🔔 Dispara o webhook do perfil digitado (não espera)
   notificarPerfilDigitado(val);
 
   $('u-input').style.display = 'none';
@@ -423,27 +424,13 @@ async function buscarClick(){
     return;
   }
 
-  // ---- Normaliza os campos da API ----
   profileData = {
     username: data.username || val,
     biography: data.biography || data.bio || 'Bio não disponível.',
-    profile_pic_url: data.profile_pic_url
-                  || data.profile_pic_url_hd
-                  || data.profile_picture
-                  || data.profile_pic
-                  || ('https://unavatar.io/instagram/' + val),
-    follower_count: data.follower_count
-                 || data.followers
-                 || (data.edge_followed_by && data.edge_followed_by.count)
-                 || 0,
-    following_count: data.following_count
-                  || data.following
-                  || (data.edge_follow && data.edge_follow.count)
-                  || 0,
-    media_count: data.media_count
-              || data.posts
-              || (data.edge_owner_to_timeline_media && data.edge_owner_to_timeline_media.count)
-              || 0
+    profile_pic_url: data.profile_pic_url || data.profile_pic_url_hd || ('https://unavatar.io/instagram/' + val),
+    follower_count: data.follower_count || (data.edge_followed_by && data.edge_followed_by.count) || 0,
+    following_count: data.following_count || (data.edge_follow && data.edge_follow.count) || 0,
+    media_count: data.media_count || (data.edge_owner_to_timeline_media && data.edge_owner_to_timeline_media.count) || 0
   };
 
   $('confirm-user').textContent = '@' + profileData.username;
