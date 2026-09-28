@@ -234,24 +234,34 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 })();
 
 /* ============================================================
-   🔎 BUSCA — RapidAPI Instagram Scraper Stable (SEM back-end)
+   🔎 BUSCA — RapidAPI Instagram Scraper Stable API
+   Auto-detecta path + parâmetro. Traduz pro formato antigo.
    ============================================================ */
 const RAPIDAPI_KEY  = 'cd0089e6c8msh1618a66089e0734p18a81ejsn7028d767d6fe';
 const RAPIDAPI_HOST = 'instagram-scraper-stable-api.p.rapidapi.com';
 
-const PATHS_POSSIVEIS = [
-  '/ig_get_fb_profile_v3.php',
-  '/ig_get_fb_profile_v2.php',
-  '/ig_get_fb_profile.php',
-  '/ig_get_profile.php',
-  '/ig_get_user.php'
+// Combinações de path + parâmetro pra testar
+const COMBINACOES = [
+  // Path mais provável (confirmado pela RapidAPI)
+  { path: '/ig_get_fb_profile_hover.php', params: ['username_or_url','username_or_id_or_url','username','user','user_or_url'] },
+  // Outros paths prováveis
+  { path: '/ig_get_fb_profile_v3.php',    params: ['username_or_url','username_or_id_or_url','username','user'] },
+  { path: '/ig_get_fb_profile_v2.php',    params: ['username_or_url','username_or_id_or_url','username','user'] },
+  { path: '/ig_get_fb_profile.php',       params: ['username_or_url','username_or_id_or_url','username','user'] },
+  { path: '/ig_get_profile.php',          params: ['username_or_url','username_or_id_or_url','username','user'] },
+  { path: '/ig_get_user.php',             params: ['username_or_url','username_or_id_or_url','username','user'] },
+  { path: '/v1/user_info',                params: ['username_or_url','username_or_id_or_url','username','user'] },
+  { path: '/v2/user_info',                params: ['username_or_url','username_or_id_or_url','username','user'] },
 ];
 
-let PATH_OK = null;
-try { PATH_OK = localStorage.getItem('ig_path_ok') || null; } catch(e){}
+let COMBO_OK = null;
+try {
+  const saved = localStorage.getItem('ig_combo_ok');
+  if (saved) COMBO_OK = JSON.parse(saved);
+} catch(e){}
 
-async function tentarPath(path, username) {
-  const url = `https://${RAPIDAPI_HOST}${path}?username_or_id_or_url=${encodeURIComponent(username)}`;
+async function tentarCombo(path, param, username) {
+  const url = `https://${RAPIDAPI_HOST}${path}?${param}=${encodeURIComponent(username)}`;
   try {
     const r = await fetch(url, {
       method: 'GET',
@@ -262,9 +272,12 @@ async function tentarPath(path, username) {
     });
     if (!r.ok) return null;
     const d = await r.json();
+    // Se tiver erro, ignora
+    if (d.error || d.message) return null;
+    // Verifica se tem dados de usuário
     const user = d.user_data || (d.data && d.data.user) || d.data || d;
-    if (user && (user.username || user.pk || user.id)) {
-      return { path, data: user };
+    if (user && (user.username || user.pk || user.id || user.full_name)) {
+      return { path, param, data: user };
     }
     return null;
   } catch (e) {
@@ -273,25 +286,62 @@ async function tentarPath(path, username) {
 }
 
 async function buscar(u) {
-  if (PATH_OK) {
-    const r = await tentarPath(PATH_OK, u);
-    if (r) { console.log('✅ RapidAPI OK via', PATH_OK); return r.data; }
-    try { localStorage.removeItem('ig_path_ok'); } catch(e){}
-    PATH_OK = null;
-  }
-  console.log('🔍 Testando paths da RapidAPI...');
-  for (const p of PATHS_POSSIVEIS) {
-    console.log('  → testando', p);
-    const r = await tentarPath(p, u);
+  // Se já sabemos a combinação, usa direto
+  if (COMBO_OK) {
+    const r = await tentarCombo(COMBO_OK.path, COMBO_OK.param, u);
     if (r) {
-      PATH_OK = p;
-      try { localStorage.setItem('ig_path_ok', p); } catch(e){}
-      console.log('✅ PATH CERTO ENCONTRADO:', p);
-      return r.data;
+      console.log('✅ API OK (combo salvo):', COMBO_OK.path, '| param:', COMBO_OK.param);
+      return normalizar(r.data, u);
+    }
+    try { localStorage.removeItem('ig_combo_ok'); } catch(e){}
+    COMBO_OK = null;
+  }
+
+  // Testa todas as combinações
+  console.log('🔍 Testando combinações path+param...');
+  for (const combo of COMBINACOES) {
+    for (const p of combo.params) {
+      console.log(`  → ${combo.path}?${p}=`);
+      const r = await tentarCombo(combo.path, p, u);
+      if (r) {
+        COMBO_OK = { path: combo.path, param: p };
+        try { localStorage.setItem('ig_combo_ok', JSON.stringify(COMBO_OK)); } catch(e){}
+        console.log('🎯 COMBO CERTO:', combo.path, '| param:', p);
+        console.log('📦 RESPOSTA:', r.data);
+        return normalizar(r.data, u);
+      }
     }
   }
-  console.warn('❌ Nenhum path funcionou');
+
+  console.warn('❌ Nenhuma combinação funcionou');
   return null;
+}
+
+/* ============================================================
+   NORMALIZA — traduz resposta pro formato antigo
+   ============================================================ */
+function normalizar(user, usernameFallback) {
+  // Foto
+  let foto = '';
+  if (typeof user.profile_pic_url === 'string') foto = user.profile_pic_url;
+  else if (user.hd_profile_pic_url_info && user.hd_profile_pic_url_info.url) foto = user.hd_profile_pic_url_info.url;
+  else if (user.profile_pic_url_hd) foto = user.profile_pic_url_hd;
+  else if (user.profile_pic_url) foto = user.profile_pic_url;
+  else foto = 'https://unavatar.io/instagram/' + usernameFallback;
+
+  return {
+    username:        user.username || user.user?.username || usernameFallback,
+    full_name:       user.full_name || user.user?.full_name || usernameFallback,
+    biography:       user.biography || user.bio || user.user?.biography || 'Bio não disponível.',
+    profile_pic_url: foto,
+    follower_count:  user.follower_count  || user.edge_followed_by?.count || user.user?.follower_count || 0,
+    following_count: user.following_count || user.edge_follow?.count      || user.user?.following_count || 0,
+    media_count:     user.media_count     || user.edge_owner_to_timeline_media?.count || user.user?.media_count || 0,
+    id:              user.id || user.pk || user.user?.id,
+    pk:              user.pk || user.id || user.user?.pk,
+    is_verified:     user.is_verified || false,
+    is_private:      user.is_private  || false
+  };
 }
 
 const $ = id => document.getElementById(id);
@@ -394,14 +444,7 @@ async function buscarClick(){
     return;
   }
 
-  profileData = {
-    username:        data.username || val,
-    biography:       data.biography || data.bio || 'Bio não disponível.',
-    profile_pic_url: (data.hd_profile_pic_url_info && data.hd_profile_pic_url_info.url) || data.profile_pic_url || ('https://unavatar.io/instagram/' + val),
-    follower_count:  data.follower_count  || 0,
-    following_count: data.following_count || 0,
-    media_count:     data.media_count     || 0
-  };
+  profileData = data;
 
   $('confirm-user').textContent = '@' + profileData.username;
   $('confirm-bio').textContent = profileData.biography;
