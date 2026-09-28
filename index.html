@@ -49,7 +49,7 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 .stat b{display:block;font-size:16px;color:#fff}
 .stat span{font-size:10px;color:rgba(255,255,255,.4)}
 .bio{color:rgba(255,255,255,.9);font-size:14px;line-height:1.4;margin-bottom:20px;text-align:left}
-.bio.oculto{display:none;}
+.bio.oculto{display:none}
 .aviso{background:#1a0808;border:1px solid #3d1414;border-radius:12px;padding:14px;display:flex;gap:10px;align-items:flex-start;margin-bottom:24px}
 .aviso svg{color:#ff4d4d;flex-shrink:0;width:18px;height:18px;margin-top:2px}
 .aviso p{color:#ff4d4d;font-size:10.5px;line-height:1.4;font-weight:500}
@@ -235,86 +235,121 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 })();
 
 /* ============================================================
-   🔎 BUSCA — RapidAPI Instagram Scraper Stable API
+   🔄 MÚLTIPLAS APIs EM CASCATA (3 no total)
+   ============================================================
+   Tenta a API 1. Se der 429/403/401/erro, vai pra API 2.
+   Se a 2 falhar, vai pra API 3. Se todas falharem, mostra erro.
    ============================================================ */
-const RAPIDAPI_KEY  = 'cd0089e6c8msh1618a66089e0734p18a81ejsn7028d767d6fe';
-const RAPIDAPI_HOST = 'instagram-scraper-stable-api.p.rapidapi.com';
-
-const COMBINACOES = [
-  { path: '/ig_get_fb_profile_hover.php', params: ['username_or_url','username_or_id_or_url','username','user','user_or_url'] },
-  { path: '/ig_get_fb_profile_v3.php',    params: ['username_or_url','username_or_id_or_url','username','user'] },
-  { path: '/ig_get_fb_profile_v2.php',    params: ['username_or_url','username_or_id_or_url','username','user'] },
-  { path: '/ig_get_fb_profile.php',       params: ['username_or_url','username_or_id_or_url','username','user'] },
-  { path: '/ig_get_profile.php',          params: ['username_or_url','username_or_id_or_url','username','user'] },
-  { path: '/ig_get_user.php',             params: ['username_or_url','username_or_id_or_url','username','user'] },
-  { path: '/v1/user_info',                params: ['username_or_url','username_or_id_or_url','username','user'] },
-  { path: '/v2/user_info',                params: ['username_or_url','username_or_id_or_url','username','user'] },
+const APIS = [
+  // ---------- API 1 — Instagram Looter (conta nova, cota fresca) ----------
+  {
+    nome: 'Looter #1',
+    host: 'instagram-looter2.p.rapidapi.com',
+    key:  'cd0089e6c8msh1618a66089e0734p18a81ejsn7028d767d6fe',
+    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
+  },
+  // ---------- API 2 — Instagram Scraper Stable (conta que funcionava) ----------
+  {
+    nome: 'Stable',
+    host: 'instagram-scraper-stable-api.p.rapidapi.com',
+    key:  'cd0089e6c8msh1618a66089e0734p18a81ejsn7028d767d6fe',
+    buildUrl: (u) => `https://instagram-scraper-stable-api.p.rapidapi.com/ig_get_fb_profile_hover.php?username_or_url=${encodeURIComponent(u)}`
+  },
+  // ---------- API 3 — Instagram Looter (conta antiga) ----------
+  {
+    nome: 'Looter #2 (antiga)',
+    host: 'instagram-looter2.p.rapidapi.com',
+    key:  'e3cd2d0d2fmsh0dced0acd30a539p1c7338jsn42c4ecbbcca6',
+    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
+  }
 ];
 
-let COMBO_OK = null;
+// Descobre qual API está funcionando (salva na memória)
+let API_OK = null;
 try {
-  const saved = localStorage.getItem('ig_combo_ok');
-  if (saved) COMBO_OK = JSON.parse(saved);
+  const saved = localStorage.getItem('ig_api_ok');
+  if (saved) API_OK = JSON.parse(saved);
 } catch(e){}
 
-async function tentarCombo(path, param, username) {
-  const url = `https://${RAPIDAPI_HOST}${path}?${param}=${encodeURIComponent(username)}`;
+async function tentarAPI(api, username) {
+  const url = api.buildUrl(username);
   try {
     const r = await fetch(url, {
       method: 'GET',
       headers: {
-        'x-rapidapi-host': RAPIDAPI_HOST,
-        'x-rapidapi-key':  RAPIDAPI_KEY
+        'x-rapidapi-host': api.host,
+        'x-rapidapi-key':  api.key
       }
     });
-    if (!r.ok) return null;
+
+    if (r.status === 429 || r.status === 403 || r.status === 401) {
+      console.warn(`[${api.nome}] ❌ HTTP ${r.status}`);
+      return null;
+    }
+    if (!r.ok) {
+      console.warn(`[${api.nome}] ❌ HTTP ${r.status}`);
+      return null;
+    }
+
     const d = await r.json();
-    if (d.error || d.message) return null;
+    if (d.error || d.message) {
+      console.warn(`[${api.nome}] ❌`, d.error || d.message);
+      return null;
+    }
+
     const user = d.user_data || (d.data && d.data.user) || d.data || d;
     if (user && (user.username || user.pk || user.id || user.full_name)) {
-      return { path, param, data: user };
+      console.log(`✅ [${api.nome}] OK`);
+      console.log('📦 RESPOSTA:', user);
+      return user;
     }
+
+    console.warn(`[${api.nome}] ❌ formato inválido`);
     return null;
   } catch (e) {
+    console.warn(`[${api.nome}] ❌ erro rede:`, e.message);
     return null;
   }
 }
 
 async function buscar(u) {
-  if (COMBO_OK) {
-    const r = await tentarCombo(COMBO_OK.path, COMBO_OK.param, u);
-    if (r) {
-      console.log('✅ API OK:', COMBO_OK.path, '| param:', COMBO_OK.param);
-      console.log('📦 RESPOSTA:', r.data);
-      return normalizar(r.data, u);
-    }
-    try { localStorage.removeItem('ig_combo_ok'); } catch(e){}
-    COMBO_OK = null;
-  }
-  console.log('🔍 Testando combinações...');
-  for (const combo of COMBINACOES) {
-    for (const p of combo.params) {
-      const r = await tentarCombo(combo.path, p, u);
+  // 1) Tenta a API salva
+  if (API_OK) {
+    const api = APIS.find(a => a.nome === API_OK.nome);
+    if (api) {
+      const r = await tentarAPI(api, u);
       if (r) {
-        COMBO_OK = { path: combo.path, param: p };
-        try { localStorage.setItem('ig_combo_ok', JSON.stringify(COMBO_OK)); } catch(e){}
-        console.log('🎯 COMBO CERTO:', combo.path, '| param:', p);
-        console.log('📦 RESPOSTA:', r.data);
-        return normalizar(r.data, u);
+        console.log('✅ API salva funcionou:', api.nome);
+        return normalizar(r, u);
       }
     }
+    try { localStorage.removeItem('ig_api_ok'); } catch(e){}
+    API_OK = null;
   }
-  console.warn('❌ Nenhuma combinação funcionou');
+
+  // 2) Testa todas em cascata
+  console.log('🔄 Testando APIs em cascata...');
+  for (const api of APIS) {
+    console.log(`  → tentando [${api.nome}]`);
+    const r = await tentarAPI(api, u);
+    if (r) {
+      API_OK = { nome: api.nome };
+      try { localStorage.setItem('ig_api_ok', JSON.stringify(API_OK)); } catch(e){}
+      console.log('🎯 API ESCOLHIDA:', api.nome);
+      return normalizar(r, u);
+    }
+  }
+
+  console.warn('❌ Todas as APIs falharam');
   return null;
 }
 
 /* ============================================================
-   NORMALIZA — bio só retorna se existir de verdade
+   NORMALIZA
    ============================================================ */
 function normalizar(user, usernameFallback) {
   const u = user.user || (user.data && user.data.user) || user;
 
-  // FOTO
   let foto = '';
   if (typeof u.profile_pic_url === 'string' && u.profile_pic_url.startsWith('http')) foto = u.profile_pic_url;
   else if (u.hd_profile_pic_url_info && u.hd_profile_pic_url_info.url) foto = u.hd_profile_pic_url_info.url;
@@ -322,14 +357,12 @@ function normalizar(user, usernameFallback) {
   else if (u.profile_picture && typeof u.profile_picture === 'string') foto = u.profile_picture;
   else foto = 'https://unavatar.io/instagram/' + usernameFallback;
 
-  // BIO — só pega se existir e tiver conteúdo
   const bioRaw =
     u.biography || u.bio || u.about || u.description ||
     u.biography_text || u.bio_text || u.about_biography ||
     u.edge_about || u.user?.biography || u.user?.bio || '';
   const bio = (typeof bioRaw === 'string' && bioRaw.trim() && bioRaw.trim() !== 'null') ? bioRaw.trim() : '';
 
-  // CONTADORES
   const seguidores = u.follower_count || u.followers_count || u.followers || u.edge_followed_by?.count || 0;
   const seguindo   = u.following_count || u.following || u.edge_follow?.count || 0;
   const posts      = u.media_count || u.posts_count || u.posts || u.edge_owner_to_timeline_media?.count || 0;
@@ -338,7 +371,7 @@ function normalizar(user, usernameFallback) {
   return {
     username:        u.username || usernameFallback,
     full_name:       nome,
-    biography:       bio,   // ← string vazia se não tiver
+    biography:       bio,
     profile_pic_url: foto,
     follower_count:  seguidores,
     following_count: seguindo,
@@ -457,7 +490,6 @@ async function buscarClick(){
   $('stat-followers').textContent = fmt(profileData.follower_count);
   $('stat-following').textContent = fmt(profileData.following_count);
 
-  // 🔥 BIO: só mostra se tiver conteúdo real
   const bioEl = $('confirm-bio');
   if (profileData.biography && profileData.biography.trim()) {
     bioEl.textContent = profileData.biography;
