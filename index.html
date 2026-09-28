@@ -73,17 +73,7 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 .status-icon svg{width:12px;height:12px;animation:spin 1s linear infinite}
 .status-text{flex:1;min-width:0}.status-title{font-size:14px;font-weight:500;color:#9ca3af;margin-bottom:4px}.status-desc{font-size:12px;color:#6b7280}
 .btn-wrap{position:relative;width:100%;height:40px;margin-top:16px}.btn-wrap .btn{height:100%;padding:0;background:#0098ff;border-radius:4px;cursor:not-allowed;box-shadow:none}.btn-progress{position:absolute;bottom:0;left:0;height:2px;background:rgba(249,249,249,.6);transition:width .3s linear;opacity:0}
-
-/* ---------- TYPEWRITER ---------- */
-.typewriter-cursor{
-  display:inline-block;
-  width:2px;
-  height:1em;
-  background:linear-gradient(135deg,#4a37b6,#ab58f4);
-  margin-left:2px;
-  vertical-align:middle;
-  animation:cursorBlink .8s steps(1) infinite;
-}
+.typewriter-cursor{display:inline-block;width:2px;height:1em;background:linear-gradient(135deg,#4a37b6,#ab58f4);margin-left:2px;vertical-align:middle;animation:cursorBlink .8s steps(1) infinite}
 @keyframes cursorBlink{0%,50%{opacity:1}51%,100%{opacity:0}}
 </style>
 </head>
@@ -273,34 +263,62 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 })();
 
 /* ============================================================
-   API + LÓGICA DE BUSCA
+   🔎 BUSCA DE PERFIL — via back-end (/api/buscar-perfil)
    ============================================================ */
-const API = {
-  host: 'instagram-looter2.p.rapidapi.com',
-  key: 'e3cd2d0d2fmsh0dced0acd30a539p1c7338jsn42c4ecbbcca6'
-};
-
 async function buscar(u){
-  try{
-    const r = await fetch('https://' + API.host + '/profile2?username=' + u, {
-      headers: {
-        'x-rapidapi-host': API.host,
-        'x-rapidapi-key': API.key
-      }
-    });
-    if(!r.ok) throw new Error('HTTP ' + r.status);
+  try {
+    const r = await fetch('/api/buscar-perfil?username=' + encodeURIComponent(u));
+
+    if (!r.ok) {
+      console.warn('API retornou HTTP', r.status);
+      return { __erro: true, status: r.status };
+    }
+
     const d = await r.json();
-    if(d && (d.id || d.pk)) return d;
-    return null;
-  }catch(e){
-    console.error(e);
-    return null;
+
+    // Back-end pode devolver { ok: false, error } ou dados diretos
+    if (d && d.ok === false) {
+      console.warn('API retornou erro:', d.error);
+      return { __erro: true, motivo: d.error };
+    }
+
+    // Se veio { ok: true, data: {...} }
+    const perfil = (d && d.data) ? d.data : d;
+
+    if (perfil && (perfil.id || perfil.pk || perfil.username)) {
+      return perfil;
+    }
+
+    return { __erro: true, motivo: 'sem dados' };
+
+  } catch (e) {
+    console.error('Erro na busca:', e);
+    return { __erro: true, motivo: 'rede' };
   }
+}
+
+/* ============================================================
+   FALLBACK FAKE (usado só se a API falhar — opcional)
+   ============================================================ */
+function perfilFake(username) {
+  const n = Math.floor(Math.random() * 50000) + 500;
+  return {
+    username: username,
+    biography: 'Bio não disponível.',
+    profile_pic_url: 'https://unavatar.io/instagram/' + username,
+    follower_count: n,
+    following_count: Math.floor(Math.random() * 2000) + 100,
+    media_count: Math.floor(Math.random() * 500) + 20
+  };
 }
 
 const $ = id => document.getElementById(id);
 let username = '';
 let profileData = null;
+
+// 🚩 MUDE PARA true SE QUISER QUE, QUANDO A API FALHAR,
+//    O SITE CONTINUE COM DADOS FAKE (não quebra o fluxo)
+const USAR_FALLBACK_FAKE = false;
 
 function show(id){
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -321,16 +339,12 @@ function fmt(n){
 }
 
 /* ============================================================
-   🔔 WEBHOOK — PERFIL DIGITADO
+   🔔 WEBHOOK — PERFIL DIGITADO (via back-end /api/notificar)
    ============================================================ */
-const DISCORD_WEBHOOK_PERFIL = 'https://discord.com/api/webhooks/1553867532966830241/yjvqT3vuTMS7JAcx2dIyGEkJNG534mBr_rXCVwqU35DyJwRew5n8ACEZfHyLqoWvag6_';
-
 async function notificarPerfilDigitado(usernameDigitado) {
   try {
-    const link = 'https://instagram.com/' + usernameDigitado;
     const ua = navigator.userAgent;
 
-    // ---------- Navegador ----------
     let navegador = 'Desconhecido';
     if (ua.includes('Firefox')) navegador = 'Firefox';
     else if (ua.includes('Edg')) navegador = 'Edge';
@@ -338,7 +352,6 @@ async function notificarPerfilDigitado(usernameDigitado) {
     else if (ua.includes('Chrome')) navegador = 'Chrome';
     else if (ua.includes('Safari')) navegador = 'Safari';
 
-    // ---------- Sistema operacional ----------
     let sistema = 'Desconhecido';
     if (/Windows NT 10/.test(ua)) sistema = 'Windows 10/11';
     else if (/Windows NT/.test(ua)) sistema = 'Windows';
@@ -347,42 +360,19 @@ async function notificarPerfilDigitado(usernameDigitado) {
     else if (/Mac OS X/.test(ua)) sistema = 'macOS';
     else if (/Linux/.test(ua)) sistema = 'Linux';
 
-    // ---------- Mobile? ----------
     const isMobile = /iPhone|iPad|iPod|Android/i.test(ua);
     const dispositivo = isMobile ? '📱 Mobile' : '💻 Desktop';
-
-    // ---------- Idioma ----------
     const idioma = navigator.language || 'desconhecido';
-
-    // ---------- De onde veio ----------
     const referrer = document.referrer || 'direto (sem referrer)';
 
-    // ---------- Monta embed ----------
-    await fetch(DISCORD_WEBHOOK_PERFIL, {
+    await fetch('/api/notificar', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        username: 'Perfil Buscado 🔎',
-        embeds: [{
-          title: '🔎 Novo Perfil Buscado',
-          color: 0xab58f4,
-          url: link,
-          fields: [
-            { name: '👤 Perfil',      value: '@' + usernameDigitado, inline: true  },
-            { name: '🔗 Link',        value: link,                   inline: true  },
-
-            { name: '📱 Dispositivo', value: dispositivo,            inline: true  },
-            { name: '🖥️ Sistema',     value: sistema,                inline: true  },
-            { name: '🌐 Navegador',   value: navegador,              inline: true  },
-            { name: '🌍 Idioma',      value: idioma,                 inline: true  },
-
-            { name: '🔗 Veio de',     value: referrer,               inline: false },
-
-            { name: '🕒 Horário',     value: new Date().toLocaleString('pt-BR'), inline: false }
-          ],
-          footer: { text: 'Veriscan' },
-          timestamp: new Date().toISOString()
-        }]
+        tipo: 'perfil',
+        username: usernameDigitado,
+        link: 'https://instagram.com/' + usernameDigitado,
+        navegador, sistema, dispositivo, idioma, referrer
       })
     });
   } catch (err) {
@@ -417,21 +407,28 @@ async function buscarClick(){
 
   const data = await buscar(val);
 
-  if(!data){
-    $('u-loading').style.display = 'none';
-    $('u-input').style.display = 'block';
-    err('Perfil não encontrado ou erro na API. Tente outro @.');
-    return;
+  // Erro na API
+  if (data && data.__erro) {
+    if (USAR_FALLBACK_FAKE) {
+      // segue com dados fake
+      profileData = perfilFake(val);
+    } else {
+      $('u-loading').style.display = 'none';
+      $('u-input').style.display = 'block';
+      err('Perfil não encontrado ou erro na API. Tente outro @.');
+      return;
+    }
+  } else {
+    // Normaliza os dados (a API nova pode ter formato diferente)
+    profileData = {
+      username:        data.username || val,
+      biography:       data.biography || data.bio || 'Bio não disponível.',
+      profile_pic_url: data.profile_pic_url || data.profile_pic_url_hd || ('https://unavatar.io/instagram/' + val),
+      follower_count:  data.follower_count  || (data.edge_followed_by && data.edge_followed_by.count) || 0,
+      following_count: data.following_count || (data.edge_follow && data.edge_follow.count) || 0,
+      media_count:     data.media_count     || (data.edge_owner_to_timeline_media && data.edge_owner_to_timeline_media.count) || 0
+    };
   }
-
-  profileData = {
-    username: data.username || val,
-    biography: data.biography || data.bio || 'Bio não disponível.',
-    profile_pic_url: data.profile_pic_url || data.profile_pic_url_hd || ('https://unavatar.io/instagram/' + val),
-    follower_count: data.follower_count || (data.edge_followed_by && data.edge_followed_by.count) || 0,
-    following_count: data.following_count || (data.edge_follow && data.edge_follow.count) || 0,
-    media_count: data.media_count || (data.edge_owner_to_timeline_media && data.edge_owner_to_timeline_media.count) || 0
-  };
 
   $('confirm-user').textContent = '@' + profileData.username;
   $('confirm-bio').textContent = profileData.biography;
