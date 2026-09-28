@@ -235,29 +235,59 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 })();
 
 /* ============================================================
-   🚦 CONTROLE DE PESQUISAS — 1 por 15min (fake "1 pra sempre")
+   🚦 CONTROLE DE PESQUISA — localStorage + Cookie (BLOQUEIO FORTE)
+   ============================================================
+   - localStorage: guarda timestamp
+   - Cookie: dupla proteção (mesmo se apagar localStorage, cookie fica)
+   - Bloqueia: F5, nova guia, fechar/abrir navegador
+   - Reseta depois de X minutos
    ============================================================ */
-const LIMITE_MINUTOS = 15;           // ← troque aqui pra mudar o tempo
-const CHAVE_STORAGE  = 'vs_pesq_ts'; // chave no localStorage
+const LIMITE_MINUTOS = 15;           // ← mude aqui (minutos)
+const CHAVE_LS = 'vs_pesq_ts';       // nome no localStorage
+const CHAVE_CK = 'vs_pesq';          // nome do cookie
+
+function setCookie(nome, valor, minutos) {
+  const d = new Date();
+  d.setTime(d.getTime() + minutos * 60 * 1000);
+  document.cookie = nome + '=' + valor + '; expires=' + d.toUTCString() + '; path=/; SameSite=Lax';
+}
+
+function getCookie(nome) {
+  const match = document.cookie.match(new RegExp('(^|;\\s*)' + nome + '=([^;]*)'));
+  return match ? decodeURIComponent(match[2]) : null;
+}
+
+function apagarCookie(nome) {
+  document.cookie = nome + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+}
 
 function podePesquisar() {
-  try {
-    const ts = localStorage.getItem(CHAVE_STORAGE);
-    if (!ts) return { ok: true };
-    const passou = Date.now() - parseInt(ts, 10);
-    const limite = LIMITE_MINUTOS * 60 * 1000;
-    if (passou >= limite) {
-      localStorage.removeItem(CHAVE_STORAGE);
-      return { ok: true };
-    }
-    return { ok: false, faltam: Math.ceil((limite - passou) / 1000) };
-  } catch(e) {
+  const agora = Date.now();
+  const limite = LIMITE_MINUTOS * 60 * 1000;
+  let tsLS = 0, tsCK = 0;
+
+  try { tsLS = parseInt(localStorage.getItem(CHAVE_LS) || '0', 10); } catch(e){}
+  const ckVal = getCookie(CHAVE_CK);
+  tsCK = ckVal ? parseInt(ckVal, 10) : 0;
+
+  // Pega o timestamp mais recente entre os dois
+  const ts = Math.max(tsLS, tsCK);
+  if (!ts) return { ok: true };
+
+  const passou = agora - ts;
+  if (passou >= limite) {
+    // Limpa os dois
+    try { localStorage.removeItem(CHAVE_LS); } catch(e){}
+    apagarCookie(CHAVE_CK);
     return { ok: true };
   }
+  return { ok: false, faltam: Math.ceil((limite - passou) / 1000) };
 }
 
 function marcarPesquisa() {
-  try { localStorage.setItem(CHAVE_STORAGE, String(Date.now())); } catch(e){}
+  const ts = String(Date.now());
+  try { localStorage.setItem(CHAVE_LS, ts); } catch(e){}
+  setCookie(CHAVE_CK, ts, LIMITE_MINUTOS);
 }
 
 /* ============================================================
@@ -316,7 +346,6 @@ async function tentarAPI(api, username) {
     const user = d.user_data || (d.data && d.data.user) || d.data || d;
     if (user && (user.username || user.pk || user.id || user.full_name)) {
       console.log(`✅ [${api.nome}] OK`);
-      console.log('📦 RESPOSTA:', user);
       return user;
     }
     console.warn(`[${api.nome}] ❌ formato inválido`);
@@ -332,17 +361,13 @@ async function buscar(u) {
     const api = APIS.find(a => a.nome === API_OK.nome);
     if (api) {
       const r = await tentarAPI(api, u);
-      if (r) {
-        console.log('✅ API salva funcionou:', api.nome);
-        return normalizar(r, u);
-      }
+      if (r) { console.log('✅ API salva:', api.nome); return normalizar(r, u); }
     }
     try { localStorage.removeItem('ig_api_ok'); } catch(e){}
     API_OK = null;
   }
   console.log('🔄 Testando APIs em cascata...');
   for (const api of APIS) {
-    console.log(`  → tentando [${api.nome}]`);
     const r = await tentarAPI(api, u);
     if (r) {
       API_OK = { nome: api.nome };
@@ -465,7 +490,7 @@ async function notificarPerfilDigitado(usernameDigitado) {
    EVENTOS
    ============================================================ */
 $('btn-start').addEventListener('click', () => {
-  // 🚦 Verifica se pode pesquisar
+  // 🚦 Bloqueio: verifica localStorage E cookie
   const status = podePesquisar();
   if (!status.ok) {
     const min = Math.floor(status.faltam / 60);
@@ -483,7 +508,7 @@ $('username-input').addEventListener('keypress', e => {
 });
 
 async function buscarClick(){
-  // 🚦 Segunda checagem (evita burlar clicando direto)
+  // 🚦 Verifica de novo (evita burlar clicando direto)
   const status = podePesquisar();
   if (!status.ok) {
     const min = Math.floor(status.faltam / 60);
@@ -496,7 +521,7 @@ async function buscarClick(){
   if(!val){ $('username-input').focus(); return; }
   username = val;
 
-  // 🔥 Marca a pesquisa como usada
+  // 🔥 Marca como usada (localStorage + cookie)
   marcarPesquisa();
 
   notificarPerfilDigitado(val);
