@@ -76,10 +76,221 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 .btn-wrap{position:relative;width:100%;height:40px;margin-top:16px}.btn-wrap .btn{height:100%;padding:0;background:#0098ff;border-radius:4px;cursor:not-allowed;box-shadow:none}.btn-progress{position:absolute;bottom:0;left:0;height:2px;background:rgba(249,249,249,.6);transition:width .3s linear;opacity:0}
 .typewriter-cursor{display:inline-block;width:2px;height:1em;background:linear-gradient(135deg,#4a37b6,#ab58f4);margin-left:2px;vertical-align:middle;animation:cursorBlink .8s steps(1) infinite}
 @keyframes cursorBlink{0%,50%{opacity:1}51%,100%{opacity:0}}
+
+/* ============================================
+   💎 MODAL VIP — Limite atingido / Oferta
+   ============================================ */
+.vs-modal-backdrop{
+  position:fixed;inset:0;z-index:99999;
+  background:rgba(0,0,0,.8);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  display:none;align-items:center;justify-content:center;
+  padding:20px;
+  animation:vsFadeIn .3s ease-out;
+  overflow-y:auto;
+}
+.vs-modal-backdrop.show{display:flex;}
+@keyframes vsFadeIn{from{opacity:0}to{opacity:1}}
+
+.vs-modal{
+  width:100%;max-width:400px;
+  background:linear-gradient(160deg,rgba(20,16,40,.98) 0%,rgba(28,20,58,.98) 100%);
+  border:1px solid rgba(168,85,247,.35);
+  border-radius:24px;
+  padding:28px 24px 24px;
+  text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 60px rgba(124,58,237,.25),inset 0 1px 0 rgba(255,255,255,.1);
+  position:relative;overflow:hidden;
+  animation:vsPopIn .4s cubic-bezier(.34,1.56,.64,1);
+  margin:auto;
+}
+@keyframes vsPopIn{from{opacity:0;transform:scale(.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+
+.vs-modal::before{
+  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:radial-gradient(circle,rgba(168,85,247,.15) 0%,transparent 60%);
+  pointer-events:none;animation:vsRotateGlow 10s linear infinite;
+}
+@keyframes vsRotateGlow{to{transform:rotate(360deg)}}
+
+.vs-modal-icon{
+  width:72px;height:72px;margin:0 auto 18px;
+  border-radius:22px;
+  background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 12px 36px rgba(124,58,237,.5),inset 0 1px 0 rgba(255,255,255,.3);
+  position:relative;z-index:1;
+}
+.vs-modal-icon svg{width:36px;height:36px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+.vs-modal-title{
+  font-size:23px;font-weight:800;color:#fff;
+  margin-bottom:12px;letter-spacing:-.02em;line-height:1.2;
+  position:relative;z-index:1;
+}
+.vs-modal-title span{
+  background:linear-gradient(135deg,#a855f7 0%,#6366f1 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+
+.vs-modal-desc{
+  font-size:14px;color:rgba(255,255,255,.75);
+  line-height:1.5;margin-bottom:20px;
+  position:relative;z-index:1;
+}
+.vs-modal-desc b{color:#fff;font-weight:600;}
+
+.vs-modal-target{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:rgba(168,85,247,.08);
+  border:1px solid rgba(168,85,247,.25);
+  border-radius:14px;
+  padding:12px 14px;
+  margin-bottom:18px;
+  position:relative;z-index:1;
+  font-size:14px;color:rgba(255,255,255,.85);
+}
+.vs-modal-target b{color:#a855f7;font-weight:700;}
+.vs-modal-target img{
+  width:26px;height:26px;border-radius:50%;object-fit:cover;
+  border:1.5px solid rgba(168,85,247,.4);
+}
+
+.vs-modal-benefits{
+  text-align:left;
+  background:rgba(168,85,247,.06);
+  border:1px solid rgba(168,85,247,.15);
+  border-radius:14px;
+  padding:14px 16px;
+  margin-bottom:20px;
+  position:relative;z-index:1;
+}
+.vs-modal-benefit{
+  display:flex;align-items:center;gap:10px;
+  font-size:13px;color:rgba(255,255,255,.85);
+  padding:4px 0;
+}
+.vs-modal-benefit svg{
+  width:16px;height:16px;stroke:#a855f7;
+  fill:none;stroke-width:3;flex-shrink:0;
+}
+
+.vs-modal-price{
+  display:flex;flex-direction:column;align-items:center;
+  margin-bottom:20px;position:relative;z-index:1;
+}
+.vs-modal-price .old{
+  font-size:13px;color:rgba(255,255,255,.5);
+  text-decoration:line-through;margin-bottom:4px;
+}
+.vs-modal-price .new{
+  font-size:32px;font-weight:800;
+  background:linear-gradient(135deg,#a855f7 0%,#6366f1 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  letter-spacing:-.02em;line-height:1;
+}
+.vs-modal-price .new small{font-size:16px;font-weight:600;}
+
+.vs-modal-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:16px;
+  border:none;border-radius:16px;
+  background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);
+  color:#fff;font-size:16px;font-weight:800;
+  cursor:pointer;font-family:inherit;
+  box-shadow:0 12px 32px rgba(124,58,237,.5),inset 0 1px 0 rgba(255,255,255,.25);
+  transition:all .25s;position:relative;z-index:1;
+  animation:vsPulse 2s ease-in-out infinite;
+  text-transform:uppercase;letter-spacing:.03em;
+}
+.vs-modal-btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(124,58,237,.65)}
+.vs-modal-btn:active{transform:scale(.98)}
+.vs-modal-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.5}
+@keyframes vsPulse{
+  0%,100%{box-shadow:0 12px 32px rgba(124,58,237,.5),inset 0 1px 0 rgba(255,255,255,.25)}
+  50%{box-shadow:0 12px 32px rgba(124,58,237,.7),0 0 0 8px rgba(124,58,237,.15),inset 0 1px 0 rgba(255,255,255,.25)}
+}
+
+.vs-modal-cancel{
+  display:block;width:100%;padding:12px;
+  margin-top:10px;
+  background:transparent;border:none;
+  color:rgba(255,255,255,.5);
+  font-size:13px;font-weight:500;
+  cursor:pointer;font-family:inherit;
+  transition:color .2s;
+  position:relative;z-index:1;
+}
+.vs-modal-cancel:hover{color:rgba(255,255,255,.8)}
+
+.vs-modal-timer{
+  font-size:11px;color:rgba(255,255,255,.4);
+  margin-top:14px;position:relative;z-index:1;
+}
 </style>
 </head>
 <body>
 <canvas id="matrix-canvas"></canvas>
+
+<!-- ============================================
+     💎 MODAL VIP — Limite atingido
+     ============================================ -->
+<div class="vs-modal-backdrop" id="vsModal">
+  <div class="vs-modal">
+    <div class="vs-modal-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+      </svg>
+    </div>
+
+    <h2 class="vs-modal-title">Você já usou sua <span>pesquisa grátis</span></h2>
+
+    <p class="vs-modal-desc">
+      Para continuar espionando <b>@<span id="vsTargetName">usuario</span></b> e ver <b>todos os dados ocultos</b>, ative o acesso VIP agora.
+    </p>
+
+    <div class="vs-modal-target">
+      <img id="vsTargetAvatar" src="" alt="" onerror="this.style.display='none'"/>
+      <span>Você quer espionar: <b>@<span id="vsTargetName2">usuario</span></b></span>
+    </div>
+
+    <div class="vs-modal-benefits">
+      <div class="vs-modal-benefit">
+        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        Acesso completo ao perfil do alvo
+      </div>
+      <div class="vs-modal-benefit">
+        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        Stories e posts ocultos
+      </div>
+      <div class="vs-modal-benefit">
+        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        Localização em tempo real
+      </div>
+      <div class="vs-modal-benefit">
+        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        Mensagens do Direct
+      </div>
+    </div>
+
+    <div class="vs-modal-price">
+      <span class="old">De R$ 279,90</span>
+      <span class="new">R$ 19,90<small>,90</small></span>
+    </div>
+
+    <button class="vs-modal-btn" id="vsModalVip">
+      <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      Desbloquear Acesso VIP
+    </button>
+
+    <button class="vs-modal-cancel" id="vsModalClose">
+      Voltar
+    </button>
+
+    <p class="vs-modal-timer">⚡ Promoção por tempo limitado</p>
+  </div>
+</div>
 
 <div class="screen active" id="screen-home">
 <div class="glass-card">
@@ -235,28 +446,22 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 })();
 
 /* ============================================================
-   🚦 CONTROLE DE PESQUISA — localStorage + Cookie (BLOQUEIO FORTE)
-   ============================================================
-   - localStorage: guarda timestamp
-   - Cookie: dupla proteção (mesmo se apagar localStorage, cookie fica)
-   - Bloqueia: F5, nova guia, fechar/abrir navegador
-   - Reseta depois de X minutos
+   🚦 CONTROLE DE PESQUISA — localStorage + Cookie
    ============================================================ */
-const LIMITE_MINUTOS = 15;           // ← mude aqui (minutos)
-const CHAVE_LS = 'vs_pesq_ts';       // nome no localStorage
-const CHAVE_CK = 'vs_pesq';          // nome do cookie
+const LIMITE_MINUTOS = 15;
+const CHAVE_LS = 'vs_pesq_ts';
+const CHAVE_CK = 'vs_pesq';
+const CHAVE_LAST_USER = 'vs_last_user';   // guarda o último usuário pesquisado
 
 function setCookie(nome, valor, minutos) {
   const d = new Date();
   d.setTime(d.getTime() + minutos * 60 * 1000);
   document.cookie = nome + '=' + valor + '; expires=' + d.toUTCString() + '; path=/; SameSite=Lax';
 }
-
 function getCookie(nome) {
   const match = document.cookie.match(new RegExp('(^|;\\s*)' + nome + '=([^;]*)'));
   return match ? decodeURIComponent(match[2]) : null;
 }
-
 function apagarCookie(nome) {
   document.cookie = nome + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 }
@@ -265,30 +470,71 @@ function podePesquisar() {
   const agora = Date.now();
   const limite = LIMITE_MINUTOS * 60 * 1000;
   let tsLS = 0, tsCK = 0;
-
   try { tsLS = parseInt(localStorage.getItem(CHAVE_LS) || '0', 10); } catch(e){}
   const ckVal = getCookie(CHAVE_CK);
   tsCK = ckVal ? parseInt(ckVal, 10) : 0;
-
-  // Pega o timestamp mais recente entre os dois
   const ts = Math.max(tsLS, tsCK);
   if (!ts) return { ok: true };
-
   const passou = agora - ts;
   if (passou >= limite) {
-    // Limpa os dois
     try { localStorage.removeItem(CHAVE_LS); } catch(e){}
     apagarCookie(CHAVE_CK);
     return { ok: true };
   }
-  return { ok: false, faltam: Math.ceil((limite - passou) / 1000) };
+  return { ok: false };
 }
-
 function marcarPesquisa() {
   const ts = String(Date.now());
   try { localStorage.setItem(CHAVE_LS, ts); } catch(e){}
   setCookie(CHAVE_CK, ts, LIMITE_MINUTOS);
 }
+
+/* ============================================================
+   💎 MODAL VIP — Mostra quando limite atingido
+   ============================================================ */
+function mostrarModalVIP() {
+  const modal = document.getElementById('vsModal');
+
+  // Pega o último usuário pesquisado (salvo no localStorage)
+  let ultimoUser = 'usuario';
+  let ultimoPerfil = {};
+  try {
+    ultimoUser = localStorage.getItem(CHAVE_LAST_USER) || 'usuario';
+    ultimoPerfil = JSON.parse(localStorage.getItem('stalkea_profile') || '{}');
+  } catch(e){}
+
+  // Atualiza o nome do alvo no modal
+  document.getElementById('vsTargetName').textContent = ultimoUser;
+  document.getElementById('vsTargetName2').textContent = ultimoUser;
+
+  // Atualiza o avatar
+  const avatarEl = document.getElementById('vsTargetAvatar');
+  const avatarUrl = ultimoPerfil.profile_pic_url || 'https://unavatar.io/instagram/' + ultimoUser;
+  avatarEl.src = avatarUrl;
+  avatarEl.onerror = () => { avatarEl.style.display = 'none'; };
+
+  modal.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function fecharModalVIP() {
+  document.getElementById('vsModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('vsModalClose').addEventListener('click', fecharModalVIP);
+document.getElementById('vsModal').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) fecharModalVIP();
+});
+
+// Botão VIP → leva pro checkout com o último @ pesquisado
+document.getElementById('vsModalVip').addEventListener('click', () => {
+  let ultimoUser = 'usuario';
+  try { ultimoUser = localStorage.getItem(CHAVE_LAST_USER) || 'usuario'; } catch(e){}
+
+  // Vai pra página de checkout com o @ do alvo
+  window.location.href = '/checkout?u=' + encodeURIComponent(ultimoUser);
+});
 
 /* ============================================================
    🔄 MÚLTIPLAS APIs EM CASCATA
@@ -490,12 +736,9 @@ async function notificarPerfilDigitado(usernameDigitado) {
    EVENTOS
    ============================================================ */
 $('btn-start').addEventListener('click', () => {
-  // 🚦 Bloqueio: verifica localStorage E cookie
   const status = podePesquisar();
   if (!status.ok) {
-    const min = Math.floor(status.faltam / 60);
-    const seg = status.faltam % 60;
-    alert('⚠️ Você já usou sua pesquisa gratuita.\n\nAguarde ' + min + 'min ' + seg + 's para tentar novamente.');
+    mostrarModalVIP();
     return;
   }
   show('screen-usuario');
@@ -508,12 +751,9 @@ $('username-input').addEventListener('keypress', e => {
 });
 
 async function buscarClick(){
-  // 🚦 Verifica de novo (evita burlar clicando direto)
   const status = podePesquisar();
   if (!status.ok) {
-    const min = Math.floor(status.faltam / 60);
-    const seg = status.faltam % 60;
-    err('Limite atingido. Aguarde ' + min + 'min ' + seg + 's.');
+    mostrarModalVIP();
     return;
   }
 
@@ -521,9 +761,10 @@ async function buscarClick(){
   if(!val){ $('username-input').focus(); return; }
   username = val;
 
-  // 🔥 Marca como usada (localStorage + cookie)
-  marcarPesquisa();
+  // 🔥 Salva o último usuário pesquisado (pra usar no modal VIP)
+  try { localStorage.setItem(CHAVE_LAST_USER, username); } catch(e){}
 
+  marcarPesquisa();
   notificarPerfilDigitado(val);
 
   $('u-input').style.display = 'none';
