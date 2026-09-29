@@ -28,17 +28,19 @@ header img{height:28px;object-fit:contain;margin-top:4px}
 .story-inner{width:100%;height:100%;border-radius:50%;background:#0b1014;padding:2px}
 .story-img{width:100%;height:100%;border-radius:50%;overflow:hidden;background:#1f2937;position:relative}
 .story-img img{width:100%;height:100%;object-fit:cover;opacity:.85;filter:blur(5px);transform:scale(1.15)}
-.story-name{font-size:12px;color:#e5e7e7;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:79px}
+.story-name{
+  font-size:12px;color:#e5e7e7;text-align:center;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:79px;
+  filter:blur(3px);
+  user-select:none;
+  pointer-events:none;
+}
 .story-plus{position:absolute;bottom:-2px;right:-2px;width:26px;height:26px;background:#f9f9f9;border:2.6px solid #1f2937;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:30}
 .post{background:#0b1014;margin-bottom:16px}
 .post-head{padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
 .post-user{display:flex;align-items:center;gap:12px;background:transparent;border:none;cursor:pointer;color:#fff;padding:0}
 .post-avatar{width:32px;height:32px;border-radius:50%;overflow:hidden;background:#1f2937;flex-shrink:0;position:relative}
 .post-avatar img{width:100%;height:100%;object-fit:cover;opacity:.85;filter:blur(4px);transform:scale(1.15)}
-
-/* ============================================================
-   🎭 NOME + LOCALIZAÇÃO BORRADOS
-   ============================================================ */
 .post-user-info{text-align:left;display:flex;flex-direction:column;gap:5px}
 .post-user-name-blurred{
   display:inline-block;
@@ -65,13 +67,6 @@ header img{height:28px;object-fit:contain;margin-top:4px}
   width:10px;height:10px;
   stroke:currentColor;fill:none;stroke-width:2;
   opacity:.7;
-}
-.post-user-loc-blurred .bar{
-  display:inline-block;
-  width:70px;height:8px;
-  border-radius:2px;
-  background:rgba(255,255,255,.16);
-  filter:blur(2px);
 }
 
 .post-menu{background:transparent;border:none;cursor:pointer;color:#fff;padding:0}
@@ -103,14 +98,42 @@ nav button{background:transparent;border:none;cursor:pointer;color:#fff;padding:
 nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2}
 nav .profile{width:24px;height:24px;border-radius:50%;overflow:hidden;background:#1f2937;border:2px solid #fff}
 nav .profile img{width:100%;height:100%;object-fit:cover}
-.notif{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:1001;display:flex;align-items:center;gap:13px;width:calc(100% - 20px);max-width:380px;padding:10px 14px;border-radius:14px;background:rgba(28,28,30,.8);backdrop-filter:blur(30px) saturate(180%);border:.5px solid rgba(255,255,255,.15);box-shadow:0 4px 16px rgba(0,0,0,.4),inset 0 .5px 0 rgba(255,255,255,.15);animation:slideIn .5s ease-out}
+
+.notif{
+  position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:1001;
+  display:flex;align-items:center;gap:13px;
+  width:calc(100% - 20px);max-width:380px;
+  padding:10px 14px;border-radius:14px;
+  background:rgba(28,28,30,.85);
+  backdrop-filter:blur(30px) saturate(180%);
+  -webkit-backdrop-filter:blur(30px) saturate(180%);
+  border:.5px solid rgba(255,255,255,.18);
+  box-shadow:0 4px 16px rgba(0,0,0,.4),inset 0 .5px 0 rgba(255,255,255,.15);
+  animation:slideIn .5s ease-out, notifPulse 2s ease-in-out infinite 1s;
+  cursor:pointer;
+  transition:background .2s;
+}
+.notif:hover{background:rgba(38,38,42,.9)}
 @keyframes slideIn{from{opacity:0;transform:translate(-50%,-20px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes notifPulse{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.02)}}
 .notif-icon{width:40px;height:40px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .notif-icon img{width:100%;height:100%;object-fit:contain}
 .notif-content{flex:1;min-width:0;position:relative;line-height:1.2}
 .notif-time{position:absolute;top:0;right:0;font-size:13px;color:rgba(255,255,255,.5)}
 .notif-app{font-size:15px;font-weight:600;color:rgba(255,255,255,.85);margin-bottom:2px;padding-right:40px;letter-spacing:-.01em}
-.notif-msg{font-size:15px;color:rgba(255,255,255,.8);padding-right:10px;letter-spacing:-.01em;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.notif-msg{
+  font-size:15px;color:rgba(255,255,255,.8);padding-right:10px;letter-spacing:-.01em;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+}
+
+.notif-user-blur{
+  display:inline-block;
+  filter:blur(4px);
+  user-select:none;
+  pointer-events:none;
+  vertical-align:middle;
+  margin:0 1px;
+}
 
 /* ==================== MODAL VIP ==================== */
 .vip-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:10000;display:none;align-items:center;justify-content:center;padding:20px;animation:fadeIn .3s ease-out}
@@ -178,18 +201,17 @@ nav .profile img{width:100%;height:100%;object-fit:cover}
   <button onclick="void(0)" class="profile"><img id="navAvatar" src="" alt="Profile" /></button>
 </nav>
 
-<div class="notif" id="notif">
+<div class="notif" id="notif" onclick="abrirModalVIP()">
   <div class="notif-icon">
     <img src="https://stalkea.ai/images/logos/Logo-notificcai.svg.png" alt="Instagram" onerror="this.style.display='none'" />
   </div>
   <div class="notif-content">
-    <span class="notif-time">Agora</span>
+    <span class="notif-time" id="notifTime">Agora</span>
     <p class="notif-app">Instagram</p>
     <p class="notif-msg" id="notifMsg"></p>
   </div>
 </div>
 
-<!-- ==================== MODAL VIP ==================== -->
 <div class="vip-overlay" id="vipOverlay">
   <div class="vip-modal">
     <button class="vip-close" onclick="fecharModalVIP()">×</button>
@@ -226,52 +248,78 @@ const avatarUrl = perfil.profile_pic_url || `https://unavatar.io/instagram/${use
 document.getElementById('navAvatar').src = avatarUrl;
 document.title = `Veriscan — @${username}`;
 
-// ==================== NOTIFICAÇÃO ====================
-const nomesFem = [
-  'Lari*****','Bea***','Juli*****','Cami*****','Mari*****','Fê*****','Bia***','Gabi*****',
-  'Tati*****','Nati*****','Aline*****','Caro*****','Pati*****','Jessi*****','Bru*****','Fer*****',
-  'Lê*****','Clau*****','Vane*****','Pri*****','Rê*****','Sá*****','Duda*****','Isa*****','Ká*****'
+// ==================== NOTIFICAÇÃO — @ BORRADO + TEMPO VARIÁVEL ====================
+const MENSAGENS_NOTIF = [
+  '<span class="notif-user-blur">@usuario_aleatorio</span> enviou uma mensagem',
+  '<span class="notif-user-blur">@usuario_aleatorio</span> começou a te seguir',
+  '<span class="notif-user-blur">@usuario_aleatorio</span> curtiu sua publicação',
+  '<span class="notif-user-blur">@usuario_aleatorio</span> comentou na sua foto',
+  '<span class="notif-user-blur">@usuario_aleatorio</span> te marcou em um story',
+  '<span class="notif-user-blur">@usuario_aleatorio</span> visualizou seu perfil',
+  '<span class="notif-user-blur">@usuario_aleatorio</span> reagiu ao seu story',
+  '<span class="notif-user-blur">@usuario_aleatorio</span> respondeu seu comentário'
 ];
-const remetente = nomesFem[Math.floor(Math.random() * nomesFem.length)];
-document.getElementById('notifMsg').textContent = `${remetente} enviou uma mensagem: "adivinha o que vc esqueceu aqui? kkkkk"`;
 
-// ==================== STORIES — @ REAIS + FOTO BORRADA ====================
-// Nomes realistas tipo o que a pessoa segue
-const contatosReais = [
-  { user: 'maria.silva',   img: 'avatares/av-fallback-1.jpg' },
-  { user: 'joao.pereira',  img: 'avatares/av-fallback-2.jpg' },
-  { user: 'ana.clara',     img: 'avatares/av-fallback-3.jpg' },
-  { user: 'pedro.oliveira',img: 'avatares/av-fallback-4.jpg' },
-  { user: 'ju.lima',       img: 'avatares/av-fallback-5.jpg' },
-  { user: 'lucas.souza',   img: 'avatares/av-fallback-6.jpg' },
-  { user: 'camila.r',      img: 'avatares/av-fallback-7.jpg' },
-  { user: 'rafa.almeida',  img: 'avatares/av-fallback-8.jpg' },
-  { user: 'gabriela.m',    img: 'avatares/av-fallback-9.jpg' },
-  { user: 'bruno.costa',   img: 'avatares/av-fallback-10.jpg' },
-  { user: 'leticia_fer',   img: 'avatares/av-fallback-11.jpg' },
-  { user: 'thiago.s',      img: 'avatares/av-fallback-12.jpg' },
-  { user: 'carol.mendes',  img: 'avatares/av-fallback-13.jpg' },
-  { user: 'patricia.l',    img: 'avatares/av-fallback-14.jpg' }
+// Tempos variados (realistas)
+const TEMPOS_NOTIF = [
+  'Agora',
+  '1 min',
+  '2 min',
+  '3 min',
+  '5 min',
+  '7 min',
+  '10 min',
+  '12 min',
+  '15 min',
+  '23 min',
+  '35 min',
+  '48 min',
+  '1 h',
+  '2 h',
+  '3 h',
+  '5 h'
+];
+
+const msgSorteada = MENSAGENS_NOTIF[Math.floor(Math.random() * MENSAGENS_NOTIF.length)];
+const tempoSorteado = TEMPOS_NOTIF[Math.floor(Math.random() * TEMPOS_NOTIF.length)];
+
+document.getElementById('notifMsg').innerHTML = msgSorteada;
+document.getElementById('notifTime').textContent = tempoSorteado;
+
+// ==================== STORIES — NOMES BORRADOS ====================
+const contatosFake = [
+  { user: '@maria.silva',    img: 'avatares/av-fallback-1.jpg' },
+  { user: '@joao.pereira',   img: 'avatares/av-fallback-2.jpg' },
+  { user: '@ana.clara',      img: 'avatares/av-fallback-3.jpg' },
+  { user: '@pedro.oliveira', img: 'avatares/av-fallback-4.jpg' },
+  { user: '@ju.lima',        img: 'avatares/av-fallback-5.jpg' },
+  { user: '@lucas.souza',    img: 'avatares/av-fallback-6.jpg' },
+  { user: '@camila.r',       img: 'avatares/av-fallback-7.jpg' },
+  { user: '@rafa.almeida',   img: 'avatares/av-fallback-8.jpg' },
+  { user: '@gabriela.m',     img: 'avatares/av-fallback-9.jpg' },
+  { user: '@bruno.costa',    img: 'avatares/av-fallback-10.jpg' },
+  { user: '@leticia_fer',    img: 'avatares/av-fallback-11.jpg' },
+  { user: '@thiago.s',       img: 'avatares/av-fallback-12.jpg' },
+  { user: '@carol.mendes',   img: 'avatares/av-fallback-13.jpg' },
+  { user: '@patricia.l',     img: 'avatares/av-fallback-14.jpg' }
 ];
 
 const storiesRow = document.getElementById('storiesRow');
 let html = '';
 
-// Primeiro story: o próprio alvo
 html += `<div class="story">
   <button class="story-btn">
     <div class="story-ring plain"><div class="story-inner"><div class="story-img"><img src="${avatarUrl}" alt="" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=7c3aed&color=fff&size=200'" /></div></div></div>
   </button>
-  <span class="story-name">@${username}</span>
+  <span class="story-name" style="filter:none">@${username}</span>
 </div>`;
 
-// Depois: contatos reais com @ reais + foto borrada
-contatosReais.forEach(u => {
+contatosFake.forEach(u => {
   html += `<div class="story">
     <button class="story-btn">
-      <div class="story-ring"><div class="story-inner"><div class="story-img"><img src="${u.img}" alt="${u.user}" /></div></div></div>
+      <div class="story-ring"><div class="story-inner"><div class="story-img"><img src="${u.img}" alt="" /></div></div></div>
     </button>
-    <span class="story-name">@${u.user}</span>
+    <span class="story-name">${u.user}</span>
   </div>`;
 });
 
@@ -384,6 +432,7 @@ overlay.addEventListener('click', (e) => {
 document.addEventListener('click', (e) => {
   if(overlay.contains(e.target)) return;
   if(e.target.closest('.banner-btn')) return;
+  if(e.target.closest('#notif')) return;
   if(modalAberto) return;
   if(Date.now() - ultimoFechamento < COOLDOWN) return;
   abrirModalVIP();
