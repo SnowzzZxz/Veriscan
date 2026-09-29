@@ -68,7 +68,6 @@ header img{height:28px;object-fit:contain;margin-top:4px}
   stroke:currentColor;fill:none;stroke-width:2;
   opacity:.7;
 }
-
 .post-menu{background:transparent;border:none;cursor:pointer;color:#fff;padding:0}
 .post-menu svg{width:20px;height:20px;fill:currentColor}
 .post-media{width:100%;aspect-ratio:1/1;background:#121824;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
@@ -147,10 +146,34 @@ nav .profile img{width:100%;height:100%;object-fit:cover}
 .vip-close:hover{background:rgba(255,255,255,.15);color:#fff}
 .vip-icon{width:64px;height:64px;margin:0 auto 16px;border-radius:20px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 32px rgba(124,58,237,.45),inset 0 1px 0 rgba(255,255,255,.3);position:relative;z-index:1}
 .vip-icon svg{width:32px;height:32px;stroke:#fff;fill:none;stroke-width:2}
-.vip-title{font-size:24px;font-weight:800;color:#fff;margin-bottom:10px;letter-spacing:-.02em;position:relative;z-index:1}
+.vip-title{font-size:22px;font-weight:800;color:#fff;margin-bottom:12px;letter-spacing:-.02em;position:relative;z-index:1;line-height:1.25}
 .vip-title span{background:linear-gradient(135deg,#a855f7 0%,#6366f1 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.vip-desc{font-size:14px;color:rgba(255,255,255,.7);line-height:1.5;margin-bottom:22px;position:relative;z-index:1}
-.vip-benefits{text-align:left;margin-bottom:24px;position:relative;z-index:1;background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.15);border-radius:14px;padding:14px}
+.vip-desc{font-size:14px;color:rgba(255,255,255,.72);line-height:1.55;margin-bottom:18px;position:relative;z-index:1}
+.vip-desc b{color:#fff;font-weight:600}
+
+/* Bloco "não notifica o dono" */
+.vip-safe{
+  display:flex;align-items:flex-start;gap:10px;
+  text-align:left;
+  background:rgba(34,197,94,.08);
+  border:1px solid rgba(34,197,94,.25);
+  border-radius:14px;
+  padding:12px 14px;
+  margin-bottom:18px;
+  position:relative;z-index:1;
+}
+.vip-safe svg{
+  width:18px;height:18px;
+  stroke:#22c55e;fill:none;stroke-width:2;
+  flex-shrink:0;margin-top:1px;
+}
+.vip-safe span{
+  font-size:12.5px;line-height:1.45;
+  color:rgba(255,255,255,.85);
+}
+.vip-safe b{color:#22c55e;font-weight:700}
+
+.vip-benefits{text-align:left;margin-bottom:22px;position:relative;z-index:1;background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.15);border-radius:14px;padding:14px}
 .vip-benefit{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.85);padding:5px 0}
 .vip-benefit svg{width:16px;height:16px;stroke:#a855f7;fill:none;stroke-width:3;flex-shrink:0}
 .vip-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;border:none;border-radius:16px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);color:#fff;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 12px 32px rgba(124,58,237,.45),inset 0 1px 0 rgba(255,255,255,.25);transition:all .25s;position:relative;z-index:1}
@@ -190,7 +213,7 @@ nav .profile img{width:100%;height:100%;object-fit:cover}
     <p class="banner-title">⚡ Prévia disponível por <span class="timer"><span id="timer">10:00</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3" stroke-linecap="round"/></svg></span></p>
     <p class="banner-desc">Você ganhou 10 minutos para testar gratuitamente nossa ferramenta, mas para liberar todas as funcionalidades e ter acesso permanente é necessário ser um membro VIP.</p>
   </div>
-  <button class="banner-btn" onclick="abrirModalVIP()">Virar VIP</button>
+  <button class="banner-btn" onclick="abrirModalVIP('vip')">Virar VIP</button>
 </div>
 
 <nav>
@@ -201,7 +224,7 @@ nav .profile img{width:100%;height:100%;object-fit:cover}
   <button onclick="void(0)" class="profile"><img id="navAvatar" src="" alt="Profile" /></button>
 </nav>
 
-<div class="notif" id="notif" onclick="abrirModalVIP()">
+<div class="notif" id="notif" onclick="abrirModalVIP('vip')">
   <div class="notif-icon">
     <img src="https://stalkea.ai/images/logos/Logo-notificcai.svg.png" alt="Instagram" onerror="this.style.display='none'" />
   </div>
@@ -218,14 +241,20 @@ nav .profile img{width:100%;height:100%;object-fit:cover}
     <div class="vip-icon">
       <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
     </div>
-    <h2 class="vip-title">Desbloqueie <span>Acesso VIP</span></h2>
-    <p class="vip-desc">Seu tempo de teste terminou. Para ver <b>fotos reais</b>, <b>stories completos</b> e o <b>feed sem censura</b>, vire VIP agora.</p>
-    <div class="vip-benefits">
-      <div class="vip-benefit"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Acesso completo ao perfil do alvo</div>
-      <div class="vip-benefit"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Stories e posts sem censura</div>
-      <div class="vip-benefit"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Downloads ilimitados</div>
-      <div class="vip-benefit"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> 100% anônimo e sem rastros</div>
+    <h2 class="vip-title" id="vipTitle">🔒 Função exclusiva para <span>membros VIP</span></h2>
+    <p class="vip-desc">Você chegou até aqui, mas essa parte é só pra quem tem acesso VIP. Libere agora e veja tudo que está escondido — <b>fotos reais</b>, <b>stories completos</b> e o <b>feed sem filtro</b>.</p>
+
+    <div class="vip-safe">
+      <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      <span>Sem aviso, sem rastro: <b>a pessoa nunca vai saber que você viu.</b></span>
     </div>
+
+    <div class="vip-benefits">
+      <div class="vip-benefit"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Acesso completo ao perfil</div>
+      <div class="vip-benefit"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Mensagens e curtidas liberadas</div>
+      <div class="vip-benefit"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> 100% anônimo — sem deixar rastros</div>
+    </div>
+
     <button class="vip-btn" onclick="irParaVIP()">
       <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
       Virar VIP Agora
@@ -260,24 +289,9 @@ const MENSAGENS_NOTIF = [
   '<span class="notif-user-blur">@usuario_aleatorio</span> respondeu seu comentário'
 ];
 
-// Tempos variados (realistas)
 const TEMPOS_NOTIF = [
-  'Agora',
-  '1 min',
-  '2 min',
-  '3 min',
-  '5 min',
-  '7 min',
-  '10 min',
-  '12 min',
-  '15 min',
-  '23 min',
-  '35 min',
-  '48 min',
-  '1 h',
-  '2 h',
-  '3 h',
-  '5 h'
+  'Agora','1 min','2 min','3 min','5 min','7 min','10 min',
+  '12 min','15 min','23 min','35 min','48 min','1 h','2 h','3 h','5 h'
 ];
 
 const msgSorteada = MENSAGENS_NOTIF[Math.floor(Math.random() * MENSAGENS_NOTIF.length)];
@@ -395,7 +409,7 @@ setInterval(()=>{
     seg--;
     atualizarTimer();
   } else {
-    if(!modalAberto) abrirModalVIP();
+    if(!modalAberto) abrirModalVIP('tempo');
   }
 }, 1000);
 atualizarTimer();
@@ -407,9 +421,18 @@ const COOLDOWN = 30000;
 
 const overlay = document.getElementById('vipOverlay');
 
-function abrirModalVIP(){
-  if(modalAberto) return;
+function abrirModalVIP(motivo = 'vip') {
+  if (modalAberto) return;
   modalAberto = true;
+
+  // 🔀 Altera o título conforme o motivo
+  const titulo = document.getElementById('vipTitle');
+  if (motivo === 'tempo') {
+    titulo.innerHTML = '⚠️ Você atingiu o limite da <span>prévia gratuita</span>';
+  } else {
+    titulo.innerHTML = '🔒 Função exclusiva para <span>membros VIP</span>';
+  }
+
   overlay.classList.add('show');
   document.body.style.overflow = 'hidden';
 }
@@ -435,11 +458,11 @@ document.addEventListener('click', (e) => {
   if(e.target.closest('#notif')) return;
   if(modalAberto) return;
   if(Date.now() - ultimoFechamento < COOLDOWN) return;
-  abrirModalVIP();
+  abrirModalVIP('vip');
 });
 
 setTimeout(() => {
-  if(!modalAberto) abrirModalVIP();
+  if(!modalAberto) abrirModalVIP('vip');
 }, 15000);
 </script>
 </body>
