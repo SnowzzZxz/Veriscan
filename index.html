@@ -1,30 +1,57 @@
-const APIS = [
-  // ---------- API 1 — Stable (conta principal) ----------
-  {
-    nome: 'Stable',
-    host: 'instagram-scraper-stable-api.p.rapidapi.com',
-    key:  'cd0089e6c8msh1618a66089e0734p18a81ejsn7028d767d6fe',
-    buildUrl: (u) => `https://instagram-scraper-stable-api.p.rapidapi.com/ig_get_fb_profile_hover.php?username_or_url=${encodeURIComponent(u)}`
-  },
-  // ---------- API 2 — Looter nova (chave 616c) ----------
-  {
-    nome: 'Looter Nova',
-    host: 'instagram-looter2.p.rapidapi.com',
-    key:  '616c6d0667mshadf757fba9cc993p176c9djsn862a5812f871',
-    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
-  },
-  // ---------- API 3 — Looter (conta principal) ----------
-  {
-    nome: 'Looter Principal',
-    host: 'instagram-looter2.p.rapidapi.com',
-    key:  'cd0089e6c8msh1618a66089e0734p18a81ejsn7028d767d6fe',
-    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
-  },
-  // ---------- API 4 — Looter antiga (conta antiga) ----------
-  {
-    nome: 'Looter Antiga',
-    host: 'instagram-looter2.p.rapidapi.com',
-    key:  'e3cd2d0d2fmsh0dced0acd30a539p1c7338jsn42c4ecbbcca6',
-    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
+Boa! Essa é uma nova chave da RapidAPI (instagram-looter2). Você tem uma terceira chave agora.
+
+Antes de eu atualizar o código, me confirma:
+
+---
+
+🔍 Confirmação
+
+1. Essa chave é da mesma conta (cd0089e6c8... era de uma conta, e3cd2d0d... era de outra) ou é de uma terceira conta?
+
+2. Essa chave tá funcionando? Testa no Console:
+
+```js
+fetch('https://instagram-looter2.p.rapidapi.com/profile2?username=neymar', {
+  headers: {
+    'x-rapidapi-host': 'instagram-looter2.p.rapidapi.com',
+    'x-rapidapi-key': '616c6d0667mshadf757fba9cc993p176c9djsn862a5812f871'
   }
+})
+.then(r => r.text().then(t => console.log('STATUS:', r.status, '\nRESP:', t.slice(0, 300))))
+.catch(e => console.error(e));
+```
+
+Resultado esperado:
+
+Status Significa
+200 ✅ Tá funcionando, cota fresca
+429 Cota estourada
+403 Chave inválida/banida
+404 Path mudou
+
+---
+
+🎯 Se funcionar, eu adiciono como 4ª API no código
+
+Ficaria assim:
+
+```js
+const APIS = [
+  { nome: 'Looter #1', key: 'cd0089e6...' },        // 1ª
+  { nome: 'Stable',    key: 'cd0089e6...' },        // 2ª
+  { nome: 'Looter #2', key: 'e3cd2d0d...' },        // 3ª
+  { nome: 'Looter #3', key: '616c6d06...' },        // ← NOVA
 ];
+```
+
+O código tenta na ordem. Se a 1ª estourar, vai pra 2ª, 3ª, 4ª.
+
+---
+
+📋 Me responde
+
+1. Você tem quantas contas RapidAPI agora? (2? 3?)
+2. Testou a chave nova? Qual o status?
+3. Quer que eu adicione como 4ª API em cascata?
+
+Assim que você me responder, eu atualizo o index.html com a nova chave. É rápido.
