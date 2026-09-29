@@ -27,17 +27,53 @@ header img{height:28px;object-fit:contain;margin-top:4px}
 .story-ring.gray{background:#1f2937}
 .story-inner{width:100%;height:100%;border-radius:50%;background:#0b1014;padding:2px}
 .story-img{width:100%;height:100%;border-radius:50%;overflow:hidden;background:#1f2937;position:relative}
-.story-img img{width:100%;height:100%;object-fit:cover;opacity:.8;filter:blur(4px);transform:scale(1.1)}
+.story-img img{width:100%;height:100%;object-fit:cover;opacity:.85;filter:blur(5px);transform:scale(1.15)}
 .story-name{font-size:12px;color:#e5e7e7;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:79px}
 .story-plus{position:absolute;bottom:-2px;right:-2px;width:26px;height:26px;background:#f9f9f9;border:2.6px solid #1f2937;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:30}
 .post{background:#0b1014;margin-bottom:16px}
 .post-head{padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
 .post-user{display:flex;align-items:center;gap:12px;background:transparent;border:none;cursor:pointer;color:#fff;padding:0}
-.post-avatar{width:32px;height:32px;border-radius:50%;overflow:hidden;background:#1f2937;flex-shrink:0}
-.post-avatar img{width:100%;height:100%;object-fit:cover;opacity:.8;filter:blur(3px);transform:scale(1.1)}
-.post-user-info{text-align:left}
-.post-user-name{font-size:14px;font-weight:600;color:#fff}
-.post-user-loc{font-size:12px;color:#9ca3af;margin-top:2px}
+.post-avatar{width:32px;height:32px;border-radius:50%;overflow:hidden;background:#1f2937;flex-shrink:0;position:relative}
+.post-avatar img{width:100%;height:100%;object-fit:cover;opacity:.85;filter:blur(4px);transform:scale(1.15)}
+
+/* ============================================================
+   🎭 NOME + LOCALIZAÇÃO BORRADOS
+   ============================================================ */
+.post-user-info{text-align:left;display:flex;flex-direction:column;gap:5px}
+.post-user-name-blurred{
+  display:inline-block;
+  width:90px;height:11px;
+  border-radius:3px;
+  background:linear-gradient(90deg,
+    rgba(255,255,255,.16) 0%,
+    rgba(255,255,255,.28) 50%,
+    rgba(255,255,255,.16) 100%);
+  background-size:200% 100%;
+  animation:blurredShine 2.5s ease-in-out infinite;
+  filter:blur(2.5px);
+}
+@keyframes blurredShine{
+  0%{background-position:200% 0}
+  100%{background-position:-200% 0}
+}
+.post-user-loc-blurred{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:11px;
+  color:rgba(156,163,175,.55);
+}
+.post-user-loc-blurred svg{
+  width:10px;height:10px;
+  stroke:currentColor;fill:none;stroke-width:2;
+  opacity:.7;
+}
+.post-user-loc-blurred .bar{
+  display:inline-block;
+  width:70px;height:8px;
+  border-radius:2px;
+  background:rgba(255,255,255,.16);
+  filter:blur(2px);
+}
+
 .post-menu{background:transparent;border:none;cursor:pointer;color:#fff;padding:0}
 .post-menu svg{width:20px;height:20px;fill:currentColor}
 .post-media{width:100%;aspect-ratio:1/1;background:#121824;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
@@ -187,7 +223,6 @@ try{ perfil = JSON.parse(localStorage.getItem('stalkea_profile') || '{}'); }catc
 
 const avatarUrl = perfil.profile_pic_url || `https://unavatar.io/instagram/${username}`;
 
-// ==================== APLICA FOTO ====================
 document.getElementById('navAvatar').src = avatarUrl;
 document.title = `Veriscan — @${username}`;
 
@@ -200,27 +235,29 @@ const nomesFem = [
 const remetente = nomesFem[Math.floor(Math.random() * nomesFem.length)];
 document.getElementById('notifMsg').textContent = `${remetente} enviou uma mensagem: "adivinha o que vc esqueceu aqui? kkkkk"`;
 
-// ==================== STORIES ====================
-const outrosUsuarios = [
-  { nome: 'fer*****', img: 'avatares/av-fallback-1.jpg' },
-  { nome: 'sop*****', img: 'avatares/av-fallback-2.jpg' },
-  { nome: 'luc*****', img: 'avatares/av-fallback-3.jpg' },
-  { nome: 'mig*****', img: 'avatares/av-fallback-4.jpg' },
-  { nome: 'jul*****', img: 'avatares/av-fallback-5.jpg' },
-  { nome: 'bea*****', img: 'avatares/av-fallback-6.jpg' },
-  { nome: 'dav*****', img: 'avatares/av-fallback-7.jpg' },
-  { nome: 'fel*****', img: 'avatares/av-fallback-8.jpg' },
-  { nome: 'yas*****', img: 'avatares/av-fallback-9.jpg' },
-  { nome: 'isa*****', img: 'avatares/av-fallback-10.jpg' },
-  { nome: 'bru*****', img: 'avatares/av-fallback-11.jpg' },
-  { nome: 'ali*****', img: 'avatares/av-fallback-12.jpg' },
-  { nome: 'car*****', img: 'avatares/av-fallback-13.jpg' },
-  { nome: 'pat*****', img: 'avatares/av-fallback-14.jpg' }
+// ==================== STORIES — @ REAIS + FOTO BORRADA ====================
+// Nomes realistas tipo o que a pessoa segue
+const contatosReais = [
+  { user: 'maria.silva',   img: 'avatares/av-fallback-1.jpg' },
+  { user: 'joao.pereira',  img: 'avatares/av-fallback-2.jpg' },
+  { user: 'ana.clara',     img: 'avatares/av-fallback-3.jpg' },
+  { user: 'pedro.oliveira',img: 'avatares/av-fallback-4.jpg' },
+  { user: 'ju.lima',       img: 'avatares/av-fallback-5.jpg' },
+  { user: 'lucas.souza',   img: 'avatares/av-fallback-6.jpg' },
+  { user: 'camila.r',      img: 'avatares/av-fallback-7.jpg' },
+  { user: 'rafa.almeida',  img: 'avatares/av-fallback-8.jpg' },
+  { user: 'gabriela.m',    img: 'avatares/av-fallback-9.jpg' },
+  { user: 'bruno.costa',   img: 'avatares/av-fallback-10.jpg' },
+  { user: 'leticia_fer',   img: 'avatares/av-fallback-11.jpg' },
+  { user: 'thiago.s',      img: 'avatares/av-fallback-12.jpg' },
+  { user: 'carol.mendes',  img: 'avatares/av-fallback-13.jpg' },
+  { user: 'patricia.l',    img: 'avatares/av-fallback-14.jpg' }
 ];
 
 const storiesRow = document.getElementById('storiesRow');
 let html = '';
 
+// Primeiro story: o próprio alvo
 html += `<div class="story">
   <button class="story-btn">
     <div class="story-ring plain"><div class="story-inner"><div class="story-img"><img src="${avatarUrl}" alt="" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=7c3aed&color=fff&size=200'" /></div></div></div>
@@ -228,35 +265,39 @@ html += `<div class="story">
   <span class="story-name">@${username}</span>
 </div>`;
 
-outrosUsuarios.forEach(u => {
+// Depois: contatos reais com @ reais + foto borrada
+contatosReais.forEach(u => {
   html += `<div class="story">
     <button class="story-btn">
-      <div class="story-ring"><div class="story-inner"><div class="story-img"><img src="${u.img}" alt="${u.nome}" /></div></div></div>
+      <div class="story-ring"><div class="story-inner"><div class="story-img"><img src="${u.img}" alt="${u.user}" /></div></div></div>
     </button>
-    <span class="story-name">${u.nome}</span>
+    <span class="story-name">@${u.user}</span>
   </div>`;
 });
 
 storiesRow.innerHTML = html;
 
-// ==================== POSTS ====================
+// ==================== POSTS — NOME + LOCALIZAÇÃO BORRADOS ====================
 const posts = [
-  { user: 'isa*****', img: 'avatares/av-fallback-10.jpg', loc: 'Santo Amaro da Imperatriz', likes: 57, comments: 4, reposts: 4, shares: 3, time: 'há 1 dia', liked: true },
-  { user: 'yas*****', img: 'avatares/av-fallback-9.jpg',  loc: 'Antônio Carlos', likes: 152, comments: 3, reposts: 3, shares: 0, time: 'há 1 dia', liked: false },
-  { user: 'luc*****', img: 'avatares/av-fallback-3.jpg',  loc: 'Florianópolis', likes: 72, comments: 18, reposts: 3, shares: 0, time: 'há 2 dias', liked: false },
-  { user: 'fer*****', img: 'avatares/av-fallback-1.jpg',  loc: 'Santo Amaro da Imperatriz', likes: 24, comments: 20, reposts: 1, shares: 1, time: 'há 23 horas', liked: false }
+  { img: 'avatares/av-fallback-10.jpg', likes: 57,  comments: 4,  reposts: 4, shares: 3, time: 'há 1 dia',    liked: true  },
+  { img: 'avatares/av-fallback-9.jpg',  likes: 152, comments: 3,  reposts: 3, shares: 0, time: 'há 1 dia',    liked: false },
+  { img: 'avatares/av-fallback-3.jpg',  likes: 72,  comments: 18, reposts: 3, shares: 0, time: 'há 2 dias',   liked: false },
+  { img: 'avatares/av-fallback-1.jpg',  likes: 24,  comments: 20, reposts: 1, shares: 1, time: 'há 23 horas', liked: false }
 ];
 
 document.getElementById('feed').innerHTML = posts.map(p => {
   return `<article class="post">
     <div class="post-head">
-      <button class="post-user">
-        <div class="post-avatar"><img src="${p.img}" alt="${p.user}" /></div>
+      <div class="post-user">
+        <div class="post-avatar"><img src="${p.img}" alt="" /></div>
         <div class="post-user-info">
-          <p class="post-user-name">${p.user}</p>
-          <p class="post-user-loc">${p.loc}</p>
+          <span class="post-user-name-blurred"></span>
+          <span class="post-user-loc-blurred">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <span>(localização oculta)</span>
+          </span>
         </div>
-      </button>
+      </div>
       <button class="post-menu"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg></button>
     </div>
     <div class="post-media">
@@ -291,7 +332,7 @@ document.getElementById('feed').innerHTML = posts.map(p => {
   </article>`;
 }).join('');
 
-// ==================== TIMER (10:00 regressivo) ====================
+// ==================== TIMER ====================
 let seg = 600;
 function atualizarTimer(){
   const m = Math.floor(seg/60);
@@ -333,7 +374,6 @@ function fecharModalVIP(){
 }
 
 function irParaVIP(){
-  // Vai pra página de checkout com o @ do alvo na URL
   window.location.href = '/cta?u=' + encodeURIComponent(username);
 }
 
