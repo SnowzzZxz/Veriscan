@@ -516,7 +516,7 @@ document.getElementById('vsModalVip').addEventListener('click', () => {
 });
 
 /* ============================================================
-   🔄 4 APIs EM CASCATA
+   🔄 5 APIs EM CASCATA
    ============================================================
    Tenta na ordem. Se uma der 429/403/401/erro, pula pra próxima.
    A primeira que responder com dados é salva e usada nas próximas.
@@ -548,6 +548,13 @@ const APIS = [
     nome: 'Looter Antiga',
     host: 'instagram-looter2.p.rapidapi.com',
     key:  'e3cd2d0d2fmsh0dced0acd30a539p1c7338jsn42c4ecbbcca6',
+    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
+  },
+  // ---------- API 5 — Looter Nova Chave 2 (chave nova gerada) ----------
+  {
+    nome: 'Looter Nova 2',
+    host: 'instagram-looter2.p.rapidapi.com',
+    key:  'cd0089e6c8msh1618a66089e0734p18a81ejsn7028d767d6fe',
     buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
   }
 ];
