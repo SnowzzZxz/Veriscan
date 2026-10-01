@@ -516,7 +516,7 @@ document.getElementById('vsModalVip').addEventListener('click', () => {
 });
 
 /* ============================================================
-   🔄 5 APIs EM CASCATA
+   🔄 APIs EM CASCATA (SEM REPETIR CHAVE)
    ============================================================
    Tenta na ordem. Se uma der 429/403/401/erro, pula pra próxima.
    A primeira que responder com dados é salva e usada nas próximas.
@@ -536,25 +536,18 @@ const APIS = [
     key:  '616c6d0667mshadf757fba9cc993p176c9djsn862a5812f871',
     buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
   },
-  // ---------- API 3 — Looter Principal (conta principal) ----------
-  {
-    nome: 'Looter Principal',
-    host: 'instagram-looter2.p.rapidapi.com',
-    key:  'cd0089e6c8msh1618a66089e0734p18a81ejsn7028d767d6fe',
-    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
-  },
-  // ---------- API 4 — Looter Antiga (conta antiga) ----------
+  // ---------- API 3 — Looter Antiga (conta antiga) ----------
   {
     nome: 'Looter Antiga',
     host: 'instagram-looter2.p.rapidapi.com',
     key:  'e3cd2d0d2fmsh0dced0acd30a539p1c7338jsn42c4ecbbcca6',
     buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
   },
-  // ---------- API 5 — Looter Nova Chave 2 (chave nova gerada) ----------
+  // ---------- API 4 — Looter Nova 2 (chave 950e) ----------
   {
     nome: 'Looter Nova 2',
     host: 'instagram-looter2.p.rapidapi.com',
-    key:  'cd0089e6c8msh1618a66089e0734p18a81ejsn7028d767d6fe',
+    key:  '950eac8e3cmsh6ffa910eedbc232p1928f0jsnd7fe057ba05b',
     buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
   }
 ];
