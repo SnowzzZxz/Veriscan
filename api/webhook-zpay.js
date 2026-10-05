@@ -14,12 +14,10 @@ module.exports = async (req, res) => {
 
         console.log('📩 Webhook ZPay recebido:', event, data?.id);
 
-        // Só processa pagamentos aprovados
         if (event !== 'payment.paid') {
             return res.status(200).json({ ok: true, ignored: event });
         }
 
-        // ⏭️ Filtro: ignora eventos com mais de 1 hora
         if (data.paidAt) {
             const agora = Date.now();
             const pago = new Date(data.paidAt).getTime();
@@ -30,7 +28,6 @@ module.exports = async (req, res) => {
             }
         }
 
-        // ---------- Extrai dados do message ----------
         const message = data.message || '';
         const partes = message.split(' | ').map(s => s.trim()).filter(Boolean);
 
@@ -64,22 +61,14 @@ module.exports = async (req, res) => {
 
         const valor = 'R$ ' + Number(data.amount || 0).toFixed(2).replace('.', ',');
 
-        // ---------- Monta o embed único ----------
         const fields = [
-            // Linha 1: Nome + valor
             { name: '👤 Cliente', value: nomeCompleto || '—', inline: true  },
             { name: '💵 Valor',   value: valor,               inline: true  },
             { name: '💳 Método',  value: (data.paymentMethod || 'pix').toUpperCase(), inline: true },
-
-            // Linha 2: Alvo + CPF
             { name: '🎯 Alvo',    value: alvo,                inline: true  },
             { name: '🪪 CPF',     value: cpf,                 inline: true  },
             { name: '📱 Telefone',value: telefone,            inline: true  },
-
-            // Linha 3: Email
             { name: '📧 E-mail',  value: email || '—',        inline: false },
-
-            // Linha 4: ID + data
             { name: '🆔 ID ZPay', value: `\`${data.id || '—'}\``, inline: false }
         ];
 
@@ -91,7 +80,6 @@ module.exports = async (req, res) => {
             });
         }
 
-        // ---------- Envia pro Discord ----------
         await fetch(DISCORD_PIX_APROVADO, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
