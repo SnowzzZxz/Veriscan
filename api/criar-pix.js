@@ -13,9 +13,19 @@ module.exports = async (req, res) => {
     try {
         const { valor, descricao, nome_cliente } = req.body;
 
-        const CLIENT_ID = 'zpk_541f4b2f71855fb26e1201a7';
-        const CLIENT_SECRET = 'zsk_87b13fb23ba5eed5d6d9f0f9e6153d20dfeac10e24a66dd6';
-        const ZPAY_API_URL = 'https://zpaysolution.com/api/v1';
+        // 🔒 Credenciais vêm das variáveis de ambiente do Vercel
+        // Nunca ficam expostas no código nem no GitHub
+        const CLIENT_ID     = process.env.ZPAY_CLIENT_ID;
+        const CLIENT_SECRET = process.env.ZPAY_CLIENT_SECRET;
+        const ZPAY_API_URL  = process.env.ZPAY_API_URL || 'https://zpaysolution.com/api/v1';
+
+        if (!CLIENT_ID || !CLIENT_SECRET) {
+            console.error('❌ Credenciais ZPay não configuradas');
+            return res.status(500).json({
+                success: false,
+                error: 'Erro de configuração do servidor'
+            });
+        }
 
         const response = await axios.post(
             `${ZPAY_API_URL}/payments`,
