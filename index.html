@@ -7,7 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+input,textarea{-webkit-user-select:text;user-select:text}
+img{-webkit-user-drag:none;user-drag:none}
 html,body{background:#040607;color:#f9f9f9;font-family:'Inter',-apple-system,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
 #matrix-canvas{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;opacity:.525;pointer-events:none}
 .screen{position:relative;z-index:10;min-height:100vh;display:none;align-items:center;justify-content:center;padding:20px}
@@ -371,6 +373,63 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 </div>
 
 <script>
+/* ============================================================
+   🔒 PROTEÇÃO SILENCIOSA — bloqueia sem avisar
+   ============================================================ */
+(function(){
+  // Bloqueia botão direito
+  document.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    return false;
+  });
+
+  // Bloqueia atalhos de teclado
+  document.addEventListener('keydown', (e) => {
+    // F12
+    if (e.key === 'F12' || e.keyCode === 123) {
+      e.preventDefault();
+      return false;
+    }
+    // Ctrl+Shift+I / J / C (DevTools)
+    if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+      e.preventDefault();
+      return false;
+    }
+    // Ctrl+U (ver código fonte)
+    if (e.ctrlKey && (e.key === 'U' || e.keyCode === 85)) {
+      e.preventDefault();
+      return false;
+    }
+    // Ctrl+S (salvar página)
+    if (e.ctrlKey && (e.key === 'S' || e.keyCode === 83)) {
+      e.preventDefault();
+      return false;
+    }
+    // Ctrl+Shift+K (Firefox console)
+    if (e.ctrlKey && e.shiftKey && (e.key === 'K' || e.keyCode === 75)) {
+      e.preventDefault();
+      return false;
+    }
+    // Cmd+Option+I / J / C (Mac)
+    if (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) {
+      e.preventDefault();
+      return false;
+    }
+  });
+
+  // Bloqueia seleção de texto
+  document.addEventListener('selectstart', (e) => {
+    e.preventDefault();
+    return false;
+  });
+
+  // Bloqueia arrastar imagens e links
+  document.addEventListener('dragstart', (e) => {
+    e.preventDefault();
+    return false;
+  });
+})();
+
 /* ============================================================
    MATRIX CANVAS
    ============================================================ */
