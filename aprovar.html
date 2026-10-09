@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aprovar PIX - Veriscan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0b1014;color:#fff;font-family:'Inter',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+
+/* ---------- Tela de senha ---------- */
+.lock-screen{background:#141a1c;border-radius:16px;padding:32px;max-width:400px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.5);text-align:center;display:block}
+.lock-screen.hidden{display:none}
+.lock-icon{width:64px;height:64px;background:linear-gradient(135deg,#7c4dff,#a855f7);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 12px 32px rgba(124,77,255,.4)}
+.lock-icon svg{width:32px;height:32px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+h1{font-size:22px;margin-bottom:8px;font-weight:800}
+.sub{color:#94a3b8;font-size:14px;margin-bottom:24px}
+label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:#cbd5e1;text-align:left}
+input{width:100%;padding:14px;background:#0c1011;border:1.5px solid #334155;border-radius:10px;color:#fff;font-size:15px;font-family:monospace;outline:none;margin-bottom:16px;transition:border-color .2s}
+input:focus{border-color:#7c4dff}
+button{width:100%;padding:16px;background:linear-gradient(135deg,#7c4dff,#a855f7);border:none;border-radius:10px;color:#fff;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:.05em;transition:transform .15s}
+button:hover{transform:translateY(-1px)}
+button:active{transform:scale(.98)}
+button:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* ---------- Painel principal ---------- */
+.admin-panel{background:#141a1c;border-radius:16px;padding:32px;max-width:520px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.5);display:none}
+.admin-panel.show{display:block}
+.header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.header-row h1{font-size:22px;margin:0}
+.logout-btn{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#ef4444;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.logout-btn:hover{background:rgba(239,68,68,.25)}
+
+.tip{background:rgba(124,77,255,.1);border:1px solid rgba(124,77,255,.25);border-radius:10px;padding:12px;font-size:13px;color:#cbd5e1;margin-bottom:20px;line-height:1.5}
+.tip b{color:#a855f7}
+
+.status{margin-top:20px;padding:14px;border-radius:10px;font-size:14px;font-weight:600;display:none;text-align:center;line-height:1.4}
+.status.show{display:block}
+.status.success{background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.3)}
+.status.error{background:rgba(239,68,68,.15);color:#ef4444;border:1px solid rgba(239,68,68,.3)}
+.status.loading{background:rgba(124,77,255,.15);color:#a855f7;border:1px solid rgba(124,77,255,.3)}
+
+.recent{margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08)}
+.recent-title{font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
+.recent-item{background:#0c1011;border:1px solid #1e293b;border-radius:10px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.recent-item .id{font-family:monospace;font-size:12px;color:#cbd5e1;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.recent-item .btn-mini{background:rgba(124,77,255,.2);border:1px solid rgba(124,77,255,.4);color:#a855f7;padding:6px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+.recent-item .btn-mini:hover{background:rgba(124,77,255,.35)}
+</style>
+</head>
+<body>
+
+<!-- ============================================
+     TELA DE SENHA
+     ============================================ -->
+<div class="lock-screen" id="lockScreen">
+  <div class="lock-icon">
+    <svg viewBox="0 0 24 24">
+      <rect x="3" y="11" width="18" height="11" rx="2"/>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+    </svg>
+  </div>
+  <h1>Acesso Restrito</h1>
+  <p class="sub">Painel de aprovação de PIX</p>
+
+  <label>Senha de acesso</label>
+  <input type="password" id="senhaInput" placeholder="Digite a senha" autocomplete="off">
+  <button onclick="entrar()">🔓 Entrar</button>
+
+  <div class="status" id="lockStatus"></div>
+</div>
+
+<!-- ============================================
+     PAINEL PRINCIPAL
+     ============================================ -->
+<div class="admin-panel" id="adminPanel">
+  <div class="header-row">
+    <h1>🎯 Aprovar PIX</h1>
+    <button class="logout-btn" onclick="sair()">Sair</button>
+  </div>
+
+  <div class="tip">
+    💡 Cole o <b>ID ZPay</b> do PIX que aparece no Discord (tipo <code>6aa445e6cfa9f8b25260aff245</code>) e clique em aprovar.
+  </div>
+
+  <label for="paymentId">ID do Pagamento (ZPay)</label>
+  <input type="text" id="paymentId" placeholder="6aa445e6cfa9f8b25260aff245" autocomplete="off">
+  <button id="btnAprovar" onclick="aprovar()">✅ Aprovar PIX</button>
+
+  <div class="status" id="status"></div>
+
+  <div class="recent" id="recentBox" style="display:none">
+    <div class="recent-title">Aprovados recentemente</div>
+    <div id="recentList"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   🔒 SENHA DE ACESSO
+   ============================================================ */
+// ⚠️ TROCA ESSA SENHA PELA QUE VOCÊ QUISER
+const SENHA_ADMIN = 'veriscan2024';
+
+/* ============================================================
+   ESTADO
+   ============================================================ */
+const STORAGE_KEY = 'vs_admin_auth';
+const RECENT_KEY = 'vs_recent_pix';
+
+function estaLogado() {
+  return localStorage.getItem(STORAGE_KEY) === 'true';
+}
+
+function entrar() {
+  const senha = document.getElementById('senhaInput').value.trim();
+  const st = document.getElementById('lockStatus');
+
+  if (!senha) {
+    st.className = 'status show error';
+    st.textContent = '⚠️ Digite a senha';
+    return;
+  }
+
+  if (senha === SENHA_ADMIN) {
+    localStorage.setItem(STORAGE_KEY, 'true');
+    mostrarPainel();
+  } else {
+    st.className = 'status show error';
+    st.textContent = '❌ Senha incorreta';
+    document.getElementById('senhaInput').value = '';
+  }
+}
+
+function sair() {
+  localStorage.removeItem(STORAGE_KEY);
+  document.getElementById('lockScreen').classList.remove('hidden');
+  document.getElementById('adminPanel').classList.remove('show');
+  document.getElementById('senhaInput').value = '';
+  document.getElementById('lockStatus').className = 'status';
+}
+
+function mostrarPainel() {
+  document.getElementById('lockScreen').classList.add('hidden');
+  document.getElementById('adminPanel').classList.add('show');
+  setTimeout(() => document.getElementById('paymentId').focus(), 100);
+  renderRecentes();
+}
+
+/* ============================================================
+   APROVAR PIX
+   ============================================================ */
+async function aprovar() {
+  const paymentId = document.getElementById('paymentId').value.trim();
+  const btn = document.getElementById('btnAprovar');
+  const status = document.getElementById('status');
+
+  if (!paymentId) {
+    status.className = 'status show error';
+    status.textContent = '❌ Cole o ID do pagamento';
+    return;
+  }
+
+  btn.disabled = true;
+  status.className = 'status show loading';
+  status.textContent = '⏳ Aprovando PIX...';
+
+  try {
+    const r = await fetch('/api/aprovar-pix', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ paymentId })
+    });
+
+    const d = await r.json();
+
+    if (d.ok) {
+      status.className = 'status show success';
+      status.textContent = '✅ PIX aprovado com sucesso! Status: ' + (d.data?.status || 'paid');
+      salvarRecente(paymentId);
+      document.getElementById('paymentId').value = '';
+    } else {
+      status.className = 'status show error';
+      status.textContent = '❌ Erro: ' + (d.error || 'desconhecido');
+    }
+  } catch (e) {
+    status.className = 'status show error';
+    status.textContent = '❌ Erro de conexão: ' + e.message;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+/* ============================================================
+   HISTÓRICO LOCAL
+   ============================================================ */
+function salvarRecente(paymentId) {
+  let recents = [];
+  try {
+    recents = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
+  } catch(e) {}
+
+  recents = recents.filter(r => r.id !== paymentId);
+  recents.unshift({ id: paymentId, ts: Date.now() });
+  recents = recents.slice(0, 5); // mantém só 5
+
+  localStorage.setItem(RECENT_KEY, JSON.stringify(recents));
+  renderRecentes();
+}
+
+function renderRecentes() {
+  let recents = [];
+  try {
+    recents = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
+  } catch(e) {}
+
+  const box = document.getElementById('recentBox');
+  const list = document.getElementById('recentList');
+
+  if (!recents.length) {
+    box.style.display = 'none';
+    return;
+  }
+
+  box.style.display = 'block';
+  list.innerHTML = recents.map(r => `
+    <div class="recent-item">
+      <span class="id">${r.id}</span>
+      <button class="btn-mini" onclick="usarId('${r.id}')">Usar</button>
+    </div>
+  `).join('');
+}
+
+function usarId(id) {
+  document.getElementById('paymentId').value = id;
+  document.getElementById('paymentId').focus();
+}
+
+/* ============================================================
+   INICIALIZAÇÃO
+   ============================================================ */
+if (estaLogado()) {
+  mostrarPainel();
+}
+
+// Enter pra entrar / aprovar
+document.getElementById('senhaInput').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') entrar();
+});
+document.getElementById('paymentId').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') aprovar();
+});
+</script>
+</body>
+</html>
