@@ -2,7 +2,7 @@
 // 💳 WEBHOOK DO CARTÃO → Discord (canal CARD)
 // =====================================================
 
-const DISCORD_CART = 'https://discord.com/api/webhooks/1553603673022660738/sc_fw4BM_7LvPSJtkOuOJTZdAdFKhcyHiBrvVB8D1Ca7EtM6PbuJpUJ1sATAxdRqEIUp';
+const DISCORD_CART = 'https://discord.com/api/webhooks/1557935037364568125/wzFcrRt7kRLEdhOpioigR5yEBEuaivTFyH99PAqms-3_9-TSKv3zAiCHKnq-VkMU11S1';
 
 module.exports = async (req, res) => {
     // CORS (opcional, mas ajuda em testes)
