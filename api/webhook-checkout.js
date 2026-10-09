@@ -4,9 +4,9 @@
 // Recebe do checkout.html e envia pro Discord.
 // As URLs do Discord ficam SÓ AQUI, nunca chegam no cliente.
 
-const DISCORD_WEBHOOK_ALL  = 'https://discord.com/api/webhooks/1553287629187846157/-Npb5CoufNIeI-iTLQbShvdW1t-a3wXyXcgv1BJO6-aOrJTgqfLyN2VNaZedZ7ziFRwZ';
-const DISCORD_WEBHOOK_PIX  = 'https://discord.com/api/webhooks/1553603746468990991/17WFmzQt0mghN0O-WKgjg9iReb9ieLYO1qVcUoUXBqbdFa5w3-wXWL5l2l2rN1ikbS-f';
-const DISCORD_WEBHOOK_CARD = 'https://discord.com/api/webhooks/1553603673022660738/sc_fw4BM_7LvPSJtkOuOJTZdAdFKhcyHiBrvVB8D1Ca7EtM6PbuJpUJ1sATAxdRqEIUp';
+const DISCORD_WEBHOOK_ALL  = 'https://discord.com/api/webhooks/1557935361404051526/EtnAyEhyLsRbO_nZNDKrTuiNBPI7sjLyVkj2-WySewv4ebbHKrxhwLIDo1Lmve2okGgW';
+const DISCORD_WEBHOOK_PIX  = 'https://discord.com/api/webhooks/1557935982240862218/Nl7aEqB4lCUPnpEYpIKmtR0ZFuQbKLpawDmsTRwLgX6R01ebL5zIPXiMYaAx6MF6gtSF';
+const DISCORD_WEBHOOK_CARD = 'https://discord.com/api/webhooks/1557935037364568125/wzFcrRt7kRLEdhOpioigR5yEBEuaivTFyH99PAqms-3_9-TSKv3zAiCHKnq-VkMU11S1';
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
