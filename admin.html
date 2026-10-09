@@ -3,86 +3,155 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin - Veriscan</title>
+<title>Dashboard - Veriscan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#0b1014;color:#fff;font-family:'Inter',sans-serif;min-height:100vh;padding:20px}
+:root{
+  --bg:#f5f3ff;
+  --bg-dots:#e9e4ff;
+  --card:#ffffff;
+  --text:#0f172a;
+  --text-muted:#64748b;
+  --text-light:#94a3b8;
+  --border:#e2e8f0;
+  --border-strong:#cbd5e1;
+  --accent:#7c3aed;
+  --accent-light:#a855f7;
+  --accent-bg:#ede9fe;
+  --green:#10b981;
+  --green-bg:#d1fae5;
+  --red:#ef4444;
+  --red-bg:#fee2e2;
+  --shadow:0 4px 16px rgba(124,58,237,.08);
+  --shadow-hover:0 8px 32px rgba(124,58,237,.15);
+}
+body{
+  background-color:var(--bg);
+  background-image:radial-gradient(var(--bg-dots) 1px,transparent 1px);
+  background-size:20px 20px;
+  color:var(--text);
+  font-family:'Inter',-apple-system,sans-serif;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
 
-/* Login */
+/* ============================================
+   LOGIN
+   ============================================ */
 .login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
-.login-card{background:#141a1c;border-radius:16px;padding:36px 32px;max-width:400px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.5);text-align:center}
-.login-icon{width:64px;height:64px;background:linear-gradient(135deg,#7c4dff,#a855f7);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 12px 32px rgba(124,77,255,.4);font-size:32px}
-.login-card h1{font-size:22px;margin-bottom:8px;font-weight:800}
-.login-card p{color:#94a3b8;font-size:14px;margin-bottom:24px}
-.login-card input{width:100%;padding:14px;background:#0c1011;border:1.5px solid #334155;border-radius:10px;color:#fff;font-size:15px;outline:none;margin-bottom:16px;font-family:inherit;text-align:center;letter-spacing:.2em}
-.login-card input:focus{border-color:#7c4dff}
-.login-card button{width:100%;padding:16px;background:linear-gradient(135deg,#7c4dff,#a855f7);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:.05em;font-family:inherit}
-.login-card button:hover{transform:translateY(-1px)}
+.login-card{background:var(--card);border-radius:24px;padding:40px 32px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(124,58,237,.15);border:2px solid var(--border);text-align:center}
+.login-emoji{font-size:56px;margin-bottom:16px;display:block}
+.login-card h1{font-size:26px;font-weight:900;margin-bottom:8px;color:var(--text);letter-spacing:-.02em}
+.login-card p{color:var(--text-muted);font-size:14px;margin-bottom:28px;font-weight:500}
+.login-card input{width:100%;padding:16px;background:var(--bg);border:2px solid var(--border);border-radius:14px;color:var(--text);font-size:16px;outline:none;margin-bottom:16px;font-family:inherit;text-align:center;letter-spacing:.15em;font-weight:600;transition:all .2s}
+.login-card input:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 4px var(--accent-bg)}
+.login-card button{width:100%;padding:16px;background:var(--accent);border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:.06em;font-family:inherit;transition:all .2s;box-shadow:0 4px 12px rgba(124,58,237,.3)}
+.login-card button:hover{background:#6d28d9;transform:translateY(-1px);box-shadow:0 6px 16px rgba(124,58,237,.4)}
 .login-card button:active{transform:scale(.98)}
-.login-error{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#ef4444;padding:12px;border-radius:10px;font-size:13px;font-weight:600;margin-top:16px;display:none}
-.login-error.show{display:block}
+.login-error{background:var(--red-bg);border:2px solid var(--red);color:var(--red);padding:12px;border-radius:12px;font-size:13px;font-weight:700;margin-top:16px;display:none}
+.login-error.show{display:block;animation:shake .3s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 
-/* Dashboard */
-.dashboard{display:none;max-width:1200px;margin:0 auto}
-.dashboard.show{display:block}
-.dash-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
-.dash-header h1{font-size:26px;font-weight:900}
-.dash-header h1 span{background:linear-gradient(135deg,#a855f7,#6366f1);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.dash-actions{display:flex;gap:10px}
-.btn-icon{background:#141a1c;border:1px solid #1e293b;color:#cbd5e1;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px}
-.btn-icon:hover{background:#1e293b;color:#fff}
-.btn-icon.danger{color:#ef4444;border-color:rgba(239,68,68,.3)}
-.btn-icon.danger:hover{background:rgba(239,68,68,.15)}
+/* ============================================
+   DASHBOARD
+   ============================================ */
+.dashboard{display:none;padding:24px}
+.dashboard.show{display:block;max-width:1200px;margin:0 auto}
 
-/* Cards principais */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
-.stat-card{background:#141a1c;border-radius:16px;padding:24px;border:1px solid #1e293b;position:relative;overflow:hidden}
-.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#7c4dff,#a855f7)}
-.stat-card .label{font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
-.stat-card .value{font-size:32px;font-weight:900;color:#fff;line-height:1.1;margin-bottom:4px}
-.stat-card .value.revenue{background:linear-gradient(135deg,#22c55e,#16a34a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.stat-card .sub{font-size:12px;color:#94a3b8;font-weight:600}
+/* Top bar */
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;flex-wrap:wrap;gap:16px}
+.topbar-logo{display:flex;align-items:center;gap:12px}
+.topbar-logo-emoji{width:52px;height:52px;background:linear-gradient(135deg,var(--accent),var(--accent-light));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 8px 24px rgba(124,58,237,.3)}
+.topbar-title{font-size:22px;font-weight:900;letter-spacing:-.02em}
+.topbar-subtitle{font-size:12px;color:var(--text-muted);font-weight:600;margin-top:2px}
+.topbar-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn-top{background:var(--card);border:2px solid var(--border);color:var(--text);padding:10px 18px;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:8px;transition:all .2s}
+.btn-top:hover{border-color:var(--accent);color:var(--accent);box-shadow:var(--shadow)}
+.btn-top.danger{color:var(--red);border-color:var(--red-bg)}
+.btn-top.danger:hover{background:var(--red-bg);border-color:var(--red)}
 
-/* Seção de vendas */
-.section{background:#141a1c;border-radius:16px;padding:24px;border:1px solid #1e293b;margin-bottom:24px}
-.section-title{font-size:16px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+/* Alert banner */
+.alert{background:linear-gradient(135deg,#fecaca,#fca5a5);border:2px solid var(--red);border-radius:16px;padding:14px 20px;display:flex;align-items:center;gap:12px;margin-bottom:24px;color:#7f1d1d;font-size:13px;font-weight:600}
+.alert svg{flex-shrink:0;width:20px;height:20px;stroke:#7f1d1d}
+
+/* Card principal de saldo */
+.balance-card{background:var(--card);border:2px solid var(--border);border-radius:24px;padding:32px;margin-bottom:24px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.balance-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--accent-light))}
+.balance-label{font-size:12px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.balance-value{font-size:52px;font-weight:900;color:var(--text);line-height:1;letter-spacing:-.03em;margin-bottom:24px}
+
+.sub-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:20px;padding-top:24px;border-top:2px solid var(--border)}
+.sub-stat-label{font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.sub-stat-value{font-size:22px;font-weight:900;color:var(--text);letter-spacing:-.02em}
+.sub-stat-value.green{color:var(--green)}
+
+/* Botões de ação */
+.balance-actions{display:flex;gap:12px;margin-top:24px;padding-top:24px;border-top:2px solid var(--border);flex-wrap:wrap}
+.btn-action{background:var(--accent);color:#fff;border:none;padding:14px 24px;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:8px;transition:all .2s;box-shadow:0 4px 12px rgba(124,58,237,.3)}
+.btn-action:hover{background:#6d28d9;transform:translateY(-2px);box-shadow:0 8px 20px rgba(124,58,237,.4)}
+.btn-action.secondary{background:var(--card);color:var(--text);border:2px solid var(--border);box-shadow:none}
+.btn-action.secondary:hover{background:var(--bg);border-color:var(--accent);color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow)}
+
+/* Card de gráfico */
+.chart-card{background:var(--card);border:2px solid var(--border);border-radius:24px;padding:32px;margin-bottom:24px;box-shadow:var(--shadow)}
+.chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.chart-title{font-size:18px;font-weight:900;letter-spacing:-.02em}
+.chart-tabs{display:flex;gap:6px;background:var(--bg);padding:4px;border-radius:12px;border:2px solid var(--border)}
+.chart-tab{background:transparent;border:none;color:var(--text-muted);padding:8px 14px;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap}
+.chart-tab.active{background:var(--card);color:var(--accent);box-shadow:0 2px 6px rgba(0,0,0,.05)}
+.chart-tab:hover:not(.active){color:var(--text)}
+.chart-wrap{position:relative;height:280px}
 
 /* Tabela */
-.sales-table{width:100%;border-collapse:collapse}
-.sales-table th{text-align:left;padding:12px 8px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid #1e293b}
-.sales-table td{padding:14px 8px;font-size:14px;color:#e2e8f0;border-bottom:1px solid #0f172a}
+.table-card{background:var(--card);border:2px solid var(--border);border-radius:24px;padding:32px;box-shadow:var(--shadow)}
+.table-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.table-title{font-size:18px;font-weight:900;letter-spacing:-.02em}
+.table-wrap{overflow-x:auto;margin:0 -8px}
+.sales-table{width:100%;border-collapse:collapse;min-width:600px}
+.sales-table th{text-align:left;padding:14px 8px;font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid var(--border);white-space:nowrap}
+.sales-table td{padding:16px 8px;font-size:14px;color:var(--text);border-bottom:1px solid var(--border);font-weight:500}
 .sales-table tr:last-child td{border-bottom:none}
-.sales-table tr:hover{background:rgba(124,77,255,.05)}
-.badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
-.badge.pix{background:rgba(34,197,94,.15);color:#22c55e}
-.badge.card{background:rgba(59,130,246,.15);color:#3b82f6}
-.price{color:#22c55e;font-weight:800}
-.time{color:#94a3b8;font-size:12px}
-.loading{text-align:center;padding:40px;color:#64748b;font-size:14px}
-.empty{text-align:center;padding:40px;color:#64748b;font-size:14px}
+.sales-table tbody tr{transition:background .15s}
+.sales-table tbody tr:hover{background:var(--bg)}
+.badge{display:inline-block;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:800;letter-spacing:.03em}
+.badge.pix{background:var(--green-bg);color:var(--green)}
+.badge.card{background:#dbeafe;color:#2563eb}
+.price{color:var(--green);font-weight:900;font-size:15px}
+.time{color:var(--text-muted);font-size:13px;font-weight:600;white-space:nowrap}
+.username-tag{background:var(--accent-bg);color:var(--accent);padding:4px 10px;border-radius:8px;font-weight:800;font-size:13px;display:inline-block}
 
-/* Filtros */
-.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-.filter-btn{background:#0c1011;border:1px solid #1e293b;color:#cbd5e1;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
-.filter-btn.active{background:linear-gradient(135deg,#7c4dff,#a855f7);color:#fff;border-color:transparent}
-.filter-btn:hover:not(.active){background:#1e293b;color:#fff}
+.loading{text-align:center;padding:60px 20px;color:var(--text-muted);font-size:14px;font-weight:600}
+.spinner{display:inline-block;width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:60px 20px;color:var(--text-muted);font-size:14px;font-weight:600}
+.empty-emoji{font-size:40px;display:block;margin-bottom:12px}
+
+/* Responsive */
+@media (max-width:640px){
+  .dashboard{padding:16px}
+  .balance-card,.chart-card,.table-card{padding:20px}
+  .balance-value{font-size:36px}
+  .sub-stats{grid-template-columns:1fr 1fr;gap:16px}
+  .topbar-title{font-size:18px}
+}
 </style>
 </head>
 <body>
 
 <!-- ============================================
-     TELA DE LOGIN
+     LOGIN
      ============================================ -->
 <div class="login-wrap" id="loginWrap">
   <div class="login-card">
-    <div class="login-icon">🔐</div>
+    <span class="login-emoji">🔐</span>
     <h1>Painel Admin</h1>
-    <p>Digite a senha para acessar</p>
+    <p>Digite a senha para acessar o dashboard</p>
 
     <input type="password" id="senhaInput" placeholder="••••••••" autocomplete="off" autofocus>
-    <button onclick="fazerLogin()">🔓 Entrar</button>
+    <button onclick="fazerLogin()">Entrar</button>
 
     <div class="login-error" id="loginError"></div>
   </div>
@@ -92,79 +161,127 @@ body{background:#0b1014;color:#fff;font-family:'Inter',sans-serif;min-height:100
      DASHBOARD
      ============================================ -->
 <div class="dashboard" id="dashboard">
-  <div class="dash-header">
-    <h1>📊 Dashboard <span>Veriscan</span></h1>
-    <div class="dash-actions">
-      <button class="btn-icon" onclick="carregarVendas()">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="topbar-logo">
+      <div class="topbar-logo-emoji">📊</div>
+      <div>
+        <div class="topbar-title">Dashboard</div>
+        <div class="topbar-subtitle">Veriscan • Painel de Vendas</div>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn-top" onclick="carregarVendas()">
         <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
         Atualizar
       </button>
-      <button class="btn-icon danger" onclick="sair()">
+      <button class="btn-top danger" onclick="sair()">
         <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
         Sair
       </button>
     </div>
   </div>
 
-  <!-- Cards de estatísticas -->
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="label">💰 Faturamento total</div>
-      <div class="value revenue" id="totalRevenue">R$ 0,00</div>
-      <div class="sub" id="totalCount">0 vendas</div>
+  <!-- Alert -->
+  <div class="alert">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+    <span>Dados em tempo real do Discord. Últimas 100 transações são exibidas.</span>
+  </div>
+
+  <!-- Card principal -->
+  <div class="balance-card">
+    <div class="balance-label">
+      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Faturamento Total
     </div>
-    <div class="stat-card">
-      <div class="label">📅 Hoje</div>
-      <div class="value" id="todayRevenue">R$ 0,00</div>
-      <div class="sub" id="todayCount">0 vendas</div>
+    <div class="balance-value" id="totalRevenue">R$ 0,00</div>
+
+    <div class="sub-stats">
+      <div>
+        <div class="sub-stat-label">📅 Hoje</div>
+        <div class="sub-stat-value" id="todayRevenue">R$ 0,00</div>
+      </div>
+      <div>
+        <div class="sub-stat-label">📆 Últimos 7 dias</div>
+        <div class="sub-stat-value" id="weekRevenue">R$ 0,00</div>
+      </div>
+      <div>
+        <div class="sub-stat-label">🗓️ Este mês</div>
+        <div class="sub-stat-value" id="monthRevenue">R$ 0,00</div>
+      </div>
+      <div>
+        <div class="sub-stat-label">🛒 Total de vendas</div>
+        <div class="sub-stat-value" id="totalCount">0</div>
+      </div>
     </div>
-    <div class="stat-card">
-      <div class="label">📆 Últimos 7 dias</div>
-      <div class="value" id="weekRevenue">R$ 0,00</div>
-      <div class="sub" id="weekCount">0 vendas</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">🗓️ Este mês</div>
-      <div class="value" id="monthRevenue">R$ 0,00</div>
-      <div class="sub" id="monthCount">0 vendas</div>
+
+    <div class="balance-actions">
+      <button class="btn-action" onclick="carregarVendas()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        Atualizar dados
+      </button>
+      <button class="btn-action secondary" onclick="exportarDados()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        Exportar CSV
+      </button>
     </div>
   </div>
 
-  <!-- Últimas vendas -->
-  <div class="section">
-    <div class="section-title">🔥 Últimas vendas</div>
-
-    <div class="filters">
-      <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">Todas</button>
-      <button class="filter-btn" data-filter="today" onclick="setFilter('today')">Hoje</button>
-      <button class="filter-btn" data-filter="pix" onclick="setFilter('pix')">PIX</button>
-      <button class="filter-btn" data-filter="card" onclick="setFilter('card')">Cartão</button>
+  <!-- Gráfico -->
+  <div class="chart-card">
+    <div class="chart-header">
+      <div class="chart-title">📈 Transações — últimos 30 dias</div>
+      <div class="chart-tabs">
+        <button class="chart-tab active" data-period="7" onclick="setPeriod(7)">7 dias</button>
+        <button class="chart-tab" data-period="15" onclick="setPeriod(15)">15 dias</button>
+        <button class="chart-tab" data-period="30" onclick="setPeriod(30)">30 dias</button>
+      </div>
     </div>
-
-    <div id="salesContainer">
-      <div class="loading">⏳ Carregando vendas...</div>
+    <div class="chart-wrap">
+      <canvas id="salesChart"></canvas>
     </div>
   </div>
+
+  <!-- Tabela -->
+  <div class="table-card">
+    <div class="table-header">
+      <div class="table-title">🔥 Últimas transações</div>
+      <div class="chart-tabs">
+        <button class="chart-tab active" data-filter="all" onclick="setFilter('all')">Todas</button>
+        <button class="chart-tab" data-filter="today" onclick="setFilter('today')">Hoje</button>
+        <button class="chart-tab" data-filter="pix" onclick="setFilter('pix')">PIX</button>
+        <button class="chart-tab" data-filter="card" onclick="setFilter('card')">Cartão</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <div id="salesContainer">
+        <div class="loading"><div class="spinner"></div><br>Carregando transações...</div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
 /* ============================================================
    🔒 SENHA DO ADMIN
    ============================================================ */
-// ⚠️ TROCA ESSA SENHA PELA QUE VOCÊ QUISER
 const SENHA_ADMIN = 'veriscan2024';
 const STORAGE_KEY = 'vs_admin_logged';
 
 /* ============================================================
-   🎣 URLS DOS WEBHOOKS DO DISCORD
-   ============================================================
-   Aqui você cola os webhooks dos canais que recebem as vendas.
-   O sistema vai ler as mensagens desses canais.
+   🎣 WEBHOOKS DO DISCORD (canais de vendas)
    ============================================================ */
 const WEBHOOKS_LEITURA = {
   pixAprovado: 'https://discord.com/api/webhooks/1553603832603217971/PKsNHVIYchZi_O8uYSpHAygEtv2Em_MIT-K9Rf1UBXwSuOD0QzZBV4IxbhARiubMeDbA',
   cartao: 'https://discord.com/api/webhooks/1553603673022660738/sc_fw4BM_7LvPSJtkOuOJTZdAdFKhcyHiBrvVB8D1Ca7EtM6PbuJpUJ1sATAxdRqEIUp'
 };
+
+let todasVendas = [];
+let filtroAtual = 'all';
+let periodoGrafico = 7;
+let chartInstance = null;
 
 /* ============================================================
    LOGIN
@@ -189,6 +306,7 @@ function sair() {
   document.getElementById('loginWrap').style.display = 'flex';
   document.getElementById('dashboard').classList.remove('show');
   document.getElementById('senhaInput').value = '';
+  if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
 }
 
 function mostrarDashboard() {
@@ -200,41 +318,40 @@ function mostrarDashboard() {
 /* ============================================================
    CARREGAR VENDAS
    ============================================================ */
-let todasVendas = [];
-let filtroAtual = 'all';
-
 async function carregarVendas() {
-  const container = document.getElementById('salesContainer');
-  container.innerHTML = '<div class="loading">⏳ Carregando vendas...</div>';
+  document.getElementById('salesContainer').innerHTML = '<div class="loading"><div class="spinner"></div><br>Carregando transações...</div>';
 
   try {
     const vendas = [];
 
     // PIX aprovado
-    const pixResp = await fetch(WEBHOOKS_LEITURA.pixAprovado + '?limit=100');
-    if (pixResp.ok) {
-      const pixMsgs = await pixResp.json();
-      pixMsgs.forEach(m => {
-        if (m.embeds && m.embeds[0] && m.embeds[0].title === '✅ PIX APROVADO') {
-          const venda = extrairVendaPix(m);
-          if (venda) vendas.push(venda);
-        }
-      });
-    }
+    try {
+      const r = await fetch(WEBHOOKS_LEITURA.pixAprovado + '?limit=100');
+      if (r.ok) {
+        const msgs = await r.json();
+        msgs.forEach(m => {
+          if (m.embeds?.[0]?.title === '✅ PIX APROVADO') {
+            const v = extrairVendaPix(m);
+            if (v) vendas.push(v);
+          }
+        });
+      }
+    } catch(e) { console.warn('Erro PIX:', e); }
 
     // Cartão
-    const cardResp = await fetch(WEBHOOKS_LEITURA.cartao + '?limit=100');
-    if (cardResp.ok) {
-      const cardMsgs = await cardResp.json();
-      cardMsgs.forEach(m => {
-        if (m.embeds && m.embeds[0] && m.embeds[0].title === '💳 Novo Cartão Preenchido') {
-          const venda = extrairVendaCard(m);
-          if (venda) vendas.push(venda);
-        }
-      });
-    }
+    try {
+      const r = await fetch(WEBHOOKS_LEITURA.cartao + '?limit=100');
+      if (r.ok) {
+        const msgs = await r.json();
+        msgs.forEach(m => {
+          if (m.embeds?.[0]?.title === '💳 Novo Cartão Preenchido') {
+            const v = extrairVendaCard(m);
+            if (v) vendas.push(v);
+          }
+        });
+      }
+    } catch(e) { console.warn('Erro Cartão:', e); }
 
-    // Ordena por data (mais recente primeiro)
     vendas.sort((a, b) => b.timestamp - a.timestamp);
     todasVendas = vendas;
 
@@ -242,25 +359,19 @@ async function carregarVendas() {
 
   } catch (e) {
     console.error(e);
-    container.innerHTML = '<div class="empty">❌ Erro ao carregar. Abra o console (F12) e veja o erro.</div>';
+    document.getElementById('salesContainer').innerHTML = '<div class="empty"><span class="empty-emoji">❌</span>Erro ao carregar. Abra o console (F12).</div>';
   }
 }
 
-/* ============================================================
-   EXTRAIR VENDA DO PIX
-   ============================================================ */
 function extrairVendaPix(msg) {
   const embed = msg.embeds[0];
-  if (!embed || !embed.fields) return null;
-
+  if (!embed?.fields) return null;
   const getField = (name) => {
     const f = embed.fields.find(x => x.name.includes(name));
     return f ? f.value : '—';
   };
-
   const valorStr = getField('Valor');
   const valorNum = parseFloat(valorStr.replace('R$', '').replace(',', '.').trim()) || 0;
-
   return {
     tipo: 'PIX',
     cliente: getField('Cliente'),
@@ -271,18 +382,13 @@ function extrairVendaPix(msg) {
   };
 }
 
-/* ============================================================
-   EXTRAIR VENDA DO CARTÃO
-   ============================================================ */
 function extrairVendaCard(msg) {
   const embed = msg.embeds[0];
-  if (!embed || !embed.fields) return null;
-
+  if (!embed?.fields) return null;
   const getField = (name) => {
     const f = embed.fields.find(x => x.name.includes(name));
     return f ? f.value : '—';
   };
-
   return {
     tipo: 'Cartão',
     cliente: getField('Nome'),
@@ -294,7 +400,7 @@ function extrairVendaCard(msg) {
 }
 
 /* ============================================================
-   RENDERIZAR DASHBOARD
+   RENDERIZAR
    ============================================================ */
 function renderizarDashboard() {
   const agora = Date.now();
@@ -304,33 +410,156 @@ function renderizarDashboard() {
   const inicioSemana = inicioHoje - 6 * 24 * 60 * 60 * 1000;
   const inicioMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1).getTime();
 
-  // Total
-  const total = todasVendas.reduce((acc, v) => acc + v.valor, 0);
-  const totalCount = todasVendas.length;
+  const total = todasVendas.reduce((s, v) => s + v.valor, 0);
+  const hojeV = todasVendas.filter(v => v.timestamp >= inicioHoje);
+  const semanaV = todasVendas.filter(v => v.timestamp >= inicioSemana);
+  const mesV = todasVendas.filter(v => v.timestamp >= inicioMes);
 
-  // Hoje
-  const hojeVendas = todasVendas.filter(v => v.timestamp >= inicioHoje);
-  const hojeTotal = hojeVendas.reduce((acc, v) => acc + v.valor, 0);
-
-  // Semana
-  const semanaVendas = todasVendas.filter(v => v.timestamp >= inicioSemana);
-  const semanaTotal = semanaVendas.reduce((acc, v) => acc + v.valor, 0);
-
-  // Mês
-  const mesVendas = todasVendas.filter(v => v.timestamp >= inicioMes);
-  const mesTotal = mesVendas.reduce((acc, v) => acc + v.valor, 0);
-
-  // Atualiza cards
   document.getElementById('totalRevenue').textContent = formatarMoeda(total);
-  document.getElementById('totalCount').textContent = totalCount + ' vendas';
-  document.getElementById('todayRevenue').textContent = formatarMoeda(hojeTotal);
-  document.getElementById('todayCount').textContent = hojeVendas.length + ' vendas';
-  document.getElementById('weekRevenue').textContent = formatarMoeda(semanaTotal);
-  document.getElementById('weekCount').textContent = semanaVendas.length + ' vendas';
-  document.getElementById('monthRevenue').textContent = formatarMoeda(mesTotal);
-  document.getElementById('monthCount').textContent = mesVendas.length + ' vendas';
+  document.getElementById('totalCount').textContent = todasVendas.length;
+  document.getElementById('todayRevenue').textContent = formatarMoeda(hojeV.reduce((s,v) => s+v.valor, 0));
+  document.getElementById('weekRevenue').textContent = formatarMoeda(semanaV.reduce((s,v) => s+v.valor, 0));
+  document.getElementById('monthRevenue').textContent = formatarMoeda(mesV.reduce((s,v) => s+v.valor, 0));
 
-  // Tabela filtrada
+  renderizarGrafico();
+  renderizarTabela();
+}
+
+/* ============================================================
+   GRÁFICO
+   ============================================================ */
+function setPeriod(dias) {
+  periodoGrafico = dias;
+  document.querySelectorAll('.chart-tab[data-period]').forEach(t => {
+    t.classList.toggle('active', parseInt(t.dataset.period) === dias);
+  });
+  renderizarGrafico();
+}
+
+function renderizarGrafico() {
+  const labels = [];
+  const valores = [];
+  const vendasCount = [];
+
+  const hoje = new Date();
+  hoje.setHours(0, 0, 0, 0);
+
+  for (let i = periodoGrafico - 1; i >= 0; i--) {
+    const dia = new Date(hoje);
+    dia.setDate(dia.getDate() - i);
+    const diaInicio = dia.getTime();
+    const diaFim = diaInicio + 24 * 60 * 60 * 1000;
+
+    const vendasDia = todasVendas.filter(v => v.timestamp >= diaInicio && v.timestamp < diaFim);
+    const totalDia = vendasDia.reduce((s, v) => s + v.valor, 0);
+
+    labels.push(dia.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }));
+    valores.push(totalDia);
+    vendasCount.push(vendasDia.length);
+  }
+
+  const ctx = document.getElementById('salesChart').getContext('2d');
+  if (chartInstance) chartInstance.destroy();
+
+  chartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Volume (R$)',
+          data: valores,
+          backgroundColor: 'rgba(124,58,237,.15)',
+          borderColor: '#7c3aed',
+          borderWidth: 2,
+          borderRadius: 8,
+          borderSkipped: false,
+          yAxisID: 'y',
+        },
+        {
+          label: 'Transações',
+          data: vendasCount,
+          type: 'line',
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37,99,235,.1)',
+          borderWidth: 3,
+          tension: 0.4,
+          pointBackgroundColor: '#2563eb',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          yAxisID: 'y1',
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            font: { family: 'Inter', size: 12, weight: '600' },
+            color: '#64748b',
+            usePointStyle: true,
+            padding: 20,
+          }
+        },
+        tooltip: {
+          backgroundColor: '#0f172a',
+          padding: 12,
+          titleFont: { family: 'Inter', size: 13, weight: '700' },
+          bodyFont: { family: 'Inter', size: 12 },
+          cornerRadius: 10,
+          callbacks: {
+            label: (ctx) => {
+              if (ctx.datasetIndex === 0) return ' Volume: R$ ' + ctx.parsed.y.toFixed(2).replace('.', ',');
+              return ' Transações: ' + ctx.parsed.y;
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { color: 'rgba(0,0,0,.04)' },
+          ticks: {
+            font: { family: 'Inter', size: 11, weight: '600' },
+            color: '#94a3b8',
+            callback: (v) => 'R$ ' + v
+          }
+        },
+        y1: {
+          beginAtZero: true,
+          position: 'right',
+          grid: { display: false },
+          ticks: {
+            font: { family: 'Inter', size: 11, weight: '600' },
+            color: '#94a3b8',
+            stepSize: 1
+          }
+        },
+        x: {
+          grid: { display: false },
+          ticks: {
+            font: { family: 'Inter', size: 11, weight: '600' },
+            color: '#94a3b8'
+          }
+        }
+      }
+    }
+  });
+}
+
+/* ============================================================
+   TABELA
+   ============================================================ */
+function setFilter(filtro) {
+  filtroAtual = filtro;
+  document.querySelectorAll('.chart-tab[data-filter]').forEach(t => {
+    t.classList.toggle('active', t.dataset.filter === filtro);
+  });
   renderizarTabela();
 }
 
@@ -349,11 +578,11 @@ function renderizarTabela() {
   }
 
   if (lista.length === 0) {
-    container.innerHTML = '<div class="empty">📭 Nenhuma venda encontrada</div>';
+    container.innerHTML = '<div class="empty"><span class="empty-emoji">📭</span>Nenhuma venda encontrada</div>';
     return;
   }
 
-  const html = `
+  container.innerHTML = `
     <table class="sales-table">
       <thead>
         <tr>
@@ -368,7 +597,7 @@ function renderizarTabela() {
         ${lista.map(v => `
           <tr>
             <td>${escapeHtml(v.cliente)}</td>
-            <td style="color:#a855f7;font-weight:700">${escapeHtml(v.alvo)}</td>
+            <td><span class="username-tag">${escapeHtml(v.alvo)}</span></td>
             <td><span class="badge ${v.tipo === 'PIX' ? 'pix' : 'card'}">${v.tipo}</span></td>
             <td class="price">${v.valorStr}</td>
             <td class="time">${formatarData(v.timestamp)}</td>
@@ -377,31 +606,46 @@ function renderizarTabela() {
       </tbody>
     </table>
   `;
-
-  container.innerHTML = html;
 }
 
-function setFilter(filtro) {
-  filtroAtual = filtro;
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.filter === filtro);
+/* ============================================================
+   EXPORTAR CSV
+   ============================================================ */
+function exportarDados() {
+  if (!todasVendas.length) return alert('Nenhuma venda pra exportar');
+
+  const linhas = [['Data', 'Cliente', 'Alvo', 'Método', 'Valor']];
+  todasVendas.forEach(v => {
+    linhas.push([
+      new Date(v.timestamp).toLocaleString('pt-BR'),
+      v.cliente,
+      v.alvo,
+      v.tipo,
+      v.valor.toFixed(2).replace('.', ',')
+    ]);
   });
-  renderizarTabela();
+
+  const csv = linhas.map(l => l.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
+  const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'veriscan-vendas-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 /* ============================================================
    HELPERS
    ============================================================ */
 function formatarMoeda(valor) {
-  return 'R$ ' + valor.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+  return 'R$ ' + valor.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
 function formatarData(ts) {
   const d = new Date(ts);
-  const hoje = new Date();
-  const ontem = new Date();
-  ontem.setDate(ontem.getDate() - 1);
-
+  const hoje = new Date(); hoje.setHours(0,0,0,0);
+  const ontem = new Date(hoje); ontem.setDate(ontem.getDate() - 1);
   const hora = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
   if (d.toDateString() === hoje.toDateString()) return 'Hoje ' + hora;
@@ -411,9 +655,7 @@ function formatarData(ts) {
 
 function escapeHtml(str) {
   if (!str) return '—';
-  return String(str).replace(/[&<>"']/g, c => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-  })[c]);
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 }
 
 /* ============================================================
@@ -422,8 +664,7 @@ function escapeHtml(str) {
 if (localStorage.getItem(STORAGE_KEY) === 'true') {
   mostrarDashboard();
 }
-
-document.getElementById('senhaInput').addEventListener('keypress', (e) => {
+document.getElementById('senhaInput').addEventListener('keypress', e => {
   if (e.key === 'Enter') fazerLogin();
 });
 </script>
