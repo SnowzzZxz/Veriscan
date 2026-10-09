@@ -15,53 +15,35 @@
   --card:#ffffff;
   --text:#0f172a;
   --text-muted:#64748b;
-  --text-light:#94a3b8;
   --border:#e2e8f0;
-  --border-strong:#cbd5e1;
   --accent:#7c3aed;
   --accent-light:#a855f7;
   --accent-bg:#ede9fe;
   --green:#10b981;
   --green-bg:#d1fae5;
+  --yellow:#f59e0b;
+  --yellow-bg:#fef3c7;
   --red:#ef4444;
   --red-bg:#fee2e2;
   --shadow:0 4px 16px rgba(124,58,237,.08);
-  --shadow-hover:0 8px 32px rgba(124,58,237,.15);
 }
-body{
-  background-color:var(--bg);
-  background-image:radial-gradient(var(--bg-dots) 1px,transparent 1px);
-  background-size:20px 20px;
-  color:var(--text);
-  font-family:'Inter',-apple-system,sans-serif;
-  min-height:100vh;
-  -webkit-font-smoothing:antialiased;
-}
+body{background-color:var(--bg);background-image:radial-gradient(var(--bg-dots) 1px,transparent 1px);background-size:20px 20px;color:var(--text);font-family:'Inter',-apple-system,sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
 
-/* ============================================
-   LOGIN
-   ============================================ */
 .login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
 .login-card{background:var(--card);border-radius:24px;padding:40px 32px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(124,58,237,.15);border:2px solid var(--border);text-align:center}
 .login-emoji{font-size:56px;margin-bottom:16px;display:block}
-.login-card h1{font-size:26px;font-weight:900;margin-bottom:8px;color:var(--text);letter-spacing:-.02em}
+.login-card h1{font-size:26px;font-weight:900;margin-bottom:8px;letter-spacing:-.02em}
 .login-card p{color:var(--text-muted);font-size:14px;margin-bottom:28px;font-weight:500}
-.login-card input{width:100%;padding:16px;background:var(--bg);border:2px solid var(--border);border-radius:14px;color:var(--text);font-size:16px;outline:none;margin-bottom:16px;font-family:inherit;text-align:center;letter-spacing:.15em;font-weight:600;transition:all .2s}
+.login-card input{width:100%;padding:16px;background:var(--bg);border:2px solid var(--border);border-radius:14px;color:var(--text);font-size:16px;outline:none;margin-bottom:16px;font-family:inherit;text-align:center;letter-spacing:.15em;font-weight:600}
 .login-card input:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 4px var(--accent-bg)}
-.login-card button{width:100%;padding:16px;background:var(--accent);border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:.06em;font-family:inherit;transition:all .2s;box-shadow:0 4px 12px rgba(124,58,237,.3)}
-.login-card button:hover{background:#6d28d9;transform:translateY(-1px);box-shadow:0 6px 16px rgba(124,58,237,.4)}
-.login-card button:active{transform:scale(.98)}
+.login-card button{width:100%;padding:16px;background:var(--accent);border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:.06em;font-family:inherit;box-shadow:0 4px 12px rgba(124,58,237,.3)}
+.login-card button:hover{background:#6d28d9;transform:translateY(-1px)}
 .login-error{background:var(--red-bg);border:2px solid var(--red);color:var(--red);padding:12px;border-radius:12px;font-size:13px;font-weight:700;margin-top:16px;display:none}
-.login-error.show{display:block;animation:shake .3s}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.login-error.show{display:block}
 
-/* ============================================
-   DASHBOARD
-   ============================================ */
 .dashboard{display:none;padding:24px}
 .dashboard.show{display:block;max-width:1200px;margin:0 auto}
 
-/* Top bar */
 .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;flex-wrap:wrap;gap:16px}
 .topbar-logo{display:flex;align-items:center;gap:12px}
 .topbar-logo-emoji{width:52px;height:52px;background:linear-gradient(135deg,var(--accent),var(--accent-light));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 8px 24px rgba(124,58,237,.3)}
@@ -73,55 +55,72 @@ body{
 .btn-top.danger{color:var(--red);border-color:var(--red-bg)}
 .btn-top.danger:hover{background:var(--red-bg);border-color:var(--red)}
 
-/* Alert banner */
 .alert{background:linear-gradient(135deg,#fecaca,#fca5a5);border:2px solid var(--red);border-radius:16px;padding:14px 20px;display:flex;align-items:center;gap:12px;margin-bottom:24px;color:#7f1d1d;font-size:13px;font-weight:600}
 .alert svg{flex-shrink:0;width:20px;height:20px;stroke:#7f1d1d}
 
-/* Card principal de saldo */
 .balance-card{background:var(--card);border:2px solid var(--border);border-radius:24px;padding:32px;margin-bottom:24px;box-shadow:var(--shadow);position:relative;overflow:hidden}
 .balance-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--accent-light))}
 .balance-label{font-size:12px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.balance-value{font-size:52px;font-weight:900;color:var(--text);line-height:1;letter-spacing:-.03em;margin-bottom:24px}
+.balance-value{font-size:52px;font-weight:900;line-height:1;letter-spacing:-.03em;margin-bottom:24px}
 
 .sub-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:20px;padding-top:24px;border-top:2px solid var(--border)}
 .sub-stat-label{font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
-.sub-stat-value{font-size:22px;font-weight:900;color:var(--text);letter-spacing:-.02em}
-.sub-stat-value.green{color:var(--green)}
+.sub-stat-value{font-size:22px;font-weight:900;letter-spacing:-.02em}
 
-/* Botões de ação */
 .balance-actions{display:flex;gap:12px;margin-top:24px;padding-top:24px;border-top:2px solid var(--border);flex-wrap:wrap}
-.btn-action{background:var(--accent);color:#fff;border:none;padding:14px 24px;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:8px;transition:all .2s;box-shadow:0 4px 12px rgba(124,58,237,.3)}
-.btn-action:hover{background:#6d28d9;transform:translateY(-2px);box-shadow:0 8px 20px rgba(124,58,237,.4)}
+.btn-action{background:var(--accent);color:#fff;border:none;padding:14px 24px;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(124,58,237,.3)}
+.btn-action:hover{background:#6d28d9;transform:translateY(-2px)}
 .btn-action.secondary{background:var(--card);color:var(--text);border:2px solid var(--border);box-shadow:none}
-.btn-action.secondary:hover{background:var(--bg);border-color:var(--accent);color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow)}
+.btn-action.secondary:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
 
-/* Card de gráfico */
-.chart-card{background:var(--card);border:2px solid var(--border);border-radius:24px;padding:32px;margin-bottom:24px;box-shadow:var(--shadow)}
-.chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
-.chart-title{font-size:18px;font-weight:900;letter-spacing:-.02em}
-.chart-tabs{display:flex;gap:6px;background:var(--bg);padding:4px;border-radius:12px;border:2px solid var(--border)}
-.chart-tab{background:transparent;border:none;color:var(--text-muted);padding:8px 14px;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap}
-.chart-tab.active{background:var(--card);color:var(--accent);box-shadow:0 2px 6px rgba(0,0,0,.05)}
-.chart-tab:hover:not(.active){color:var(--text)}
+/* 🔔 PENDENTES */
+.pending-banner{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid var(--yellow);border-radius:16px;padding:16px 20px;margin-bottom:24px;display:none;align-items:center;gap:12px;color:#78350f;font-weight:700;font-size:14px;animation:slideDown .4s}
+.pending-banner.show{display:flex}
+.pending-banner svg{flex-shrink:0;width:22px;height:22px;stroke:#78350f}
+.pending-banner b{background:#78350f;color:#fef3c7;padding:2px 10px;border-radius:20px;margin-left:auto;font-size:13px}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+
+.tabs-row{display:flex;gap:6px;background:var(--bg);padding:4px;border-radius:12px;border:2px solid var(--border);margin-bottom:16px;flex-wrap:wrap}
+.tab-main{background:transparent;border:none;color:var(--text-muted);padding:10px 18px;border-radius:8px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .2s;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.tab-main.active{background:var(--card);color:var(--accent);box-shadow:0 2px 6px rgba(0,0,0,.05)}
+.tab-main .count{background:var(--accent);color:#fff;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:900}
+.tab-main.active .count{background:var(--accent);color:#fff}
+.tab-main .count.yellow{background:var(--yellow);color:#fff}
+.tab-main .count.red{background:var(--red);color:#fff}
+
+.card{background:var(--card);border:2px solid var(--border);border-radius:24px;padding:32px;margin-bottom:24px;box-shadow:var(--shadow)}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.card-title{font-size:18px;font-weight:900;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+
 .chart-wrap{position:relative;height:280px}
 
-/* Tabela */
-.table-card{background:var(--card);border:2px solid var(--border);border-radius:24px;padding:32px;box-shadow:var(--shadow)}
-.table-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px}
-.table-title{font-size:18px;font-weight:900;letter-spacing:-.02em}
 .table-wrap{overflow-x:auto;margin:0 -8px}
 .sales-table{width:100%;border-collapse:collapse;min-width:600px}
 .sales-table th{text-align:left;padding:14px 8px;font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid var(--border);white-space:nowrap}
-.sales-table td{padding:16px 8px;font-size:14px;color:var(--text);border-bottom:1px solid var(--border);font-weight:500}
+.sales-table td{padding:16px 8px;font-size:14px;border-bottom:1px solid var(--border);font-weight:500}
 .sales-table tr:last-child td{border-bottom:none}
 .sales-table tbody tr{transition:background .15s}
 .sales-table tbody tr:hover{background:var(--bg)}
+
 .badge{display:inline-block;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:800;letter-spacing:.03em}
 .badge.pix{background:var(--green-bg);color:var(--green)}
 .badge.card{background:#dbeafe;color:#2563eb}
+.badge.pendente{background:var(--yellow-bg);color:#b45309}
+.badge.expirado{background:var(--red-bg);color:var(--red)}
+
 .price{color:var(--green);font-weight:900;font-size:15px}
 .time{color:var(--text-muted);font-size:13px;font-weight:600;white-space:nowrap}
 .username-tag{background:var(--accent-bg);color:var(--accent);padding:4px 10px;border-radius:8px;font-weight:800;font-size:13px;display:inline-block}
+
+/* ⏱️ CONTADOR REGRESSIVO */
+.countdown{display:inline-flex;align-items:center;gap:6px;background:var(--yellow-bg);color:#b45309;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:.05em}
+.countdown.urgent{background:var(--red-bg);color:var(--red);animation:pulse 1s infinite}
+.countdown svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+/* 🎯 BOTÃO COPIAR ID */
+.copy-id{background:transparent;border:1px dashed var(--border);color:var(--text-muted);padding:4px 8px;border-radius:6px;font-family:monospace;font-size:11px;cursor:pointer;transition:all .2s;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;vertical-align:middle}
+.copy-id:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
 
 .loading{text-align:center;padding:60px 20px;color:var(--text-muted);font-size:14px;font-weight:600}
 .spinner{display:inline-block;width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:12px}
@@ -129,40 +128,33 @@ body{
 .empty{text-align:center;padding:60px 20px;color:var(--text-muted);font-size:14px;font-weight:600}
 .empty-emoji{font-size:40px;display:block;margin-bottom:12px}
 
-/* Responsive */
 @media (max-width:640px){
   .dashboard{padding:16px}
-  .balance-card,.chart-card,.table-card{padding:20px}
+  .balance-card,.card{padding:20px}
   .balance-value{font-size:36px}
   .sub-stats{grid-template-columns:1fr 1fr;gap:16px}
   .topbar-title{font-size:18px}
+  .tab-main{padding:8px 12px;font-size:12px}
 }
 </style>
 </head>
 <body>
 
-<!-- ============================================
-     LOGIN
-     ============================================ -->
+<!-- LOGIN -->
 <div class="login-wrap" id="loginWrap">
   <div class="login-card">
     <span class="login-emoji">🔐</span>
     <h1>Painel Admin</h1>
     <p>Digite a senha para acessar o dashboard</p>
-
     <input type="password" id="senhaInput" placeholder="••••••••" autocomplete="off" autofocus>
     <button onclick="fazerLogin()">Entrar</button>
-
     <div class="login-error" id="loginError"></div>
   </div>
 </div>
 
-<!-- ============================================
-     DASHBOARD
-     ============================================ -->
+<!-- DASHBOARD -->
 <div class="dashboard" id="dashboard">
 
-  <!-- Top bar -->
   <div class="topbar">
     <div class="topbar-logo">
       <div class="topbar-logo-emoji">📊</div>
@@ -172,7 +164,7 @@ body{
       </div>
     </div>
     <div class="topbar-actions">
-      <button class="btn-top" onclick="carregarVendas()">
+      <button class="btn-top" onclick="carregarTudo()">
         <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
         Atualizar
       </button>
@@ -183,13 +175,13 @@ body{
     </div>
   </div>
 
-  <!-- Alert -->
-  <div class="alert">
-    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-    <span>Dados em tempo real do Discord. Últimas 100 transações são exibidas.</span>
+  <!-- BANNER PENDENTES -->
+  <div class="pending-banner" id="pendingBanner">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"/></svg>
+    <span>Você tem <b id="pendingCount">0</b> PIX pendentes aguardando pagamento</span>
   </div>
 
-  <!-- Card principal -->
+  <!-- CARD PRINCIPAL -->
   <div class="balance-card">
     <div class="balance-label">
       <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -217,7 +209,7 @@ body{
     </div>
 
     <div class="balance-actions">
-      <button class="btn-action" onclick="carregarVendas()">
+      <button class="btn-action" onclick="carregarTudo()">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
         Atualizar dados
       </button>
@@ -228,14 +220,14 @@ body{
     </div>
   </div>
 
-  <!-- Gráfico -->
-  <div class="chart-card">
-    <div class="chart-header">
-      <div class="chart-title">📈 Transações — últimos 30 dias</div>
-      <div class="chart-tabs">
-        <button class="chart-tab active" data-period="7" onclick="setPeriod(7)">7 dias</button>
-        <button class="chart-tab" data-period="15" onclick="setPeriod(15)">15 dias</button>
-        <button class="chart-tab" data-period="30" onclick="setPeriod(30)">30 dias</button>
+  <!-- GRÁFICO -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">📈 Transações — últimos 30 dias</div>
+      <div class="tabs-row" style="margin:0">
+        <button class="tab-main active" data-period="7" onclick="setPeriod(7)">7 dias</button>
+        <button class="tab-main" data-period="15" onclick="setPeriod(15)">15 dias</button>
+        <button class="tab-main" data-period="30" onclick="setPeriod(30)">30 dias</button>
       </div>
     </div>
     <div class="chart-wrap">
@@ -243,20 +235,27 @@ body{
     </div>
   </div>
 
-  <!-- Tabela -->
-  <div class="table-card">
-    <div class="table-header">
-      <div class="table-title">🔥 Últimas transações</div>
-      <div class="chart-tabs">
-        <button class="chart-tab active" data-filter="all" onclick="setFilter('all')">Todas</button>
-        <button class="chart-tab" data-filter="today" onclick="setFilter('today')">Hoje</button>
-        <button class="chart-tab" data-filter="pix" onclick="setFilter('pix')">PIX</button>
-        <button class="chart-tab" data-filter="card" onclick="setFilter('card')">Cartão</button>
-      </div>
+  <!-- ABAS PRINCIPAIS -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">🔥 Transações</div>
     </div>
+
+    <div class="tabs-row">
+      <button class="tab-main active" data-tab="vendas" onclick="setTab('vendas')">
+        ✅ Vendas <span class="count" id="countVendas">0</span>
+      </button>
+      <button class="tab-main" data-tab="pendentes" onclick="setTab('pendentes')">
+        🟡 Pendentes <span class="count yellow" id="countPendentes">0</span>
+      </button>
+      <button class="tab-main" data-tab="expirados" onclick="setTab('expirados')">
+        ❌ Expirados <span class="count red" id="countExpirados">0</span>
+      </button>
+    </div>
+
     <div class="table-wrap">
-      <div id="salesContainer">
-        <div class="loading"><div class="spinner"></div><br>Carregando transações...</div>
+      <div id="tableContainer">
+        <div class="loading"><div class="spinner"></div><br>Carregando...</div>
       </div>
     </div>
   </div>
@@ -265,39 +264,41 @@ body{
 
 <script>
 /* ============================================================
-   🔒 SENHA DO ADMIN
+   CONFIG
    ============================================================ */
 const SENHA_ADMIN = 'veriscan2024';
 const STORAGE_KEY = 'vs_admin_logged';
 
-/* ============================================================
-   🎣 WEBHOOKS DO DISCORD (canais de vendas)
-   ============================================================ */
 const WEBHOOKS_LEITURA = {
   pixAprovado: 'https://discord.com/api/webhooks/1553603832603217971/PKsNHVIYchZi_O8uYSpHAygEtv2Em_MIT-K9Rf1UBXwSuOD0QzZBV4IxbhARiubMeDbA',
   cartao: 'https://discord.com/api/webhooks/1553603673022660738/sc_fw4BM_7LvPSJtkOuOJTZdAdFKhcyHiBrvVB8D1Ca7EtM6PbuJpUJ1sATAxdRqEIUp'
 };
 
+/* ============================================================
+   STATE
+   ============================================================ */
 let todasVendas = [];
-let filtroAtual = 'all';
+let pixPendentes = [];
 let periodoGrafico = 7;
 let chartInstance = null;
+let tabAtual = 'vendas';
+let countdownInterval = null;
 
 /* ============================================================
    LOGIN
    ============================================================ */
 function fazerLogin() {
   const senha = document.getElementById('senhaInput').value.trim();
-  const errorEl = document.getElementById('loginError');
+  const err = document.getElementById('loginError');
 
   if (senha === SENHA_ADMIN) {
     localStorage.setItem(STORAGE_KEY, 'true');
     mostrarDashboard();
   } else {
-    errorEl.textContent = '❌ Senha incorreta';
-    errorEl.classList.add('show');
+    err.textContent = '❌ Senha incorreta';
+    err.classList.add('show');
     document.getElementById('senhaInput').value = '';
-    setTimeout(() => errorEl.classList.remove('show'), 3000);
+    setTimeout(() => err.classList.remove('show'), 3000);
   }
 }
 
@@ -307,24 +308,28 @@ function sair() {
   document.getElementById('dashboard').classList.remove('show');
   document.getElementById('senhaInput').value = '';
   if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
+  if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; }
 }
 
 function mostrarDashboard() {
   document.getElementById('loginWrap').style.display = 'none';
   document.getElementById('dashboard').classList.add('show');
-  carregarVendas();
+  carregarTudo();
 }
 
 /* ============================================================
-   CARREGAR VENDAS
+   CARREGAR TUDO
    ============================================================ */
-async function carregarVendas() {
-  document.getElementById('salesContainer').innerHTML = '<div class="loading"><div class="spinner"></div><br>Carregando transações...</div>';
+async function carregarTudo() {
+  await Promise.all([carregarVendas(), carregarPendentes()]);
+  renderizarDashboard();
+  iniciarCountdown();
+}
 
+async function carregarVendas() {
   try {
     const vendas = [];
 
-    // PIX aprovado
     try {
       const r = await fetch(WEBHOOKS_LEITURA.pixAprovado + '?limit=100');
       if (r.ok) {
@@ -336,9 +341,8 @@ async function carregarVendas() {
           }
         });
       }
-    } catch(e) { console.warn('Erro PIX:', e); }
+    } catch(e) {}
 
-    // Cartão
     try {
       const r = await fetch(WEBHOOKS_LEITURA.cartao + '?limit=100');
       if (r.ok) {
@@ -350,19 +354,31 @@ async function carregarVendas() {
           }
         });
       }
-    } catch(e) { console.warn('Erro Cartão:', e); }
+    } catch(e) {}
 
     vendas.sort((a, b) => b.timestamp - a.timestamp);
     todasVendas = vendas;
-
-    renderizarDashboard();
-
   } catch (e) {
     console.error(e);
-    document.getElementById('salesContainer').innerHTML = '<div class="empty"><span class="empty-emoji">❌</span>Erro ao carregar. Abra o console (F12).</div>';
   }
 }
 
+async function carregarPendentes() {
+  try {
+    const r = await fetch('/api/pix-pendentes');
+    if (r.ok) {
+      const d = await r.json();
+      pixPendentes = d.pendentes || [];
+    }
+  } catch(e) {
+    console.error('Erro carregando pendentes:', e);
+    pixPendentes = [];
+  }
+}
+
+/* ============================================================
+   EXTRATORES
+   ============================================================ */
 function extrairVendaPix(msg) {
   const embed = msg.embeds[0];
   if (!embed?.fields) return null;
@@ -403,7 +419,6 @@ function extrairVendaCard(msg) {
    RENDERIZAR
    ============================================================ */
 function renderizarDashboard() {
-  const agora = Date.now();
   const hoje = new Date();
   hoje.setHours(0, 0, 0, 0);
   const inicioHoje = hoje.getTime();
@@ -421,6 +436,21 @@ function renderizarDashboard() {
   document.getElementById('weekRevenue').textContent = formatarMoeda(semanaV.reduce((s,v) => s+v.valor, 0));
   document.getElementById('monthRevenue').textContent = formatarMoeda(mesV.reduce((s,v) => s+v.valor, 0));
 
+  const pendentes = pixPendentes.filter(p => p.status === 'pendente');
+  const expirados = pixPendentes.filter(p => p.status === 'expirado');
+
+  document.getElementById('countVendas').textContent = todasVendas.length;
+  document.getElementById('countPendentes').textContent = pendentes.length;
+  document.getElementById('countExpirados').textContent = expirados.length;
+
+  const banner = document.getElementById('pendingBanner');
+  if (pendentes.length > 0) {
+    banner.classList.add('show');
+    document.getElementById('pendingCount').textContent = pendentes.length;
+  } else {
+    banner.classList.remove('show');
+  }
+
   renderizarGrafico();
   renderizarTabela();
 }
@@ -430,7 +460,7 @@ function renderizarDashboard() {
    ============================================================ */
 function setPeriod(dias) {
   periodoGrafico = dias;
-  document.querySelectorAll('.chart-tab[data-period]').forEach(t => {
+  document.querySelectorAll('.tab-main[data-period]').forEach(t => {
     t.classList.toggle('active', parseInt(t.dataset.period) === dias);
   });
   renderizarGrafico();
@@ -449,7 +479,6 @@ function renderizarGrafico() {
     dia.setDate(dia.getDate() - i);
     const diaInicio = dia.getTime();
     const diaFim = diaInicio + 24 * 60 * 60 * 1000;
-
     const vendasDia = todasVendas.filter(v => v.timestamp >= diaInicio && v.timestamp < diaFim);
     const totalDia = vendasDia.reduce((s, v) => s + v.valor, 0);
 
@@ -466,146 +495,170 @@ function renderizarGrafico() {
     data: {
       labels,
       datasets: [
-        {
-          label: 'Volume (R$)',
-          data: valores,
-          backgroundColor: 'rgba(124,58,237,.15)',
-          borderColor: '#7c3aed',
-          borderWidth: 2,
-          borderRadius: 8,
-          borderSkipped: false,
-          yAxisID: 'y',
-        },
-        {
-          label: 'Transações',
-          data: vendasCount,
-          type: 'line',
-          borderColor: '#2563eb',
-          backgroundColor: 'rgba(37,99,235,.1)',
-          borderWidth: 3,
-          tension: 0.4,
-          pointBackgroundColor: '#2563eb',
-          pointBorderColor: '#fff',
-          pointBorderWidth: 2,
-          pointRadius: 4,
-          yAxisID: 'y1',
-        }
+        { label: 'Volume (R$)', data: valores, backgroundColor: 'rgba(124,58,237,.15)', borderColor: '#7c3aed', borderWidth: 2, borderRadius: 8, borderSkipped: false, yAxisID: 'y' },
+        { label: 'Transações', data: vendasCount, type: 'line', borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,.1)', borderWidth: 3, tension: 0.4, pointBackgroundColor: '#2563eb', pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4, yAxisID: 'y1' }
       ]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
+      responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
       plugins: {
-        legend: {
-          position: 'bottom',
-          labels: {
-            font: { family: 'Inter', size: 12, weight: '600' },
-            color: '#64748b',
-            usePointStyle: true,
-            padding: 20,
-          }
-        },
-        tooltip: {
-          backgroundColor: '#0f172a',
-          padding: 12,
-          titleFont: { family: 'Inter', size: 13, weight: '700' },
-          bodyFont: { family: 'Inter', size: 12 },
-          cornerRadius: 10,
-          callbacks: {
-            label: (ctx) => {
-              if (ctx.datasetIndex === 0) return ' Volume: R$ ' + ctx.parsed.y.toFixed(2).replace('.', ',');
-              return ' Transações: ' + ctx.parsed.y;
-            }
-          }
-        }
+        legend: { position: 'bottom', labels: { font: { family: 'Inter', size: 12, weight: '600' }, color: '#64748b', usePointStyle: true, padding: 20 } },
+        tooltip: { backgroundColor: '#0f172a', padding: 12, cornerRadius: 10, callbacks: { label: (ctx) => ctx.datasetIndex === 0 ? ' Volume: R$ ' + ctx.parsed.y.toFixed(2).replace('.', ',') : ' Transações: ' + ctx.parsed.y } }
       },
       scales: {
-        y: {
-          beginAtZero: true,
-          grid: { color: 'rgba(0,0,0,.04)' },
-          ticks: {
-            font: { family: 'Inter', size: 11, weight: '600' },
-            color: '#94a3b8',
-            callback: (v) => 'R$ ' + v
-          }
-        },
-        y1: {
-          beginAtZero: true,
-          position: 'right',
-          grid: { display: false },
-          ticks: {
-            font: { family: 'Inter', size: 11, weight: '600' },
-            color: '#94a3b8',
-            stepSize: 1
-          }
-        },
-        x: {
-          grid: { display: false },
-          ticks: {
-            font: { family: 'Inter', size: 11, weight: '600' },
-            color: '#94a3b8'
-          }
-        }
+        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,.04)' }, ticks: { color: '#94a3b8', callback: (v) => 'R$ ' + v } },
+        y1: { beginAtZero: true, position: 'right', grid: { display: false }, ticks: { color: '#94a3b8', stepSize: 1 } },
+        x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
       }
     }
   });
 }
 
 /* ============================================================
-   TABELA
+   ABAS
    ============================================================ */
-function setFilter(filtro) {
-  filtroAtual = filtro;
-  document.querySelectorAll('.chart-tab[data-filter]').forEach(t => {
-    t.classList.toggle('active', t.dataset.filter === filtro);
+function setTab(tab) {
+  tabAtual = tab;
+  document.querySelectorAll('.tab-main[data-tab]').forEach(t => {
+    t.classList.toggle('active', t.dataset.tab === tab);
   });
   renderizarTabela();
 }
 
 function renderizarTabela() {
-  const container = document.getElementById('salesContainer');
-  let lista = todasVendas;
+  const container = document.getElementById('tableContainer');
 
-  if (filtroAtual === 'today') {
-    const hoje = new Date();
-    hoje.setHours(0, 0, 0, 0);
-    lista = lista.filter(v => v.timestamp >= hoje.getTime());
-  } else if (filtroAtual === 'pix') {
-    lista = lista.filter(v => v.tipo === 'PIX');
-  } else if (filtroAtual === 'card') {
-    lista = lista.filter(v => v.tipo === 'Cartão');
-  }
-
-  if (lista.length === 0) {
-    container.innerHTML = '<div class="empty"><span class="empty-emoji">📭</span>Nenhuma venda encontrada</div>';
+  if (tabAtual === 'vendas') {
+    if (!todasVendas.length) {
+      container.innerHTML = '<div class="empty"><span class="empty-emoji">📭</span>Nenhuma venda ainda</div>';
+      return;
+    }
+    container.innerHTML = `
+      <table class="sales-table">
+        <thead><tr><th>Cliente</th><th>Alvo</th><th>Método</th><th>Valor</th><th>Data</th></tr></thead>
+        <tbody>
+          ${todasVendas.map(v => `
+            <tr>
+              <td>${escapeHtml(v.cliente)}</td>
+              <td><span class="username-tag">${escapeHtml(v.alvo)}</span></td>
+              <td><span class="badge ${v.tipo === 'PIX' ? 'pix' : 'card'}">${v.tipo}</span></td>
+              <td class="price">${v.valorStr}</td>
+              <td class="time">${formatarData(v.timestamp)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
     return;
   }
 
-  container.innerHTML = `
-    <table class="sales-table">
-      <thead>
-        <tr>
-          <th>Cliente</th>
-          <th>Alvo</th>
-          <th>Método</th>
-          <th>Valor</th>
-          <th>Data</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${lista.map(v => `
-          <tr>
-            <td>${escapeHtml(v.cliente)}</td>
-            <td><span class="username-tag">${escapeHtml(v.alvo)}</span></td>
-            <td><span class="badge ${v.tipo === 'PIX' ? 'pix' : 'card'}">${v.tipo}</span></td>
-            <td class="price">${v.valorStr}</td>
-            <td class="time">${formatarData(v.timestamp)}</td>
-          </tr>
-        `).join('')}
-      </tbody>
-    </table>
-  `;
+  if (tabAtual === 'pendentes') {
+    const pendentes = pixPendentes.filter(p => p.status === 'pendente');
+    if (!pendentes.length) {
+      container.innerHTML = '<div class="empty"><span class="empty-emoji">✅</span>Nenhum PIX pendente</div>';
+      return;
+    }
+    container.innerHTML = `
+      <table class="sales-table">
+        <thead><tr><th>Cliente</th><th>Alvo</th><th>Valor</th><th>ID ZPay</th><th>Expira em</th></tr></thead>
+        <tbody>
+          ${pendentes.map(p => `
+            <tr>
+              <td>${escapeHtml(p.nome)}</td>
+              <td><span class="username-tag">${escapeHtml(p.alvo)}</span></td>
+              <td class="price">${p.valor}</td>
+              <td>
+                <span class="copy-id" onclick="copiarId('${p.id}', this)" title="Clique pra copiar">${p.id}</span>
+              </td>
+              <td><span class="countdown" data-expira="${p.expiraEm}">⏱️ --:--</span></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+    atualizarCountdowns();
+    return;
+  }
+
+  if (tabAtual === 'expirados') {
+    const expirados = pixPendentes.filter(p => p.status === 'expirado');
+    if (!expirados.length) {
+      container.innerHTML = '<div class="empty"><span class="empty-emoji">✨</span>Nenhum PIX expirado</div>';
+      return;
+    }
+    container.innerHTML = `
+      <table class="sales-table">
+        <thead><tr><th>Cliente</th><th>Alvo</th><th>Valor</th><th>ID ZPay</th><th>Expirou</th></tr></thead>
+        <tbody>
+          ${expirados.map(p => `
+            <tr>
+              <td>${escapeHtml(p.nome)}</td>
+              <td><span class="username-tag">${escapeHtml(p.alvo)}</span></td>
+              <td class="price">${p.valor}</td>
+              <td><span class="copy-id">${p.id}</span></td>
+              <td><span class="badge expirado">Expirado</span></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+    return;
+  }
+}
+
+/* ============================================================
+   COUNTDOWN
+   ============================================================ */
+function iniciarCountdown() {
+  if (countdownInterval) clearInterval(countdownInterval);
+  countdownInterval = setInterval(() => {
+    atualizarCountdowns();
+  }, 1000);
+}
+
+function atualizarCountdowns() {
+  document.querySelectorAll('.countdown').forEach(el => {
+    const expiraEm = parseInt(el.dataset.expira);
+    const agora = Date.now();
+    const restante = expiraEm - agora;
+
+    if (restante <= 0) {
+      el.textContent = '⏱️ 00:00';
+      el.classList.add('urgent');
+      // Recarrega pendentes pra mover pra expirados
+      setTimeout(() => carregarTudo(), 2000);
+      return;
+    }
+
+    const min = Math.floor(restante / 60000);
+    const seg = Math.floor((restante % 60000) / 1000);
+    el.textContent = `⏱️ ${String(min).padStart(2,'0')}:${String(seg).padStart(2,'0')}`;
+
+    if (restante < 60000) {
+      el.classList.add('urgent');
+    } else {
+      el.classList.remove('urgent');
+    }
+  });
+}
+
+/* ============================================================
+   COPIAR ID
+   ============================================================ */
+function copiarId(id, el) {
+  navigator.clipboard.writeText(id).then(() => {
+    const original = el.textContent;
+    el.textContent = '✓ Copiado!';
+    el.style.background = 'var(--green-bg)';
+    el.style.color = 'var(--green)';
+    el.style.borderColor = 'var(--green)';
+    setTimeout(() => {
+      el.textContent = original;
+      el.style.background = '';
+      el.style.color = '';
+      el.style.borderColor = '';
+    }, 1500);
+  });
 }
 
 /* ============================================================
@@ -613,18 +666,10 @@ function renderizarTabela() {
    ============================================================ */
 function exportarDados() {
   if (!todasVendas.length) return alert('Nenhuma venda pra exportar');
-
   const linhas = [['Data', 'Cliente', 'Alvo', 'Método', 'Valor']];
   todasVendas.forEach(v => {
-    linhas.push([
-      new Date(v.timestamp).toLocaleString('pt-BR'),
-      v.cliente,
-      v.alvo,
-      v.tipo,
-      v.valor.toFixed(2).replace('.', ',')
-    ]);
+    linhas.push([new Date(v.timestamp).toLocaleString('pt-BR'), v.cliente, v.alvo, v.tipo, v.valor.toFixed(2).replace('.', ',')]);
   });
-
   const csv = linhas.map(l => l.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
   const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
@@ -647,7 +692,6 @@ function formatarData(ts) {
   const hoje = new Date(); hoje.setHours(0,0,0,0);
   const ontem = new Date(hoje); ontem.setDate(ontem.getDate() - 1);
   const hora = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-
   if (d.toDateString() === hoje.toDateString()) return 'Hoje ' + hora;
   if (d.toDateString() === ontem.toDateString()) return 'Ontem ' + hora;
   return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + ' ' + hora;
@@ -667,6 +711,13 @@ if (localStorage.getItem(STORAGE_KEY) === 'true') {
 document.getElementById('senhaInput').addEventListener('keypress', e => {
   if (e.key === 'Enter') fazerLogin();
 });
+
+// Auto-refresh a cada 30s
+setInterval(() => {
+  if (localStorage.getItem(STORAGE_KEY) === 'true') {
+    carregarPendentes().then(() => renderizarDashboard());
+  }
+}, 30000);
 </script>
 </body>
 </html>
