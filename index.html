@@ -117,50 +117,28 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 <div class="vs-modal-backdrop" id="vsModal">
   <div class="vs-modal">
     <div class="vs-modal-icon">
-      <svg viewBox="0 0 24 24">
-        <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-      </svg>
+      <svg viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
     </div>
-
     <h2 class="vs-modal-title">Você já usou sua <span>pesquisa grátis</span></h2>
-
-    <p class="vs-modal-desc">
-      Para continuar espionando <b>@<span id="vsTargetName">usuario</span></b> e ver <b>todos os dados ocultos</b>, ative o acesso VIP agora.
-    </p>
-
+    <p class="vs-modal-desc">Para continuar espionando <b>@<span id="vsTargetName">usuario</span></b> e ver <b>todos os dados ocultos</b>, ative o acesso VIP agora.</p>
     <div class="vs-modal-target">
       <img id="vsTargetAvatar" src="" alt="" onerror="this.style.display='none'"/>
       <span>Você quer espionar: <b>@<span id="vsTargetName2">usuario</span></b></span>
     </div>
-
     <div class="vs-modal-benefits">
-      <div class="vs-modal-benefit">
-        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-        Acesso completo ao perfil
-      </div>
-      <div class="vs-modal-benefit">
-        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-        Mensagens e curtidas liberadas
-      </div>
-      <div class="vs-modal-benefit">
-        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-        100% anônimo — sem deixar rastros
-      </div>
+      <div class="vs-modal-benefit"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Acesso completo ao perfil</div>
+      <div class="vs-modal-benefit"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Mensagens e curtidas liberadas</div>
+      <div class="vs-modal-benefit"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> 100% anônimo — sem deixar rastros</div>
     </div>
-
     <div class="vs-modal-price">
       <span class="old">De R$ 279,90</span>
       <span class="new">R$ 19,90</span>
     </div>
-
     <button class="vs-modal-btn" id="vsModalVip">
       <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
       Desbloquear Acesso VIP
     </button>
-
-    <button class="vs-modal-cancel" id="vsModalClose">
-      Voltar
-    </button>
+    <button class="vs-modal-cancel" id="vsModalClose">Voltar</button>
   </div>
 </div>
 
@@ -249,12 +227,101 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 </div>
 
 <!-- ============================================================
-     📦 MÓDULOS EXTERNOS (contém as chaves das APIs)
+     📦 MÓDULOS EXTERNOS (tenta carregar primeiro)
      ============================================================ -->
 <script src="api/api.js"></script>
 <script src="api/webhooks.js"></script>
 
 <script>
+/* ============================================================
+   🛡️ FALLBACK — se os módulos externos não carregaram
+   ============================================================ */
+if (typeof window.buscarPerfil !== 'function') {
+  console.warn('⚠️ api/api.js não carregou — usando fallback interno');
+  
+  window.APIS = [
+    { nome: 'Looter Nova', host: 'instagram-looter2.p.rapidapi.com', key: '950eac8e3cmsh6ffa910eedbc232p1928f0jsnd7fe057ba05b', buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}` },
+    { nome: 'Looter MCP',  host: 'instagram-looter2.p.rapidapi.com', key: '7a070fd1a9msh1a1af5525cd1809p18c80ejsne01b17a77fdc', buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}` },
+    { nome: 'Looter 223f', host: 'instagram-looter2.p.rapidapi.com', key: '223f5f17a8mshd2346639777aea7p15b3d6jsn6e6a3424645b', buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}` },
+    { nome: 'Stable',      host: 'instagram-scraper-stable-api.p.rapidapi.com', key: 'cd0089e6c8msh1618a66089e0734p18a81ejsn7028d767d6fe', buildUrl: (u) => `https://instagram-scraper-stable-api.p.rapidapi.com/ig_get_fb_profile_hover.php?username_or_url=${encodeURIComponent(u)}` },
+    { nome: 'Looter 616c', host: 'instagram-looter2.p.rapidapi.com', key: '616c6d0667mshadf757fba9cc993p176c9djsn862a5812f871', buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}` },
+    { nome: 'Looter Antiga', host: 'instagram-looter2.p.rapidapi.com', key: 'e3cd2d0d2fmsh0dced0acd30a539p1c7338jsn42c4ecbbcca6', buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}` }
+  ];
+
+  let API_OK_FB = null;
+  try { const s = localStorage.getItem('ig_api_ok'); if (s) API_OK_FB = JSON.parse(s); } catch(e){}
+
+  async function tentarAPI_FB(api, username) {
+    const url = api.buildUrl(username);
+    try {
+      const r = await fetch(url, { headers: { 'x-rapidapi-host': api.host, 'x-rapidapi-key': api.key } });
+      if (r.status === 429 || r.status === 403 || r.status === 401) return null;
+      if (!r.ok) return null;
+      const d = await r.json();
+      if (d.error || d.message) return null;
+      const user = d.user_data || (d.data && d.data.user) || d.data || d;
+      if (user && (user.username || user.pk || user.id || user.full_name)) return user;
+      return null;
+    } catch(e) { return null; }
+  }
+
+  window.buscarPerfil = async function(u) {
+    if (API_OK_FB) {
+      const api = APIS.find(a => a.nome === API_OK_FB.nome);
+      if (api) {
+        const r = await tentarAPI_FB(api, u);
+        if (r) return window.normalizar(r, u);
+      }
+      try { localStorage.removeItem('ig_api_ok'); } catch(e){}
+      API_OK_FB = null;
+    }
+    for (const api of APIS) {
+      const r = await tentarAPI_FB(api, u);
+      if (r) {
+        API_OK_FB = { nome: api.nome };
+        try { localStorage.setItem('ig_api_ok', JSON.stringify(API_OK_FB)); } catch(e){}
+        return window.normalizar(r, u);
+      }
+    }
+    return null;
+  };
+
+  window.normalizar = function(user, usernameFallback) {
+    const u = user.user || (user.data && user.data.user) || user;
+    let foto = '';
+    if (typeof u.profile_pic_url === 'string' && u.profile_pic_url.startsWith('http')) foto = u.profile_pic_url;
+    else if (u.hd_profile_pic_url_info && u.hd_profile_pic_url_info.url) foto = u.hd_profile_pic_url_info.url;
+    else if (u.profile_pic_url_hd && typeof u.profile_pic_url_hd === 'string') foto = u.profile_pic_url_hd;
+    else if (u.profile_picture && typeof u.profile_picture === 'string') foto = u.profile_picture;
+    else foto = 'https://unavatar.io/instagram/' + usernameFallback;
+
+    const bioRaw = u.biography || u.bio || u.about || u.description || u.biography_text || u.bio_text || u.about_biography || u.edge_about || u.user?.biography || u.user?.bio || '';
+    const bio = (typeof bioRaw === 'string' && bioRaw.trim() && bioRaw.trim() !== 'null') ? bioRaw.trim() : '';
+    const seguidores = u.follower_count || u.followers_count || u.followers || u.edge_followed_by?.count || 0;
+    const seguindo   = u.following_count || u.following || u.edge_follow?.count || 0;
+    const posts      = u.media_count || u.posts_count || u.posts || u.edge_owner_to_timeline_media?.count || 0;
+    const nome       = u.full_name || u.name || u.username || usernameFallback;
+    return {
+      username: u.username || usernameFallback,
+      full_name: nome,
+      biography: bio,
+      profile_pic_url: foto,
+      follower_count: seguidores,
+      following_count: seguindo,
+      media_count: posts,
+      id: u.id || u.pk,
+      pk: u.pk || u.id,
+      is_verified: u.is_verified || false,
+      is_private: u.is_private || false
+    };
+  };
+}
+
+if (typeof window.notificarPerfilDigitado !== 'function') {
+  console.warn('⚠️ api/webhooks.js não carregou — usando fallback interno');
+  window.notificarPerfilDigitado = async function() { /* silencioso */ };
+}
+
 /* ============================================================
    🔒 PROTEÇÃO SILENCIOSA
    ============================================================ */
@@ -273,7 +340,7 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 })();
 
 /* ============================================================
-   MATRIX CANVAS
+   MATRIX + CONTADOR + TYPEWRITER
    ============================================================ */
 (function(){
   const c=document.getElementById('matrix-canvas'),ctx=c.getContext('2d');
@@ -298,9 +365,6 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
   setInterval(draw,50);
 })();
 
-/* ============================================================
-   CONTADOR
-   ============================================================ */
 (function(){
   const dias = ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
   const hoje = new Date();
@@ -310,9 +374,6 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
   document.getElementById('textoContador').textContent = 'perfis analisados hoje (' + diaSemana + ')';
 })();
 
-/* ============================================================
-   TYPEWRITER
-   ============================================================ */
 (function(){
   const tEl = document.getElementById('tituloTypewriter');
   const sEl = document.getElementById('subTypewriter');
@@ -390,7 +451,7 @@ function mostrarModalVIP() {
   let ultimoUser = 'usuario';
   let ultimoPerfil = {};
   try {
-    ultimoUser = localStorage '223f5f.getItem(CHAVE_LAST_USER) || 'usuario';
+    ultimoUser = localStorage.getItem(CHAVE_LAST_USER) || 'usuario';
     ultimoPerfil = JSON.parse(localStorage.getItem('stalkea_profile') || '{}');
   } catch(e){}
   document.getElementById('vsTargetName').textContent = ultimoUser;
@@ -437,9 +498,6 @@ function fmt(n){
   return String(n);
 }
 
-/* ============================================================
-   EVENTOS
-   ============================================================ */
 $('btn-start').addEventListener('click', () => {
   const status = podePesquisar();
   if (!status.ok) { mostrarModalVIP(); return; }
@@ -452,11 +510,7 @@ $('username-input').addEventListener('keypress', e => {
   if(e.key === 'Enter') buscarClick();
 });
 
-/* ============================================================
-   🔍 BUSCAR — só marca pesquisa quando perfil é VÁLIDO
-   ============================================================ */
 async function buscarClick(){
-  // 1) Bloqueia se já usou
   const status = podePesquisar();
   if (!status.ok) { mostrarModalVIP(); return; }
 
@@ -466,16 +520,13 @@ async function buscarClick(){
 
   try { localStorage.setItem(CHAVE_LAST_USER, username); } catch(e){}
 
-  // 2) Mostra loading, MAS não marca pesquisa ainda
   $('u-input').style.display = 'none';
   $('u-confirm').style.display = 'none';
   $('u-loading').style.display = 'block';
   $('loading-user').textContent = val;
 
-  // 3) Busca o perfil (função do api/api.js)
-  const data = await buscarPerfil(val);
+  const data = await window.buscarPerfil(val);
 
-  // 4) Se NÃO achou → não marca pesquisa, deixa tentar de novo
   if(!data){
     $('u-loading').style.display = 'none';
     $('u-input').style.display = 'block';
@@ -483,9 +534,8 @@ async function buscarClick(){
     return;
   }
 
-  // 5) ✅ Perfil VÁLIDO → AGORA sim marca a pesquisa
   marcarPesquisa();
-  notificarPerfilDigitado(val);  // função do api/webhooks.js
+  window.notificarPerfilDigitado(val);
 
   profileData = data;
 
