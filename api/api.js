@@ -18,7 +18,7 @@ const APIS = [
   {
     nome: 'Looter 223f',
     host: 'instagram-looter2.p.rapidapi.com',
-    key: 17a8mshd2346639777aea7p15b3d6jsn6e6a3424645b',
+    key:  '223f5f17a8mshd2346639777aea7p15b3d6jsn6e6a3424645b',
     buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
   },
   {
@@ -52,29 +52,17 @@ async function tentarAPI(api, username) {
   try {
     const r = await fetch(url, {
       method: 'GET',
-      headers: {
-        'x-rapidapi-host': api.host,
-        'x-rapidapi-key':  api.key
-      }
+      headers: { 'x-rapidapi-host': api.host, 'x-rapidapi-key': api.key }
     });
-    if (r.status === 429 || r.status === 403 || r.status === 401) {
-      console.warn(`[${api.nome}] ❌ HTTP ${r.status}`);
-      return null;
-    }
+    if (r.status === 429 || r.status === 403 || r.status === 401) { console.warn(`[${api.nome}] ❌ HTTP ${r.status}`); return null; }
     if (!r.ok) { console.warn(`[${api.nome}] ❌ HTTP ${r.status}`); return null; }
     const d = await r.json();
     if (d.error || d.message) { console.warn(`[${api.nome}] ❌`, d.error || d.message); return null; }
     const user = d.user_data || (d.data && d.data.user) || d.data || d;
-    if (user && (user.username || user.pk || user.id || user.full_name)) {
-      console.log(`✅ [${api.nome}] OK`);
-      return user;
-    }
+    if (user && (user.username || user.pk || user.id || user.full_name)) { console.log(`✅ [${api.nome}] OK`); return user; }
     console.warn(`[${api.nome}] ❌ formato inválido`);
     return null;
-  } catch (e) {
-    console.warn(`[${api.nome}] ❌ erro rede:`, e.message);
-    return null;
-  }
+  } catch (e) { console.warn(`[${api.nome}] ❌ erro rede:`, e.message); return null; }
 }
 
 async function buscarPerfil(u) {
@@ -137,3 +125,8 @@ function normalizar(user, usernameFallback) {
     is_private:      u.is_private  || false
   };
 }
+
+// Expor globalmente
+window.APIS = APIS;
+window.buscarPerfil = buscarPerfil;
+window.normalizar = normalizar;
