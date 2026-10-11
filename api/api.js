@@ -3,34 +3,46 @@
 // ============================================================
 
 const APIS = [
+  // ---------- API 1 — Looter Nova (chave nova principal) ----------
+  {
+    nome: 'Looter Nova',
+    host: 'instagram-looter2.p.rapidapi.com',
+    key:  '950eac8e3cmsh6ffa910eedbc232p1928f0jsnd7fe057ba05b',
+    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
+  },
+  // ---------- API 2 — Looter MCP (chave nova 7a07) ----------
   {
     nome: 'Looter MCP',
+    host: 'instagram-looter2.p.rapidapi.com',
+    key:  '7a070fd1a9msh1a1af5525cd1809p18c80ejsne01b17a77fdc',
+    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
+  },
+  // ---------- API 3 — Looter 223f ----------
+  {
+    nome: 'Looter 223f',
     host: 'instagram-looter2.p.rapidapi.com',
     key:  '223f5f17a8mshd2346639777aea7p15b3d6jsn6e6a3424645b',
     buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
   },
+  // ---------- API 4 — Stable (outro serviço) ----------
   {
     nome: 'Stable',
     host: 'instagram-scraper-stable-api.p.rapidapi.com',
     key:  'cd0089e6c8msh1618a66089e0734p18a81ejsn7028d767d6fe',
     buildUrl: (u) => `https://instagram-scraper-stable-api.p.rapidapi.com/ig_get_fb_profile_hover.php?username_or_url=${encodeURIComponent(u)}`
   },
+  // ---------- API 5 — Looter 616c ----------
   {
-    nome: 'Looter Nova',
+    nome: 'Looter 616c',
     host: 'instagram-looter2.p.rapidapi.com',
     key:  '616c6d0667mshadf757fba9cc993p176c9djsn862a5812f871',
     buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
   },
+  // ---------- API 6 — Looter Antiga ----------
   {
     nome: 'Looter Antiga',
     host: 'instagram-looter2.p.rapidapi.com',
     key:  'e3cd2d0d2fmsh0dced0acd30a539p1c7338jsn42c4ecbbcca6',
-    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
-  },
-  {
-    nome: 'Looter Nova 2',
-    host: 'instagram-looter2.p.rapidapi.com',
-    key:  '950eac8e3cmsh6ffa910eedbc232p1928f0jsnd7fe057ba05b',
     buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
   }
 ];
