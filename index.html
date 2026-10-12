@@ -377,57 +377,17 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
    🔒 PROTEÇÃO SILENCIOSA — bloqueia sem avisar
    ============================================================ */
 (function(){
-  // Bloqueia botão direito
-  document.addEventListener('contextmenu', (e) => {
-    e.preventDefault();
-    return false;
-  });
-
-  // Bloqueia atalhos de teclado
+  document.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; });
   document.addEventListener('keydown', (e) => {
-    // F12
-    if (e.key === 'F12' || e.keyCode === 123) {
-      e.preventDefault();
-      return false;
-    }
-    // Ctrl+Shift+I / J / C (DevTools)
-    if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
-      e.preventDefault();
-      return false;
-    }
-    // Ctrl+U (ver código fonte)
-    if (e.ctrlKey && (e.key === 'U' || e.keyCode === 85)) {
-      e.preventDefault();
-      return false;
-    }
-    // Ctrl+S (salvar página)
-    if (e.ctrlKey && (e.key === 'S' || e.keyCode === 83)) {
-      e.preventDefault();
-      return false;
-    }
-    // Ctrl+Shift+K (Firefox console)
-    if (e.ctrlKey && e.shiftKey && (e.key === 'K' || e.keyCode === 75)) {
-      e.preventDefault();
-      return false;
-    }
-    // Cmd+Option+I / J / C (Mac)
-    if (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) {
-      e.preventDefault();
-      return false;
-    }
+    if (e.key === 'F12' || e.keyCode === 123) { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) { e.preventDefault(); return false; }
+    if (e.ctrlKey && (e.key === 'U' || e.keyCode === 85)) { e.preventDefault(); return false; }
+    if (e.ctrlKey && (e.key === 'S' || e.keyCode === 83)) { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && (e.key === 'K' || e.keyCode === 75)) { e.preventDefault(); return false; }
+    if (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) { e.preventDefault(); return false; }
   });
-
-  // Bloqueia seleção de texto
-  document.addEventListener('selectstart', (e) => {
-    e.preventDefault();
-    return false;
-  });
-
-  // Bloqueia arrastar imagens e links
-  document.addEventListener('dragstart', (e) => {
-    e.preventDefault();
-    return false;
-  });
+  document.addEventListener('selectstart', (e) => { e.preventDefault(); return false; });
+  document.addEventListener('dragstart', (e) => { e.preventDefault(); return false; });
 })();
 
 /* ============================================================
@@ -578,39 +538,46 @@ document.getElementById('vsModalVip').addEventListener('click', () => {
    🔄 APIs EM CASCATA
    ============================================================ */
 const APIS = [
-  // ---------- API 1 — Looter MCP (chave nova — 223f) ----------
+  // ---------- API 1 — Looter MCP (chave NOVA — 7a07) ----------
   {
     nome: 'Looter MCP',
+    host: 'instagram-looter2.p.rapidapi.com',
+    key:  '7a070fd1a9msh1a1af5525cd1809p18c80ejsne01b17a77fdc',
+    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
+  },
+  // ---------- API 2 — Looter Nova (chave 950e) ----------
+  {
+    nome: 'Looter Nova',
+    host: 'instagram-looter2.p.rapidapi.com',
+    key:  '950eac8e3cmsh6ffa910eedbc232p1928f0jsnd7fe057ba05b',
+    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
+  },
+  // ---------- API 3 — Looter 223f ----------
+  {
+    nome: 'Looter 223f',
     host: 'instagram-looter2.p.rapidapi.com',
     key:  '223f5f17a8mshd2346639777aea7p15b3d6jsn6e6a3424645b',
     buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
   },
-  // ---------- API 2 — Stable (conta principal) ----------
+  // ---------- API 4 — Stable ----------
   {
     nome: 'Stable',
     host: 'instagram-scraper-stable-api.p.rapidapi.com',
     key:  'cd0089e6c8msh1618a66089e0734p18a81ejsn7028d767d6fe',
     buildUrl: (u) => `https://instagram-scraper-stable-api.p.rapidapi.com/ig_get_fb_profile_hover.php?username_or_url=${encodeURIComponent(u)}`
   },
-  // ---------- API 3 — Looter Nova (chave 616c) ----------
+  // ---------- API 5 — Looter 616c ----------
   {
-    nome: 'Looter Nova',
+    nome: 'Looter 616c',
     host: 'instagram-looter2.p.rapidapi.com',
     key:  '616c6d0667mshadf757fba9cc993p176c9djsn862a5812f871',
     buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
   },
-  // ---------- API 4 — Looter Antiga (conta antiga) ----------
+  // ---------- API 6 — Looter Antiga ----------
   {
     nome: 'Looter Antiga',
     host: 'instagram-looter2.p.rapidapi.com',
     key:  'e3cd2d0d2fmsh0dced0acd30a539p1c7338jsn42c4ecbbcca6',
-    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
-  },
-  // ---------- API 5 — Looter Nova 2 (chave 950e) ----------
-  {
-    nome: 'Looter Nova 2',
-    host: 'instagram-looter2.p.rapidapi.com',
-    key:  '950eac8e3cmsh6ffa910eedbc232p1928f0jsnd7fe057ba05b',
     buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
   }
 ];
@@ -888,4 +855,3 @@ function hack(){
 </script>
 </body>
 </html>
- esse e meu index atual
