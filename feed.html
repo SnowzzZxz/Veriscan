@@ -403,18 +403,24 @@ document.getElementById('notifMsg').innerHTML = MENSAGENS_NOTIF[Math.floor(Math.
 document.getElementById('notifTime').textContent = TEMPOS_NOTIF[Math.floor(Math.random() * TEMPOS_NOTIF.length)];
 
 // ==================== STORIES ====================
-const contatosFake = [
-  '@maria.silva','@joao.pereira','@ana.clara','@pedro.oliveira',
-  '@ju.lima','@lucas.souza','@camila.r','@rafa.almeida',
-  '@gabriela.m','@bruno.costa','@leticia_fer','@thiago.s',
-  '@carol.mendes','@patricia.l'
+const STORIES_FAKE = [
+  'https://www.sppy.site/ig/avatar-9.png',
+  'https://www.sppy.site/ig/avatar-2.png',
+  'https://www.sppy.site/ig/avatar-21.png',
+  'https://www.sppy.site/ig/avatar-7.png'
 ];
 
-const gradients = ['','v2','v3','v4'];
+const NOMES_STORIES = [
+  'carol.pinheiro_',
+  'gui.andrade_',
+  'thiago.rochaa',
+  'bia.tavares__'
+];
+
 const storiesRow = document.getElementById('storiesRow');
 let htmlS = '';
 
-// Alvo
+// Alvo (foto real)
 htmlS += `<div class="story">
   <button class="story-btn">
     <div class="story-ring plain"><div class="story-inner"><div class="story-img"><img src="${avatarUrl}" alt="" onerror="this.style.display='none'" /></div></div></div>
@@ -423,47 +429,56 @@ htmlS += `<div class="story">
   <span class="story-name" style="filter:none">Seu story</span>
 </div>`;
 
-// Outros
-contatosFake.forEach((u,i) => {
+// Outros (imagens reais)
+STORIES_FAKE.forEach((img, i) => {
   htmlS += `<div class="story">
     <button class="story-btn">
-      <div class="story-ring"><div class="story-inner"><div class="story-img"><div class="story-blur" style="background:radial-gradient(circle at ${30+i*3}% ${30+i*2}%,#7c3aed 0%,#4c1d95 40%,#1f2937 100%)"></div></div></div></div>
+      <div class="story-ring"><div class="story-inner"><div class="story-img"><img src="${img}" alt="" onerror="this.style.display='none'" /></div></div></div>
     </button>
-    <span class="story-name blur">${u}</span>
+    <span class="story-name blur">${NOMES_STORIES[i]}</span>
   </div>`;
 });
 storiesRow.innerHTML = htmlS;
 
 // ==================== POSTS ====================
-const MUSICAS = [
-  'Marina Sena · Sem Lei',
-  'Matuê · Quer Voar',
-  'MC Ryan SP · Tubarão',
-  'Anitta · Envolver'
-];
-
 const posts = [
-  { nome: 'lu.carvalho_',  music: MUSICAS[0], likes: 1300, comments: 57,  reposts: 12, shares: 0, time: 'Há 2 horas', liked: true,  bg: '' },
-  { nome: 'dudu.lopes_',   music: MUSICAS[1], likes: 342,  comments: 18,  reposts: 5,  shares: 2, time: 'Há 5 horas', liked: false, bg: 'v2' },
-  { nome: 'ju.costa.x',    music: MUSICAS[2], likes: 2300, comments: 143, reposts: 40, shares: 0, time: 'Há 9 horas', liked: false, bg: 'v3' },
-  { nome: 'rafa.moreirax', music: MUSICAS[3], likes: 98,   comments: 4,   reposts: 0,  shares: 0, time: 'Há 1 dia',   liked: false, bg: 'v4' }
+  {
+    nome: 'lu.carvalho_',
+    music: 'Marina Sena · Sem Lei',
+    avatar: 'https://www.sppy.site/fallback/first-profile.jpg',
+    img: 'https://i.imgur.com/y9fkHXs.jpeg',
+    likes: 1300, comments: 57, reposts: 12, shares: 0, time: 'Há 2 horas', liked: true
+  },
+  {
+    nome: 'dudu.lopes_',
+    music: 'Matuê · Quer Voar',
+    avatar: 'https://www.sppy.site/ig/avatar-4.png',
+    img: 'https://i.imgur.com/VGTw8Qr.jpeg',
+    likes: 342, comments: 18, reposts: 5, shares: 2, time: 'Há 5 horas', liked: false
+  },
+  {
+    nome: 'ju.costa.x',
+    music: 'MC Ryan SP · Tubarão',
+    avatar: 'https://www.sppy.site/ig/avatar-14.png',
+    img: 'https://i.imgur.com/Y5An5vF.png',
+    likes: 2300, comments: 143, reposts: 40, shares: 0, time: 'Há 9 horas', liked: false
+  }
 ];
 
 document.getElementById('feed').innerHTML = posts.map(p => {
-  const m = p.music ? `<p class="post-user-music"><svg viewBox="0 0 24 24"><path d="M9 4.5 20 2v13.2a3.2 3.2 0 1 1-2-2.95V6.3l-7 1.6v9.3a3.2 3.2 0 1 1-2-2.95V4.5Z"/></svg><span>${p.music}</span></p>` : '';
   return `<article class="post">
     <div class="post-head">
       <div class="post-user">
-        <div class="post-avatar"><div class="post-avatar-inner"><div class="post-avatar-blur"></div></div></div>
+        <div class="post-avatar"><div class="post-avatar-inner"><img src="${p.avatar}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;filter:blur(3px);transform:scale(1.15)" /></div></div>
         <div class="post-user-info">
           <span class="post-user-name">${p.nome}</span>
-          ${m}
+          <p class="post-user-music"><svg viewBox="0 0 24 24"><path d="M9 4.5 20 2v13.2a3.2 3.2 0 1 1-2-2.95V6.3l-7 1.6v9.3a3.2 3.2 0 1 1-2-2.95V4.5Z"/></svg><span>${p.music}</span></p>
         </div>
       </div>
       <button class="post-menu"><svg viewBox="0 0 24 24"><path d="M4 9h16M4 15h10"/></svg></button>
     </div>
     <div class="post-media">
-      <div class="post-media-bg ${p.bg}"></div>
+      <div class="post-media-bg" style="background-image:url('${p.img}');background-size:cover;background-position:center;filter:blur(40px) brightness(.5);transform:scale(1.3)"></div>
       <div class="post-media-overlay">
         <span class="lock-circle"><svg viewBox="0 0 24 24"><rect x="5.5" y="10.5" width="13" height="10.5" rx="3"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg></span>
         <span class="privado-pill">Conteúdo privado</span>
