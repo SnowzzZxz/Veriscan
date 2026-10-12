@@ -2,192 +2,139 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-<title>Veriscan — @<span id="titleUser"></span></title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Veriscan — Feed</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Grand+Hotel&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{background:#0c1014;color:#fff;font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden;padding-bottom:100px}
-
-/* ============ HEADER ============ */
-header{position:fixed;top:0;left:0;right:0;z-index:50;padding:10px 16px;background:#0c1014;display:flex;align-items:center;justify-content:space-between;height:56px}
-header .logo-ig{font-family:'Grand Hotel',cursive;font-size:32px;line-height:1;color:#fff}
-.header-btns{display:flex;gap:22px;align-items:center}
-.header-btns button{background:transparent;border:none;cursor:pointer;position:relative;color:#fff;padding:0;display:flex;align-items:center}
-.header-btns svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.dot{position:absolute;top:-2px;right:-2px;width:8px;height:8px;background:#ff3040;border-radius:50%;border:2px solid #0c1014}
-
-/* ============ SCREENS ============ */
-.screen{display:none}
-.screen.active{display:block}
-
-/* ============ FEED SCREEN ============ */
-.pt-header{padding-top:56px}
-.stories{overflow-x:auto;padding:8px 12px 12px;scrollbar-width:none}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#0b1014;color:#fff;font-family:'Inter',-apple-system,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden;padding-bottom:140px}
+header{position:fixed;top:0;left:0;right:0;z-index:50;padding:12px 16px;background:#0b1014;display:flex;align-items:center;justify-content:space-between}
+header img{height:28px;object-fit:contain;margin-top:4px}
+.header-btns{display:flex;gap:16px}
+.header-btns button{background:transparent;border:none;cursor:pointer;position:relative;color:#fff;padding:0}
+.header-btns svg{width:24px;height:24px;fill:currentColor}
+.dot{position:absolute;top:-4px;right:-4px;width:8px;height:8px;background:#ef4444;border-radius:50%}
+.badge{position:absolute;top:-8px;right:-8px;min-width:18px;height:18px;background:#ef4444;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;padding:0 4px}
+.pt-header{padding-top:60px}
+.stories{overflow-x:auto;padding:12px 16px;scrollbar-width:none}
 .stories::-webkit-scrollbar{display:none}
 .stories-row{display:flex;gap:12px}
-.story{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;width:84px}
-.story-btn{background:transparent;border:none;cursor:pointer;padding:0;width:84px;height:84px;position:relative}
-.story-ring{width:100%;height:100%;border-radius:50%;padding:3px;background:conic-gradient(from 200deg,#fdc830,#f37335,#e1306c,#c13584,#833ab4,#fdc830)}
+.story{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;width:79px}
+.story-btn{background:transparent;border:none;cursor:pointer;padding:0;width:79px;height:79px;position:relative}
+.story-ring{width:100%;height:100%;border-radius:50%;padding:3px;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
 .story-ring.plain{background:#44b051}
-.story-inner{width:100%;height:100%;border-radius:50%;background:#0c1014;padding:3px}
+.story-ring.gray{background:#1f2937}
+.story-inner{width:100%;height:100%;border-radius:50%;background:#0b1014;padding:2px}
 .story-img{width:100%;height:100%;border-radius:50%;overflow:hidden;background:#1f2937;position:relative}
-.story-img img{width:100%;height:100%;object-fit:cover;opacity:.85;filter:blur(6px);transform:scale(1.15)}
-.story-name{font-size:12px;color:#e5e7e7;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:84px;filter:blur(3px);user-select:none;pointer-events:none}
-.story-plus{position:absolute;bottom:0;right:0;width:28px;height:28px;background:#fff;border:3px solid #0c1014;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:30}
-.story-plus svg{width:14px;height:14px;stroke:#000;fill:none;stroke-width:2.5}
-
-/* POSTS */
-.post{background:#0c1014;margin-bottom:20px;padding-bottom:8px}
-.post-head{padding:10px 14px 8px;display:flex;align-items:center;justify-content:space-between}
-.post-user{display:flex;align-items:center;gap:10px;background:transparent;border:none;color:#fff;padding:0;flex:1;min-width:0}
-.post-avatar{width:36px;height:36px;border-radius:50%;overflow:hidden;background:#1f2937;flex-shrink:0;padding:2px;background:conic-gradient(from 200deg,#fdc830,#f37335,#e1306c,#c13584,#833ab4,#fdc830)}
-.post-avatar-inner{width:100%;height:100%;border-radius:50%;overflow:hidden;background:#0c1014;padding:2px}
-.post-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;opacity:.85;filter:blur(3px);transform:scale(1.15)}
-.post-user-info{text-align:left;display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
-.post-user-name{font-size:14px;font-weight:600;color:#fff;filter:blur(4px);user-select:none;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.post-user-music{display:flex;align-items:center;gap:5px;font-size:12px;color:#a3a3a3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.post-user-music svg{width:12px;height:12px;flex-shrink:0;fill:currentColor}
-.post-menu{background:transparent;border:none;cursor:pointer;color:#fff;padding:6px;display:flex;align-items:center}
-.post-menu svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2}
-
-.post-media{width:100%;aspect-ratio:4/5;background:#1a1e22;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.post-media .media-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(22px) brightness(.5);transform:scale(1.15)}
-.post-media .media-overlay{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
-.post-media .lock-circle{width:56px;height:56px;border-radius:50%;background:rgba(0,0,0,.45);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center}
-.post-media .lock-circle svg{width:28px;height:28px;stroke:#fff;fill:none;stroke-width:1.9}
-.post-media .privado-pill{background:rgba(0,0,0,.45);backdrop-filter:blur(12px);padding:6px 14px;border-radius:999px;font-size:12.5px;font-weight:600;color:#fff}
-.post-media .mute-btn{position:absolute;bottom:12px;right:12px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:3}
-.post-media .mute-btn svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2}
-
-.post-actions{padding:12px 14px 0}
-.actions-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.actions-left{display:flex;align-items:center;gap:18px}
-.action-btn{display:flex;align-items:center;gap:6px;background:transparent;border:none;cursor:pointer;color:#fff;padding:0}
-.action-btn svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2}
-.action-btn.liked svg{fill:#ff3040;stroke:#ff3040}
+.story-img img{width:100%;height:100%;object-fit:cover;opacity:.85;filter:blur(5px);transform:scale(1.15)}
+.story-name{
+  font-size:12px;color:#e5e7e7;text-align:center;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:79px;
+  filter:blur(3px);
+  user-select:none;
+  pointer-events:none;
+}
+.story-plus{position:absolute;bottom:-2px;right:-2px;width:26px;height:26px;background:#f9f9f9;border:2.6px solid #1f2937;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:30}
+.post{background:#0b1014;margin-bottom:16px}
+.post-head{padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.post-user{display:flex;align-items:center;gap:12px;background:transparent;border:none;cursor:pointer;color:#fff;padding:0}
+.post-avatar{width:32px;height:32px;border-radius:50%;overflow:hidden;background:#1f2937;flex-shrink:0;position:relative}
+.post-avatar img{width:100%;height:100%;object-fit:cover;opacity:.85;filter:blur(4px);transform:scale(1.15)}
+.post-user-info{text-align:left;display:flex;flex-direction:column;gap:5px}
+.post-user-name-blurred{
+  display:inline-block;
+  width:90px;height:11px;
+  border-radius:3px;
+  background:linear-gradient(90deg,
+    rgba(255,255,255,.16) 0%,
+    rgba(255,255,255,.28) 50%,
+    rgba(255,255,255,.16) 100%);
+  background-size:200% 100%;
+  animation:blurredShine 2.5s ease-in-out infinite;
+  filter:blur(2.5px);
+}
+@keyframes blurredShine{
+  0%{background-position:200% 0}
+  100%{background-position:-200% 0}
+}
+.post-user-loc-blurred{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:11px;
+  color:rgba(156,163,175,.55);
+}
+.post-user-loc-blurred svg{
+  width:10px;height:10px;
+  stroke:currentColor;fill:none;stroke-width:2;
+  opacity:.7;
+}
+.post-menu{background:transparent;border:none;cursor:pointer;color:#fff;padding:0}
+.post-menu svg{width:20px;height:20px;fill:currentColor}
+.post-media{width:100%;aspect-ratio:1/1;background:#121824;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.post-media svg.lock{width:48px;height:48px;color:#6b7280;margin-bottom:12px;fill:none;stroke:currentColor;stroke-width:2}
+.post-media .restrito{color:#9ca3af;font-weight:500;font-size:14px}
+.post-media .tempo{color:#6b7280;font-size:13px;margin-top:4px}
+.post-actions{padding:12px 16px}
+.actions-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.actions-left{display:flex;align-items:center;gap:16px}
+.action-btn{display:flex;align-items:center;gap:4px;background:transparent;border:none;cursor:pointer;color:#fff;padding:0}
+.action-btn svg{width:24px;height:24px;fill:currentColor}
+.action-btn.liked svg{fill:#ff3040}
 .action-count{font-size:14px;font-weight:600;color:#fff}
 .save-btn{background:transparent;border:none;cursor:pointer;color:#fff;padding:0}
-.save-btn svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2}
-.post-caption{padding:0 14px;display:flex;flex-direction:column;gap:4px}
-.post-caption-line{font-size:14px;line-height:1.4;color:#e5e7e7;filter:blur(4px);user-select:none;pointer-events:none}
-.post-caption-line b{font-weight:600;color:#fff;margin-right:4px}
-.post-time{font-size:12px;color:#a3a3a3;margin-top:4px}
-
-/* ============ DIRECT SCREEN ============ */
-.direct-header{padding-top:56px}
-.direct-title{display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 16px;font-size:20px;font-weight:700;cursor:pointer}
-.direct-title svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2}
-.direct-title .red-dot{width:8px;height:8px;background:#ff3040;border-radius:50%}
-.direct-search{margin:4px 16px 12px;display:flex;align-items:center;gap:10px;background:#25292e;border-radius:24px;padding:10px 16px;cursor:pointer}
-.direct-search svg{width:20px;height:20px;stroke:#a3a3a3;fill:none;stroke-width:1.8}
-.direct-search span{color:#a3a3a3;font-size:14px}
-
-/* NOTAS (bubbles) */
-.notes-row{display:flex;gap:12px;overflow-x:auto;padding:40px 12px 12px;scrollbar-width:none}
-.notes-row::-webkit-scrollbar{display:none}
-.note{position:relative;display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:92px}
-.note-bubble{position:absolute;top:-42px;left:50%;transform:translateX(-50%);width:92px;background:#25292e;border-radius:16px;padding:6px 8px;text-align:center;font-size:11px;line-height:1.2;color:#d4d4d4;box-shadow:0 4px 12px rgba(0,0,0,.4)}
-.note-bubble-title{display:flex;align-items:center;justify-content:center;gap:4px;font-weight:600;color:#fff;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.note-bubble-title svg{width:10px;height:10px;fill:currentColor;flex-shrink:0}
-.note-bubble-text{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
-.note-avatar{width:74px;height:74px;border-radius:50%;overflow:hidden;background:#1f2937;position:relative}
-.note-avatar img{width:100%;height:100%;object-fit:cover;filter:blur(10px);transform:scale(1.15)}
-.note-avatar-plus{position:absolute;bottom:0;right:0;width:22px;height:22px;background:#fff;border:3px solid #0c1014;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.note-avatar-plus svg{width:12px;height:12px;stroke:#000;fill:none;stroke-width:3}
-.note-name{margin-top:6px;font-size:12px;color:#d4d4d4;width:100%;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.note-name.blur{filter:blur(4px);user-select:none}
-
-/* LISTA DE CONVERSAS */
-.direct-subtitle{padding:8px 16px;font-size:16px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
-.direct-subtitle span{color:#a3a3a3;font-size:13px;font-weight:600}
-.conversa{display:flex;align-items:center;gap:12px;padding:8px 16px;cursor:pointer}
-.conversa-avatar{width:60px;height:60px;border-radius:50%;overflow:hidden;background:#1f2937;position:relative;flex-shrink:0;padding:2px}
-.conversa-avatar.ring{background:conic-gradient(from 200deg,#fdc830,#f37335,#e1306c,#c13584,#833ab4,#fdc830)}
-.conversa-avatar-inner{width:100%;height:100%;border-radius:50%;overflow:hidden;background:#0c1014;padding:2px}
-.conversa-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;filter:blur(8px);transform:scale(1.15)}
-.conversa-avatar .online{position:absolute;bottom:2px;right:2px;width:16px;height:16px;background:#1cd14f;border-radius:50%;border:3px solid #0c1014;z-index:3}
-.conversa-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
-.conversa-nome{font-size:15px;font-weight:600;color:#fff;filter:blur(4px);user-select:none;pointer-events:none}
-.conversa-msg{font-size:14px;color:#d4d4d4;display:flex;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.conversa-msg .txt{filter:blur(4px);user-select:none;pointer-events:none}
-.conversa-msg .hora{color:#a3a3a3;font-weight:400;flex-shrink:0}
-.conversa-dot{width:8px;height:8px;background:#4a5df9;border-radius:50%;flex-shrink:0}
-
-/* ============ PROFILE SCREEN ============ */
-.profile-header{padding-top:56px}
-.profile-top{display:flex;align-items:center;justify-content:center;gap:4px;padding:8px 16px;font-size:20px;font-weight:700}
-.profile-top svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2}
-.profile-top .lock-icon{width:18px;height:18px;stroke-width:1.9}
-.profile-top .red-dot{width:8px;height:8px;background:#ff3040;border-radius:50%}
-
-.profile-main{padding:16px 16px 0}
-.profile-row{display:flex;align-items:center;gap:20px}
-.profile-avatar-big{position:relative;flex-shrink:0}
-.profile-avatar-big .note-top{position:absolute;top:-30px;left:50%;transform:translateX(-50%);background:#25292e;border-radius:14px;padding:4px 10px;font-size:11px;color:#d4d4d4;white-space:nowrap}
-.profile-avatar-img{width:86px;height:86px;border-radius:50%;overflow:hidden;background:#1f2937}
-.profile-avatar-img img{width:100%;height:100%;object-fit:cover}
-.profile-avatar-plus{position:absolute;bottom:0;right:0;width:28px;height:28px;background:#fff;border:3px solid #0c1014;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.profile-avatar-plus svg{width:16px;height:16px;stroke:#000;fill:none;stroke-width:2.5}
-.profile-info{flex:1;min-width:0}
-.profile-nome{font-size:15px;font-weight:600;margin-bottom:8px;color:#fff}
-.profile-stats{display:flex;justify-content:space-between;gap:8px}
-.profile-stat{display:flex;flex-direction:column;align-items:flex-start}
-.profile-stat b{font-size:17px;font-weight:600;color:#fff}
-.profile-stat span{font-size:13px;color:#d4d4d4}
-
-.profile-bio{margin-top:14px;font-size:14px;color:#d4d4d4;line-height:1.4;white-space:pre-line}
-
-.profile-btns{margin-top:16px;display:flex;gap:6px}
-.profile-btn{flex:1;height:36px;border-radius:8px;background:#25292e;color:#fff;font-size:14px;font-weight:600;border:none;cursor:pointer;font-family:inherit}
-.profile-btn-icon{width:40px;flex:none;background:#25292e;border:none;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.profile-btn-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
-
-.profile-tabs{margin-top:12px;display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid #1f2937}
-.profile-tab{height:48px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;cursor:pointer;color:#a3a3a3;position:relative}
-.profile-tab.active{color:#fff}
-.profile-tab.active::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:64px;height:2px;background:#fff}
-.profile-tab svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2}
-
-.profile-empty{padding:40px 24px;display:flex;flex-direction:column;align-items:center;text-align:center}
-.profile-empty img{width:190px;height:auto;margin-bottom:16px}
-.profile-empty-title{font-size:22px;font-weight:800;margin-bottom:6px}
-.profile-empty-desc{font-size:14px;color:#a3a3a3;margin-bottom:20px}
-.profile-empty-btn{width:100%;max-width:360px;height:44px;background:#4a5df9;border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
-
-/* ============ NAVBAR PILL ============ */
-nav{position:fixed;bottom:14px;left:12px;right:12px;z-index:1001;padding:0 6px;border-radius:32px;background:rgba(27,31,36,.85);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,.1);height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 8px 30px rgba(0,0,0,.6)}
-nav button{background:transparent;border:none;cursor:pointer;color:#fff;padding:0;flex:1;height:52px;display:flex;align-items:center;justify-content:center;position:relative;border-radius:26px;transition:background .2s}
-nav button.active{background:rgba(255,255,255,.12)}
-nav svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-nav .profile{width:30px;height:30px;border-radius:50%;overflow:hidden;background:#1f2937;position:relative}
-nav .profile img{width:100%;height:100%;object-fit:cover}
-nav .nav-dot{position:absolute;bottom:14px;right:calc(50% - 10px);width:8px;height:8px;background:#ff3040;border-radius:50%;border:2px solid #1b1f24}
-
-/* ============ BANNER VIP ============ */
-.banner{position:fixed;bottom:90px;left:2.5%;right:2.5%;z-index:9999;border-radius:16px;padding:10px 16px;display:flex;align-items:flex-start;background:linear-gradient(135deg,rgba(105,85,210,.98) 0%,rgba(122,83,217,.98) 100%);backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,.25);box-shadow:0 8px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.2)}
+.save-btn svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.5}
+.post-time{font-size:12px;color:#9ca3af;margin-top:8px}
+.banner{position:fixed;bottom:1px;left:2.5%;right:2.5%;z-index:9999;border-radius:16px 16px 0 0;padding:10px 16px;display:flex;align-items:flex-start;background:linear-gradient(135deg,rgba(105,85,210,.98) 0%,rgba(122,83,217,.98) 100%);backdrop-filter:blur(24px) saturate(180%);border-top:1px solid rgba(255,255,255,.25);box-shadow:0 -8px 32px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.2)}
 .banner-content{flex:1;min-width:0}
 .banner-title{font-size:13px;font-weight:700;color:#fff;line-height:1.2;display:flex;align-items:center;gap:3px;flex-wrap:wrap;padding-top:6px;margin-top:-9px}
 .banner-title span.timer{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:700}
 .banner-title svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;animation:pulse 1.5s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 .banner-desc{font-size:11px;color:rgba(255,255,255,.9);line-height:1.4;margin-top:4px}
-.banner-btn{position:absolute;top:0;right:0;background:#fff;color:#6955d2;border:none;padding:6px 12px;border-radius:0 16px 0 8px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.banner-btn{position:absolute;top:0;right:0;background:#fff;color:#6955d2;border:none;padding:5px 11px;border-radius:0 16px 0 8px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:1001;padding:16px 24px;background:#0b1014;border-top:1px solid #1f2937;display:flex;align-items:center;justify-content:space-between}
+nav button{background:transparent;border:none;cursor:pointer;color:#fff;padding:0}
+nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2}
+nav .profile{width:24px;height:24px;border-radius:50%;overflow:hidden;background:#1f2937;border:2px solid #fff}
+nav .profile img{width:100%;height:100%;object-fit:cover}
 
-/* ============ NOTIFICAÇÃO ============ */
-.notif{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:1001;display:flex;align-items:center;gap:13px;width:calc(100% - 20px);max-width:380px;padding:10px 14px;border-radius:14px;background:rgba(28,28,30,.85);backdrop-filter:blur(30px) saturate(180%);border:.5px solid rgba(255,255,255,.18);box-shadow:0 4px 16px rgba(0,0,0,.4),inset 0 .5px 0 rgba(255,255,255,.15);animation:slideIn .5s ease-out;cursor:pointer}
+.notif{
+  position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:1001;
+  display:flex;align-items:center;gap:13px;
+  width:calc(100% - 20px);max-width:380px;
+  padding:10px 14px;border-radius:14px;
+  background:rgba(28,28,30,.85);
+  backdrop-filter:blur(30px) saturate(180%);
+  -webkit-backdrop-filter:blur(30px) saturate(180%);
+  border:.5px solid rgba(255,255,255,.18);
+  box-shadow:0 4px 16px rgba(0,0,0,.4),inset 0 .5px 0 rgba(255,255,255,.15);
+  animation:slideIn .5s ease-out, notifPulse 2s ease-in-out infinite 1s;
+  cursor:pointer;
+  transition:background .2s;
+}
+.notif:hover{background:rgba(38,38,42,.9)}
 @keyframes slideIn{from{opacity:0;transform:translate(-50%,-20px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes notifPulse{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.02)}}
 .notif-icon{width:40px;height:40px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .notif-icon img{width:100%;height:100%;object-fit:contain}
 .notif-content{flex:1;min-width:0;position:relative;line-height:1.2}
 .notif-time{position:absolute;top:0;right:0;font-size:13px;color:rgba(255,255,255,.5)}
-.notif-app{font-size:15px;font-weight:600;color:rgba(255,255,255,.85);margin-bottom:2px;padding-right:40px}
-.notif-msg{font-size:15px;color:rgba(255,255,255,.8);padding-right:10px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-.notif-user-blur{display:inline-block;filter:blur(4px);user-select:none;pointer-events:none;vertical-align:middle;margin:0 1px}
+.notif-app{font-size:15px;font-weight:600;color:rgba(255,255,255,.85);margin-bottom:2px;padding-right:40px;letter-spacing:-.01em}
+.notif-msg{
+  font-size:15px;color:rgba(255,255,255,.8);padding-right:10px;letter-spacing:-.01em;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+}
 
-/* ============ MODAL VIP ============ */
+.notif-user-blur{
+  display:inline-block;
+  filter:blur(4px);
+  user-select:none;
+  pointer-events:none;
+  vertical-align:middle;
+  margin:0 1px;
+}
+
+/* ==================== MODAL VIP ==================== */
 .vip-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:10000;display:none;align-items:center;justify-content:center;padding:20px;animation:fadeIn .3s ease-out}
 .vip-overlay.show{display:flex}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -195,21 +142,43 @@ nav .nav-dot{position:absolute;bottom:14px;right:calc(50% - 10px);width:8px;heig
 @keyframes popIn{from{opacity:0;transform:scale(.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
 .vip-modal::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(168,85,247,.15) 0%,transparent 60%);pointer-events:none;animation:rotateGlow 8s linear infinite}
 @keyframes rotateGlow{to{transform:rotate(360deg)}}
-.vip-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.08);border:none;color:#9ca3af;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;z-index:2}
+.vip-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.08);border:none;color:#9ca3af;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:2}
+.vip-close:hover{background:rgba(255,255,255,.15);color:#fff}
 .vip-icon{width:64px;height:64px;margin:0 auto 16px;border-radius:20px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 32px rgba(124,58,237,.45),inset 0 1px 0 rgba(255,255,255,.3);position:relative;z-index:1}
 .vip-icon svg{width:32px;height:32px;stroke:#fff;fill:none;stroke-width:2}
-.vip-title{font-size:22px;font-weight:800;color:#fff;margin-bottom:12px;position:relative;z-index:1;line-height:1.25}
+.vip-title{font-size:22px;font-weight:800;color:#fff;margin-bottom:12px;letter-spacing:-.02em;position:relative;z-index:1;line-height:1.25}
 .vip-title span{background:linear-gradient(135deg,#a855f7 0%,#6366f1 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .vip-desc{font-size:14px;color:rgba(255,255,255,.72);line-height:1.55;margin-bottom:18px;position:relative;z-index:1}
 .vip-desc b{color:#fff;font-weight:600}
-.vip-safe{display:flex;align-items:flex-start;gap:10px;text-align:left;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:14px;padding:12px 14px;margin-bottom:18px;position:relative;z-index:1}
-.vip-safe svg{width:18px;height:18px;stroke:#22c55e;fill:none;stroke-width:2;flex-shrink:0;margin-top:1px}
-.vip-safe span{font-size:12.5px;line-height:1.45;color:rgba(255,255,255,.85)}
+
+/* Bloco "não notifica o dono" */
+.vip-safe{
+  display:flex;align-items:flex-start;gap:10px;
+  text-align:left;
+  background:rgba(34,197,94,.08);
+  border:1px solid rgba(34,197,94,.25);
+  border-radius:14px;
+  padding:12px 14px;
+  margin-bottom:18px;
+  position:relative;z-index:1;
+}
+.vip-safe svg{
+  width:18px;height:18px;
+  stroke:#22c55e;fill:none;stroke-width:2;
+  flex-shrink:0;margin-top:1px;
+}
+.vip-safe span{
+  font-size:12.5px;line-height:1.45;
+  color:rgba(255,255,255,.85);
+}
 .vip-safe b{color:#22c55e;font-weight:700}
+
 .vip-benefits{text-align:left;margin-bottom:22px;position:relative;z-index:1;background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.15);border-radius:14px;padding:14px}
 .vip-benefit{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.85);padding:5px 0}
 .vip-benefit svg{width:16px;height:16px;stroke:#a855f7;fill:none;stroke-width:3;flex-shrink:0}
-.vip-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;border:none;border-radius:16px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);color:#fff;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 12px 32px rgba(124,58,237,.45);position:relative;z-index:1}
+.vip-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;border:none;border-radius:16px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);color:#fff;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 12px 32px rgba(124,58,237,.45),inset 0 1px 0 rgba(255,255,255,.25);transition:all .25s;position:relative;z-index:1}
+.vip-btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(124,58,237,.6)}
+.vip-btn:active{transform:scale(.98)}
 .vip-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.5}
 .vip-timer{margin-top:14px;font-size:12px;color:rgba(255,255,255,.5);position:relative;z-index:1}
 .vip-timer b{color:#a855f7;font-weight:700}
@@ -217,129 +186,48 @@ nav .nav-dot{position:absolute;bottom:14px;right:calc(50% - 10px);width:8px;heig
 </head>
 <body>
 
-<!-- ============ HEADER ============ -->
 <header>
-  <span class="logo-ig">Instagram</span>
+  <img src="https://stalkea.ai/images/logos/logo-insta.png" alt="Instagram" onerror="this.style.display='none'" />
   <div class="header-btns">
     <button onclick="void(0)">
       <svg viewBox="0 0 24 24"><path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z"/></svg>
       <span class="dot"></span>
     </button>
     <button onclick="void(0)">
-      <svg viewBox="0 0 24 24"><path d="M21.2 3.2 2.9 9.6a.6.6 0 0 0 0 1.1l7.4 2.9 2.9 7.4a.6.6 0 0 0 1.1 0L21.2 3.2Z"/><path d="m10.3 13.6 5.4-5.4"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M13.973 20.046 21.77 6.928C22.8 5.195 21.55 3 19.535 3H4.466C2.138 3 .984 5.825 2.646 7.456l4.842 4.752 1.723 7.121c.548 2.266 3.571 2.721 4.762.717Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"/><line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="7.488" x2="15.515" y1="12.208" y2="7.641"/></svg>
+      <span class="badge">3</span>
     </button>
   </div>
 </header>
 
-<!-- ============ SCREEN: FEED ============ -->
-<div class="screen active" id="screen-feed">
-  <div class="pt-header">
-    <div class="stories"><div class="stories-row" id="storiesRow"></div></div>
-  </div>
-  <div id="feed"></div>
-</div>
-
-<!-- ============ SCREEN: DIRECT ============ -->
-<div class="screen" id="screen-direct">
-  <div class="direct-header">
-    <div class="direct-title" onclick="abrirModalVIP('vip')">
-      <span id="directUser">@usuario</span>
-      <svg viewBox="0 0 24 24"><path d="m6 9.5 6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span class="red-dot"></span>
-    </div>
-    <div class="direct-search" onclick="abrirModalVIP('vip')">
-      <svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="7.8"/><path d="m16.6 16.6 5 5"/><path d="M17.5 2.5v4M15.5 4.5h4"/></svg>
-      <span>Pesquise ou pergunte à Meta AI</span>
-    </div>
-
-    <div class="notes-row" id="notesRow"></div>
-
-    <div class="direct-subtitle">Mensagens <span>Pedidos (3)</span></div>
-    <div id="conversasList"></div>
+<div class="pt-header">
+  <div class="stories">
+    <div class="stories-row" id="storiesRow"></div>
   </div>
 </div>
 
-<!-- ============ SCREEN: PROFILE ============ -->
-<div class="screen" id="screen-profile">
-  <div class="profile-header">
-    <div class="profile-top">
-      <svg class="lock-icon" viewBox="0 0 24 24"><rect x="5.5" y="10.5" width="13" height="10.5" rx="3"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg>
-      <span id="profileUser">@usuario</span>
-      <svg viewBox="0 0 24 24"><path d="m6 9.5 6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span class="red-dot"></span>
-    </div>
+<div id="feed"></div>
 
-    <div class="profile-main">
-      <div class="profile-row">
-        <div class="profile-avatar-big">
-          <div class="note-top" id="profileNote">A vibe do dia...</div>
-          <div class="profile-avatar-img"><img id="profileAvatar" src="" alt="" /></div>
-          <div class="profile-avatar-plus" onclick="abrirModalVIP('vip')">
-            <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-          </div>
-        </div>
-        <div class="profile-info">
-          <div class="profile-nome" id="profileNome">Carregando...</div>
-          <div class="profile-stats">
-            <div class="profile-stat"><b id="statPosts">0</b><span>posts</span></div>
-            <div class="profile-stat"><b id="statFollowers">0</b><span>seguidores</span></div>
-            <div class="profile-stat"><b id="statFollowing">0</b><span>seguindo</span></div>
-          </div>
-        </div>
-      </div>
-
-      <p class="profile-bio" id="profileBio"></p>
-
-      <div class="profile-btns">
-        <button class="profile-btn" onclick="abrirModalVIP('vip')">Editar</button>
-        <button class="profile-btn" onclick="abrirModalVIP('vip')">Compartilhar perfil</button>
-        <button class="profile-btn-icon" onclick="abrirModalVIP('vip')">
-          <svg viewBox="0 0 24 24"><circle cx="13" cy="8" r="4"/><path d="M6 20.5c0-3.9 3.1-6.5 7-6.5s7 2.6 7 6.5"/><path d="M4.5 7v5M2 9.5h5"/></svg>
-        </button>
-      </div>
-
-      <div class="profile-tabs">
-        <button class="profile-tab active" onclick="abrirModalVIP('vip')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="4.6" height="4.6" rx="1.2" fill="currentColor"/><rect x="10" y="3" width="4.6" height="4.6" rx="1.2" fill="currentColor"/><rect x="17" y="3" width="4.6" height="4.6" rx="1.2" fill="currentColor"/><rect x="3" y="10" width="4.6" height="4.6" rx="1.2" fill="currentColor"/><rect x="10" y="10" width="4.6" height="4.6" rx="1.2" fill="currentColor"/><rect x="17" y="10" width="4.6" height="4.6" rx="1.2" fill="currentColor"/><rect x="3" y="17" width="4.6" height="4.6" rx="1.2" fill="currentColor"/><rect x="10" y="17" width="4.6" height="4.6" rx="1.2" fill="currentColor"/><rect x="17" y="17" width="4.6" height="4.6" rx="1.2" fill="currentColor"/></svg></button>
-        <button class="profile-tab" onclick="abrirModalVIP('vip')"><svg viewBox="0 0 24 24"><path d="M4 11V9a4 4 0 0 1 4-4h11"/><path d="m16 2 3 3-3 3"/><path d="M20 13v2a4 4 0 0 1-4 4H5"/><path d="m8 22-3-3 3-3"/></svg></button>
-        <button class="profile-tab" onclick="abrirModalVIP('vip')"><svg viewBox="0 0 24 24"><path d="M9 3.5 10.5 2h3L15 3.5h3.5A2.5 2.5 0 0 1 21 6v13.5a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 19.5V6a2.5 2.5 0 0 1 2.5-2.5H9Z"/><circle cx="12" cy="10.5" r="3"/></svg></button>
-      </div>
-
-      <div class="profile-empty">
-        <img src="https://i.imgur.com/Z4JMSp7.png" alt="" onerror="this.style.display='none'" />
-        <div class="profile-empty-title">Crie seu primeiro post</div>
-        <div class="profile-empty-desc">Compartilhe seu ponto de vista.</div>
-        <button class="profile-empty-btn" onclick="abrirModalVIP('vip')">Criar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ============ BANNER ============ -->
 <div class="banner">
   <div class="banner-content">
     <p class="banner-title">⚡ Prévia disponível por <span class="timer"><span id="timer">10:00</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3" stroke-linecap="round"/></svg></span></p>
-    <p class="banner-desc">Você ganhou 10 minutos para testar gratuitamente nossa ferramenta.</p>
+    <p class="banner-desc">Você ganhou 10 minutos para testar gratuitamente nossa ferramenta, mas para liberar todas as funcionalidades e ter acesso permanente é necessário ser um membro VIP.</p>
   </div>
   <button class="banner-btn" onclick="abrirModalVIP('vip')">Virar VIP</button>
 </div>
 
-<!-- ============ NAVBAR ============ -->
 <nav>
-  <button class="active" data-tab="feed" onclick="trocarTela('feed')">
-    <svg viewBox="0 0 24 24"><path d="M3 10.3 12 3l9 7.3V20a1.6 1.6 0 0 1-1.6 1.6H15.2v-5.4a3.2 3.2 0 0 0-6.4 0v5.4H4.6A1.6 1.6 0 0 1 3 20v-9.7Z"/></svg>
-  </button>
-  <button data-tab="direct" onclick="trocarTela('direct')">
-    <svg viewBox="0 0 24 24"><path d="M21.2 3.2 2.9 9.6a.6.6 0 0 0 0 1.1l7.4 2.9 2.9 7.4a.6.6 0 0 0 1.1 0L21.2 3.2Z"/><path d="m10.3 13.6 5.4-5.4"/></svg>
-    <span class="nav-dot"></span>
-  </button>
-  <button data-tab="profile" onclick="trocarTela('profile')">
-    <span class="profile"><img id="navAvatar" src="" alt="" /></span>
-  </button>
+  <button onclick="void(0)"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></button>
+  <button onclick="void(0)"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></button>
+  <button onclick="void(0)"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg></button>
+  <button onclick="void(0)"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button>
+  <button onclick="void(0)" class="profile"><img id="navAvatar" src="" alt="Profile" /></button>
 </nav>
 
-<!-- ============ NOTIFICAÇÃO ============ -->
 <div class="notif" id="notif" onclick="abrirModalVIP('vip')">
-  <div class="notif-icon"><img src="https://stalkea.ai/images/logos/Logo-notificcai.svg.png" alt="" onerror="this.style.display='none'" /></div>
+  <div class="notif-icon">
+    <img src="https://stalkea.ai/images/logos/Logo-notificcai.svg.png" alt="Instagram" onerror="this.style.display='none'" />
+  </div>
   <div class="notif-content">
     <span class="notif-time" id="notifTime">Agora</span>
     <p class="notif-app">Instagram</p>
@@ -347,24 +235,28 @@ nav .nav-dot{position:absolute;bottom:14px;right:calc(50% - 10px);width:8px;heig
   </div>
 </div>
 
-<!-- ============ MODAL VIP ============ -->
 <div class="vip-overlay" id="vipOverlay">
   <div class="vip-modal">
     <button class="vip-close" onclick="fecharModalVIP()">×</button>
-    <div class="vip-icon"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+    <div class="vip-icon">
+      <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+    </div>
     <h2 class="vip-title" id="vipTitle">🔒 Função exclusiva para <span>membros VIP</span></h2>
     <p class="vip-desc">Você chegou até aqui, mas essa parte é só pra quem tem acesso VIP. Libere agora e veja tudo que está escondido — <b>fotos reais</b>, <b>stories completos</b> e o <b>feed sem filtro</b>.</p>
+
     <div class="vip-safe">
-      <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
       <span>Sem aviso, sem rastro: <b>a pessoa nunca vai saber que você viu.</b></span>
     </div>
+
     <div class="vip-benefits">
-      <div class="vip-benefit"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Acesso completo ao perfil</div>
-      <div class="vip-benefit"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Mensagens e curtidas liberadas</div>
-      <div class="vip-benefit"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> 100% anônimo — sem deixar rastros</div>
+      <div class="vip-benefit"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Acesso completo ao perfil</div>
+      <div class="vip-benefit"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Mensagens e curtidas liberadas</div>
+      <div class="vip-benefit"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> 100% anônimo — sem deixar rastros</div>
     </div>
+
     <button class="vip-btn" onclick="irParaVIP()">
-      <svg viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+      <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
       Virar VIP Agora
     </button>
     <p class="vip-timer">Oferta expira em <b id="vipTimer">10:00</b></p>
@@ -376,45 +268,39 @@ nav .nav-dot{position:absolute;bottom:14px;right:calc(50% - 10px);width:8px;heig
 const params = new URLSearchParams(location.search);
 const username = (params.get('u') || location.pathname.slice(1) || 'usuario').toLowerCase();
 
+// ==================== PEGA DADOS DO PERFIL ====================
 let perfil = {};
-try { perfil = JSON.parse(localStorage.getItem('stalkea_profile') || '{}'); } catch(e){}
+try{ perfil = JSON.parse(localStorage.getItem('stalkea_profile') || '{}'); }catch(e){}
 
 const avatarUrl = perfil.profile_pic_url || `https://unavatar.io/instagram/${username}`;
-const displayName = perfil.full_name || perfil.name || username;
 
-document.getElementById('titleUser').textContent = '@' + username;
+document.getElementById('navAvatar').src = avatarUrl;
 document.title = `Veriscan — @${username}`;
 
-// Preenche dados
-document.getElementById('navAvatar').src = avatarUrl;
-document.getElementById('directUser').textContent = '@' + username;
-document.getElementById('profileUser').textContent = '@' + username;
-document.getElementById('profileAvatar').src = avatarUrl;
-document.getElementById('profileNome').textContent = displayName;
-document.getElementById('statPosts').textContent = perfil.media_count || 0;
-document.getElementById('statFollowers').textContent = perfil.follower_count || 0;
-document.getElementById('statFollowing').textContent = perfil.following_count || 0;
-
-const bioEl = document.getElementById('profileBio');
-if (perfil.biography && perfil.biography.trim()) {
-  bioEl.textContent = perfil.biography;
-} else {
-  bioEl.textContent = '💸';
-}
-
-// ==================== NOTIFICAÇÃO ====================
+// ==================== NOTIFICAÇÃO — @ BORRADO + TEMPO VARIÁVEL ====================
 const MENSAGENS_NOTIF = [
   '<span class="notif-user-blur">@usuario_aleatorio</span> enviou uma mensagem',
   '<span class="notif-user-blur">@usuario_aleatorio</span> começou a te seguir',
   '<span class="notif-user-blur">@usuario_aleatorio</span> curtiu sua publicação',
   '<span class="notif-user-blur">@usuario_aleatorio</span> comentou na sua foto',
-  '<span class="notif-user-blur">@usuario_aleatorio</span> te marcou em um story'
+  '<span class="notif-user-blur">@usuario_aleatorio</span> te marcou em um story',
+  '<span class="notif-user-blur">@usuario_aleatorio</span> visualizou seu perfil',
+  '<span class="notif-user-blur">@usuario_aleatorio</span> reagiu ao seu story',
+  '<span class="notif-user-blur">@usuario_aleatorio</span> respondeu seu comentário'
 ];
-const TEMPOS_NOTIF = ['Agora','1 min','2 min','3 min','5 min','7 min','10 min','15 min','23 min','48 min','1 h','2 h'];
-document.getElementById('notifMsg').innerHTML = MENSAGENS_NOTIF[Math.floor(Math.random() * MENSAGENS_NOTIF.length)];
-document.getElementById('notifTime').textContent = TEMPOS_NOTIF[Math.floor(Math.random() * TEMPOS_NOTIF.length)];
 
-// ==================== STORIES ====================
+const TEMPOS_NOTIF = [
+  'Agora','1 min','2 min','3 min','5 min','7 min','10 min',
+  '12 min','15 min','23 min','35 min','48 min','1 h','2 h','3 h','5 h'
+];
+
+const msgSorteada = MENSAGENS_NOTIF[Math.floor(Math.random() * MENSAGENS_NOTIF.length)];
+const tempoSorteado = TEMPOS_NOTIF[Math.floor(Math.random() * TEMPOS_NOTIF.length)];
+
+document.getElementById('notifMsg').innerHTML = msgSorteada;
+document.getElementById('notifTime').textContent = tempoSorteado;
+
+// ==================== STORIES — NOMES BORRADOS ====================
 const contatosFake = [
   { user: '@maria.silva',    img: 'avatares/av-fallback-1.jpg' },
   { user: '@joao.pereira',   img: 'avatares/av-fallback-2.jpg' },
@@ -433,140 +319,80 @@ const contatosFake = [
 ];
 
 const storiesRow = document.getElementById('storiesRow');
-let htmlS = '';
-htmlS += `<div class="story">
+let html = '';
+
+html += `<div class="story">
   <button class="story-btn">
     <div class="story-ring plain"><div class="story-inner"><div class="story-img"><img src="${avatarUrl}" alt="" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=7c3aed&color=fff&size=200'" /></div></div></div>
-    <div class="story-plus"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
   </button>
   <span class="story-name" style="filter:none">@${username}</span>
 </div>`;
+
 contatosFake.forEach(u => {
-  htmlS += `<div class="story">
+  html += `<div class="story">
     <button class="story-btn">
       <div class="story-ring"><div class="story-inner"><div class="story-img"><img src="${u.img}" alt="" /></div></div></div>
     </button>
     <span class="story-name">${u.user}</span>
   </div>`;
 });
-storiesRow.innerHTML = htmlS;
 
-// ==================== POSTS ====================
-const MUSICAS = [
-  'Marina Sena · Sem Lei',
-  'Matuê · Quer Voar',
-  'MC Ryan SP · Tubarão',
-  'Anitta · Envolver',
-  'Luísa Sonza · Chico',
-  'Veigh · Novo Balanço'
-];
+storiesRow.innerHTML = html;
 
+// ==================== POSTS — NOME + LOCALIZAÇÃO BORRADOS ====================
 const posts = [
-  { img: 'avatares/av-fallback-10.jpg', nome: 'lu.carvalho_',  music: MUSICAS[0], likes: 1300, comments: 57,  reposts: 12, shares: 0, time: 'Há 2 horas', liked: true },
-  { img: 'avatares/av-fallback-9.jpg',  nome: 'dudu.lopes_',   music: MUSICAS[1], likes: 342,  comments: 18,  reposts: 5,  shares: 2, time: 'Há 5 horas', liked: false },
-  { img: 'avatares/av-fallback-3.jpg',  nome: 'ju.costa.x',    music: null,       likes: 2300, comments: 143, reposts: 40, shares: 0, time: 'Há 9 horas', liked: false },
-  { img: 'avatares/av-fallback-1.jpg',  nome: 'rafa.moreirax', music: MUSICAS[2], likes: 98,   comments: 4,   reposts: 0,  shares: 0, time: 'Há 1 dia',   liked: false }
+  { img: 'avatares/av-fallback-10.jpg', likes: 57,  comments: 4,  reposts: 4, shares: 3, time: 'há 1 dia',    liked: true  },
+  { img: 'avatares/av-fallback-9.jpg',  likes: 152, comments: 3,  reposts: 3, shares: 0, time: 'há 1 dia',    liked: false },
+  { img: 'avatares/av-fallback-3.jpg',  likes: 72,  comments: 18, reposts: 3, shares: 0, time: 'há 2 dias',   liked: false },
+  { img: 'avatares/av-fallback-1.jpg',  likes: 24,  comments: 20, reposts: 1, shares: 1, time: 'há 23 horas', liked: false }
 ];
 
 document.getElementById('feed').innerHTML = posts.map(p => {
-  const m = p.music ? `<p class="post-user-music"><svg viewBox="0 0 24 24"><path d="M9 4.5 20 2v13.2a3.2 3.2 0 1 1-2-2.95V6.3l-7 1.6v9.3a3.2 3.2 0 1 1-2-2.95V4.5Z"/></svg><span>${p.music}</span></p>` : '';
   return `<article class="post">
     <div class="post-head">
       <div class="post-user">
-        <div class="post-avatar"><div class="post-avatar-inner"><img src="${p.img}" alt="" /></div></div>
+        <div class="post-avatar"><img src="${p.img}" alt="" /></div>
         <div class="post-user-info">
-          <span class="post-user-name">${p.nome}</span>
-          ${m}
+          <span class="post-user-name-blurred"></span>
+          <span class="post-user-loc-blurred">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <span>(localização oculta)</span>
+          </span>
         </div>
       </div>
-      <button class="post-menu"><svg viewBox="0 0 24 24"><path d="M4 9h16M4 15h10"/></svg></button>
+      <button class="post-menu"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg></button>
     </div>
     <div class="post-media">
-      <div class="media-bg" style="background-image:url('${p.img}')"></div>
-      <div class="media-overlay">
-        <span class="lock-circle"><svg viewBox="0 0 24 24"><rect x="5.5" y="10.5" width="13" height="10.5" rx="3"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg></span>
-        <span class="privado-pill">Conteúdo privado</span>
-      </div>
-      <span class="mute-btn"><svg viewBox="0 0 24 24"><path d="M11 5 6.5 9H3.5v6h3L11 19V5Z"/><path d="m16 9.5 5 5M21 9.5l-5 5"/></svg></span>
+      <svg class="lock" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+      <p class="restrito">Conteúdo restrito</p>
+      <p class="tempo">${p.time}</p>
     </div>
     <div class="post-actions">
       <div class="actions-row">
         <div class="actions-left">
-          <button class="action-btn ${p.liked ? 'liked' : ''}"><svg viewBox="0 0 24 24"><path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z" ${p.liked ? 'fill="#ff3040" stroke="#ff3040"' : ''}/></svg><span class="action-count">${p.likes >= 1000 ? (p.likes/1000).toFixed(1).replace('.0','')+'k' : p.likes}</span></button>
-          <button class="action-btn"><svg viewBox="0 0 24 24"><path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z"/></svg><span class="action-count">${p.comments}</span></button>
-          <button class="action-btn"><svg viewBox="0 0 24 24"><path d="M4 11V9a4 4 0 0 1 4-4h11"/><path d="m16 2 3 3-3 3"/><path d="M20 13v2a4 4 0 0 1-4 4H5"/><path d="m8 22-3-3 3-3"/></svg>${p.reposts ? `<span class="action-count">${p.reposts}</span>` : ''}</button>
-          <button class="action-btn"><svg viewBox="0 0 24 24"><path d="M22 3 9.218 10.083"/><path d="M11.698 20.334 22 3.001H2l7.218 7.083 2.48 10.25Z"/></svg>${p.shares ? `<span class="action-count">${p.shares}</span>` : ''}</button>
+          <button class="action-btn ${p.liked ? 'liked' : ''}" onclick="void(0)">
+            <svg viewBox="0 0 24 24"><path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z"/></svg>
+            <span class="action-count">${p.likes}</span>
+          </button>
+          <button class="action-btn">
+            <svg viewBox="0 0 24 24"><path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"/></svg>
+            <span class="action-count">${p.comments}</span>
+          </button>
+          <button class="action-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+            <span class="action-count">${p.reposts}</span>
+          </button>
+          <button class="action-btn">
+            <svg viewBox="0 0 24 24"><path d="M13.973 20.046 21.77 6.928C22.8 5.195 21.55 3 19.535 3H4.466C2.138 3 .984 5.825 2.646 7.456l4.842 4.752 1.723 7.121c.548 2.266 3.571 2.721 4.762.717Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"/><line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="7.488" x2="15.515" y1="12.208" y2="7.641"/></svg>
+            ${p.shares ? `<span class="action-count">${p.shares}</span>` : ''}
+          </button>
         </div>
-        <button class="save-btn"><svg viewBox="0 0 24 24"><path d="M20 21 12 13.44 4 21V3h16v18Z"/></svg></button>
+        <button class="save-btn"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
       </div>
-      <div class="post-caption">
-        <p class="post-caption-line"><b>${p.nome}</b> legenda escondida da publicação privada</p>
-        <p class="post-time">${p.time}</p>
-      </div>
+      <p class="post-time">${p.time}</p>
     </div>
   </article>`;
 }).join('');
-
-// ==================== NOTES (Direct) ====================
-const NOTES = [
-  { titulo: 'Sua nota',       texto: 'Preciso de inspiração...',                        img: avatarUrl, blur: false },
-  { titulo: 'Chico',          texto: 'Luísa Sonza',                                     img: 'avatares/av-fallback-5.jpg',  blur: true },
-  { titulo: 'nanda ribeiro',  texto: 'Baila Sola · Eslabon Armado',                     img: 'avatares/av-fallback-7.jpg',  blur: true },
-  { titulo: '',               texto: 'Tem dia que a noite...',                          img: 'avatares/av-fallback-4.jpg',  blur: true },
-  { titulo: '',               texto: 'partiu praia?',                                   img: 'avatares/av-fallback-2.jpg',  blur: true }
-];
-
-document.getElementById('notesRow').innerHTML = NOTES.map((n, i) => {
-  const title = n.titulo ? `<span class="note-bubble-title">${i === 1 ? '<svg viewBox="0 0 24 24"><path d="M9 4.5 20 2v13.2a3.2 3.2 0 1 1-2-2.95V6.3l-7 1.6v9.3a3.2 3.2 0 1 1-2-2.95V4.5Z"/></svg>' : ''}<span class="truncate">${n.titulo}</span></span>` : '';
-  const plus = i === 0 ? '<div class="note-avatar-plus"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>' : '';
-  return `<div class="note" onclick="abrirModalVIP('vip')">
-    <div class="note-bubble">${title}<span class="note-bubble-text">${n.texto}</span></div>
-    <div class="note-avatar">
-      <img src="${n.img}" alt="" />
-      ${plus}
-    </div>
-    <div class="note-name ${n.blur ? 'blur' : ''}">${n.titulo || n.texto}</div>
-  </div>`;
-}).join('');
-
-// ==================== CONVERSAS (Direct) ====================
-const CONVERSAS = [
-  { nome: 'isa prado',     msg: 'kkkkkkkkkkk',                  hora: '2 min',  dot: true,  online: false, ring: true  },
-  { nome: 'gabi fontes',   msg: 'Enviou um reel',               hora: '18 h',   dot: true,  online: false, ring: false },
-  { nome: 'matheus sena',  msg: 'Enviado terça-feira',          hora: '',       dot: false, online: false, ring: false },
-  { nome: 'duda rezende',  msg: 'Online agora',                 hora: '',       dot: false, online: true,  ring: false },
-  { nome: 'taís nogueira', msg: 'obrigada migo ❤️',             hora: '3 d',    dot: true,  online: false, ring: false },
-  { nome: 'joão vitor',    msg: 'kkkkk não acredito que você fez isso', hora: '4 d', dot: false, online: false, ring: true  },
-  { nome: 'lari fonseca',  msg: 'Curtiu sua mensagem',          hora: '5 d',    dot: false, online: false, ring: false },
-  { nome: 'sofia leal',    msg: '4 novas mensagens',            hora: '1 sem',  dot: true,  online: false, ring: false },
-  { nome: 'bel quintela',  msg: 'Visto',                        hora: '1 sem',  dot: false, online: false, ring: false },
-  { nome: 'lucas teixeira',msg: 'me manda depois',              hora: '2 sem',  dot: false, online: false, ring: false }
-];
-
-document.getElementById('conversasList').innerHTML = CONVERSAS.map(c => {
-  const avatarClass = c.ring ? 'conversa-avatar ring' : 'conversa-avatar';
-  const innerHtml = c.ring ? `<div class="conversa-avatar-inner"><img src="avatares/av-fallback-${Math.floor(Math.random()*14)+1}.jpg" alt="" /></div>` : `<img src="avatares/av-fallback-${Math.floor(Math.random()*14)+1}.jpg" alt="" />`;
-  const onlineDot = c.online ? '<span class="online"></span>' : '';
-  const blueDot = c.dot ? '<span class="conversa-dot"></span>' : '';
-  return `<div class="conversa" onclick="abrirModalVIP('vip')">
-    <div class="${avatarClass}">${innerHtml}${onlineDot}</div>
-    <div class="conversa-info">
-      <div class="conversa-nome">${c.nome}</div>
-      <div class="conversa-msg"><span class="txt">${c.msg}</span>${c.hora ? `<span class="hora">· ${c.hora}</span>` : ''}</div>
-    </div>
-    ${blueDot}
-  </div>`;
-}).join('');
-
-// ==================== TROCAR TELA ====================
-function trocarTela(tab) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + tab).classList.add('active');
-  document.querySelectorAll('nav button[data-tab]').forEach(b => {
-    b.classList.toggle('active', b.dataset.tab === tab);
-  });
-  window.scrollTo(0, 0);
-}
 
 // ==================== TIMER ====================
 let seg = 600;
@@ -579,8 +405,12 @@ function atualizarTimer(){
   if(vt) vt.textContent = txt;
 }
 setInterval(()=>{
-  if(seg > 0){ seg--; atualizarTimer(); }
-  else { if(!modalAberto) abrirModalVIP('tempo'); }
+  if(seg > 0){
+    seg--;
+    atualizarTimer();
+  } else {
+    if(!modalAberto) abrirModalVIP('tempo');
+  }
 }, 1000);
 atualizarTimer();
 
@@ -588,45 +418,52 @@ atualizarTimer();
 let modalAberto = false;
 let ultimoFechamento = 0;
 const COOLDOWN = 30000;
+
 const overlay = document.getElementById('vipOverlay');
 
 function abrirModalVIP(motivo = 'vip') {
   if (modalAberto) return;
   modalAberto = true;
+
+  // 🔀 Altera o título conforme o motivo
   const titulo = document.getElementById('vipTitle');
   if (motivo === 'tempo') {
     titulo.innerHTML = '⚠️ Você atingiu o limite da <span>prévia gratuita</span>';
   } else {
     titulo.innerHTML = '🔒 Função exclusiva para <span>membros VIP</span>';
   }
+
   overlay.classList.add('show');
   document.body.style.overflow = 'hidden';
 }
+
 function fecharModalVIP(){
   modalAberto = false;
   ultimoFechamento = Date.now();
   overlay.classList.remove('show');
   document.body.style.overflow = '';
 }
+
 function irParaVIP(){
   window.location.href = '/cta?u=' + encodeURIComponent(username);
 }
-overlay.addEventListener('click', (e) => { if(e.target === overlay) fecharModalVIP(); });
 
-// Clique fora abre VIP (regra do site)
+overlay.addEventListener('click', (e) => {
+  if(e.target === overlay) fecharModalVIP();
+});
+
 document.addEventListener('click', (e) => {
-  if (overlay.contains(e.target)) return;
-  if (e.target.closest('.banner-btn')) return;
-  if (e.target.closest('#notif')) return;
-  if (e.target.closest('nav button[data-tab]')) return;
-  if (e.target.closest('.vip-btn')) return;
-  if (e.target.closest('.profile-avatar-plus')) return;
-  if (modalAberto) return;
-  if (Date.now() - ultimoFechamento < COOLDOWN) return;
+  if(overlay.contains(e.target)) return;
+  if(e.target.closest('.banner-btn')) return;
+  if(e.target.closest('#notif')) return;
+  if(modalAberto) return;
+  if(Date.now() - ultimoFechamento < COOLDOWN) return;
   abrirModalVIP('vip');
 });
 
-setTimeout(() => { if(!modalAberto) abrirModalVIP('vip'); }, 15000);
+setTimeout(() => {
+  if(!modalAberto) abrirModalVIP('vip');
+}, 15000);
 </script>
 </body>
 </html>
