@@ -34,8 +34,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:50;padding:10px 16px;backgrou
 .story-ring.plain{background:#1f2937}
 .story-inner{width:100%;height:100%;border-radius:50%;background:#0c1014;padding:3px}
 .story-img{width:100%;height:100%;border-radius:50%;overflow:hidden;background:#1f2937;position:relative}
-.story-img img{width:100%;height:100%;object-fit:cover}
-.story-blur{width:100%;height:100%;background:radial-gradient(circle at 30% 30%,#7c3aed 0%,#4c1d95 40%,#1f2937 100%);filter:blur(6px);transform:scale(1.15)}
+.story-img img{width:100%;height:100%;object-fit:cover;filter:blur(6px);transform:scale(1.15)}
+.story-img img.no-blur{filter:none;transform:none}
 .story-name{font-size:12px;color:#e5e7e7;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:79px}
 .story-name.blur{filter:blur(4px);user-select:none;pointer-events:none}
 .story-plus{position:absolute;bottom:0;right:0;width:26px;height:26px;background:#fff;border:3px solid #0c1014;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:30}
@@ -47,7 +47,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:50;padding:10px 16px;backgrou
 .post-user{display:flex;align-items:center;gap:10px;background:transparent;border:none;color:#fff;padding:0;flex:1;min-width:0}
 .post-avatar{width:38px;height:38px;border-radius:50%;overflow:hidden;background:#1f2937;flex-shrink:0;padding:2px;background:conic-gradient(from 200deg,#fdc830,#f37335,#e1306c,#c13584,#833ab4,#fdc830)}
 .post-avatar-inner{width:100%;height:100%;border-radius:50%;overflow:hidden;background:#0c1014;padding:2px}
-.post-avatar-blur{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 30% 30%,#7c3aed 0%,#4c1d95 40%,#1f2937 100%);filter:blur(4px);transform:scale(1.15)}
+.post-avatar-inner img{width:100%;height:100%;object-fit:cover;border-radius:50%;filter:blur(3px);transform:scale(1.15)}
 .post-user-info{text-align:left;display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
 .post-user-name{font-size:14px;font-weight:600;color:#fff;filter:blur(4px);user-select:none;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .post-user-music{display:flex;align-items:center;gap:5px;font-size:12px;color:#d4d4d4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -56,10 +56,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:50;padding:10px 16px;backgrou
 .post-menu svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
 
 .post-media{width:100%;aspect-ratio:4/5;background:#1a1e22;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.post-media-bg{position:absolute;inset:0;background:radial-gradient(circle at 30% 40%,#7c3aed 0%,#3730a3 30%,#1e1b4b 60%,#0f172a 100%);filter:blur(40px);transform:scale(1.3)}
-.post-media-bg.v2{background:radial-gradient(circle at 60% 30%,#e11d48 0%,#7c3aed 40%,#1e1b4b 80%)}
-.post-media-bg.v3{background:radial-gradient(circle at 40% 60%,#f59e0b 0%,#7c3aed 50%,#1e1b4b 90%)}
-.post-media-bg.v4{background:radial-gradient(circle at 50% 40%,#10b981 0%,#3730a3 50%,#0f172a 100%)}
+.post-media-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(12px) brightness(.6);transform:scale(1.3)}
 .post-media-overlay{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:12px}
 .lock-circle{width:56px;height:56px;border-radius:50%;background:rgba(0,0,0,.5);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center}
 .lock-circle svg{width:26px;height:26px;stroke:#fff;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
@@ -93,11 +90,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:50;padding:10px 16px;backgrou
 .direct-subtitle span{color:#a3a3a3;font-size:13px;font-weight:600}
 .conversa{display:flex;align-items:center;gap:12px;padding:8px 16px;cursor:pointer}
 .conversa-avatar{width:56px;height:56px;border-radius:50%;overflow:hidden;background:#1f2937;position:relative;flex-shrink:0}
-.conversa-blur{width:100%;height:100%;background:radial-gradient(circle at 30% 30%,#7c3aed 0%,#4c1d95 40%,#1f2937 100%);filter:blur(8px);transform:scale(1.15)}
-.conversa-blur.v2{background:radial-gradient(circle at 60% 40%,#e11d48 0%,#7c3aed 40%,#1f2937 100%)}
-.conversa-blur.v3{background:radial-gradient(circle at 40% 60%,#f59e0b 0%,#7c3aed 50%,#1f2937 100%)}
-.conversa-blur.v4{background:radial-gradient(circle at 50% 40%,#10b981 0%,#3730a3 50%,#1f2937 100%)}
-.conversa-blur.v5{background:radial-gradient(circle at 30% 60%,#ef4444 0%,#7c3aed 50%,#1f2937 100%)}
+.conversa-avatar img{width:100%;height:100%;object-fit:cover;filter:blur(6px);transform:scale(1.15)}
 .conversa-avatar .online{position:absolute;bottom:0;right:0;width:16px;height:16px;background:#1cd14f;border-radius:50%;border:3px solid #0c1014;z-index:3}
 .conversa-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
 .conversa-nome{font-size:15px;font-weight:600;color:#fff;filter:blur(4px);user-select:none;pointer-events:none}
@@ -215,7 +208,7 @@ nav .profile-dot{position:absolute;bottom:12px;right:calc(50% - 12px);width:8px;
   </div>
 </header>
 
-<!-- ============ SCREEN: FEED ============ -->
+<!-- FEED -->
 <div class="screen active" id="screen-feed">
   <div class="pt-header">
     <div class="stories"><div class="stories-row" id="storiesRow"></div></div>
@@ -223,7 +216,7 @@ nav .profile-dot{position:absolute;bottom:12px;right:calc(50% - 12px);width:8px;
   <div id="feed"></div>
 </div>
 
-<!-- ============ SCREEN: DIRECT ============ -->
+<!-- DIRECT -->
 <div class="screen" id="screen-direct">
   <div class="direct-wrap">
     <div class="direct-title" onclick="abrirModalVIP('vip')">
@@ -240,7 +233,7 @@ nav .profile-dot{position:absolute;bottom:12px;right:calc(50% - 12px);width:8px;
   </div>
 </div>
 
-<!-- ============ SCREEN: PROFILE ============ -->
+<!-- PROFILE -->
 <div class="screen" id="screen-profile">
   <div class="profile-wrap">
     <div class="profile-top">
@@ -302,7 +295,6 @@ nav .profile-dot{position:absolute;bottom:12px;right:calc(50% - 12px);width:8px;
   <button class="banner-btn" onclick="abrirModalVIP('vip')">Virar VIP</button>
 </div>
 
-<!-- ============ NAVBAR ============ -->
 <nav>
   <button class="active" data-tab="feed" onclick="trocarTela('feed')">
     <svg viewBox="0 0 24 24"><path d="M3 10.3 12 3l9 7.3V20a1.6 1.6 0 0 1-1.6 1.6H15.2v-5.4a3.2 3.2 0 0 0-6.4 0v5.4H4.6A1.6 1.6 0 0 1 3 20v-9.7Z"/></svg>
@@ -337,9 +329,7 @@ nav .profile-dot{position:absolute;bottom:12px;right:calc(50% - 12px);width:8px;
 <div class="vip-overlay" id="vipOverlay">
   <div class="vip-modal">
     <button class="vip-close" onclick="fecharModalVIP()">×</button>
-    <div class="vip-icon">
-      <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
-    </div>
+    <div class="vip-icon"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
     <h2 class="vip-title" id="vipTitle">🔒 Função exclusiva para <span>membros VIP</span></h2>
     <p class="vip-desc">Você chegou até aqui, mas essa parte é só pra quem tem acesso VIP. Libere agora e veja tudo que está escondido — <b>fotos reais</b>, <b>stories completos</b> e o <b>feed sem filtro</b>.</p>
     <div class="vip-safe">
@@ -373,7 +363,6 @@ const displayName = perfil.full_name || perfil.name || username;
 document.getElementById('navAvatar').src = avatarUrl;
 document.title = `Veriscan — @${username}`;
 
-// Preenche Direct e Profile
 document.getElementById('directUser').textContent = '@' + username;
 document.getElementById('profileUser').textContent = '@' + username;
 document.getElementById('profileAvatar').src = avatarUrl;
@@ -403,39 +392,35 @@ document.getElementById('notifMsg').innerHTML = MENSAGENS_NOTIF[Math.floor(Math.
 document.getElementById('notifTime').textContent = TEMPOS_NOTIF[Math.floor(Math.random() * TEMPOS_NOTIF.length)];
 
 // ==================== STORIES ====================
+// 1 do alvo + 6 fake (total 7)
 const STORIES_FAKE = [
-  'https://www.sppy.site/ig/avatar-9.png',
-  'https://www.sppy.site/ig/avatar-2.png',
-  'https://www.sppy.site/ig/avatar-21.png',
-  'https://www.sppy.site/ig/avatar-7.png'
-];
-
-const NOMES_STORIES = [
-  'carol.pinheiro_',
-  'gui.andrade_',
-  'thiago.rochaa',
-  'bia.tavares__'
+  { img: 'https://www.sppy.site/ig/avatar-14.png', nome: 'carol.pinheiro_' },
+  { img: 'https://www.sppy.site/ig/avatar-18.png', nome: 'gui.andrade_'   },
+  { img: 'https://www.sppy.site/ig/avatar-22.png', nome: 'thiago.rochaa'  },
+  { img: 'https://www.sppy.site/ig/avatar-26.png', nome: 'bia.tavares__'  },
+  { img: 'https://www.sppy.site/ig/avatar-16.png', nome: 'nanda.ribeiro'  },
+  { img: 'https://www.sppy.site/ig/avatar-20.png', nome: 'sofia.leal'     }
 ];
 
 const storiesRow = document.getElementById('storiesRow');
 let htmlS = '';
 
-// Alvo (foto real)
+// Alvo (foto real, SEM blur)
 htmlS += `<div class="story">
   <button class="story-btn">
-    <div class="story-ring plain"><div class="story-inner"><div class="story-img"><img src="${avatarUrl}" alt="" onerror="this.style.display='none'" /></div></div></div>
+    <div class="story-ring plain"><div class="story-inner"><div class="story-img"><img src="${avatarUrl}" alt="" class="no-blur" onerror="this.style.display='none'" /></div></div></div>
     <div class="story-plus"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
   </button>
   <span class="story-name" style="filter:none">Seu story</span>
 </div>`;
 
-// Outros (imagens reais)
-STORIES_FAKE.forEach((img, i) => {
+// Outros (com blur)
+STORIES_FAKE.forEach((s) => {
   htmlS += `<div class="story">
     <button class="story-btn">
-      <div class="story-ring"><div class="story-inner"><div class="story-img"><img src="${img}" alt="" onerror="this.style.display='none'" /></div></div></div>
+      <div class="story-ring"><div class="story-inner"><div class="story-img"><img src="${s.img}" alt="" onerror="this.style.display='none'" /></div></div></div>
     </button>
-    <span class="story-name blur">${NOMES_STORIES[i]}</span>
+    <span class="story-name blur">${s.nome}</span>
   </div>`;
 });
 storiesRow.innerHTML = htmlS;
@@ -469,7 +454,7 @@ document.getElementById('feed').innerHTML = posts.map(p => {
   return `<article class="post">
     <div class="post-head">
       <div class="post-user">
-        <div class="post-avatar"><div class="post-avatar-inner"><img src="${p.avatar}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;filter:blur(3px);transform:scale(1.15)" /></div></div>
+        <div class="post-avatar"><div class="post-avatar-inner"><img src="${p.avatar}" alt="" onerror="this.style.display='none'" /></div></div>
         <div class="post-user-info">
           <span class="post-user-name">${p.nome}</span>
           <p class="post-user-music"><svg viewBox="0 0 24 24"><path d="M9 4.5 20 2v13.2a3.2 3.2 0 1 1-2-2.95V6.3l-7 1.6v9.3a3.2 3.2 0 1 1-2-2.95V4.5Z"/></svg><span>${p.music}</span></p>
@@ -478,7 +463,7 @@ document.getElementById('feed').innerHTML = posts.map(p => {
       <button class="post-menu"><svg viewBox="0 0 24 24"><path d="M4 9h16M4 15h10"/></svg></button>
     </div>
     <div class="post-media">
-      <div class="post-media-bg" style="background-image:url('${p.img}');background-size:cover;background-position:center;filter:blur(40px) brightness(.5);transform:scale(1.3)"></div>
+      <div class="post-media-bg" style="background-image:url('${p.img}')"></div>
       <div class="post-media-overlay">
         <span class="lock-circle"><svg viewBox="0 0 24 24"><rect x="5.5" y="10.5" width="13" height="10.5" rx="3"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg></span>
         <span class="privado-pill">Conteúdo privado</span>
@@ -506,18 +491,23 @@ document.getElementById('feed').innerHTML = posts.map(p => {
   </article>`;
 }).join('');
 
-// ==================== CONVERSAS (Direct) ====================
+// ==================== CONVERSAS (Direct) — 15 conversas, avatar-12 até avatar-26 ====================
 const CONVERSAS = [
-  { nome: 'isa prado',     msg: 'kkkkkkkkkkk',                        hora: '2 min',  dot: true,  online: false, bg: ''   },
-  { nome: 'gabi fontes',   msg: 'Enviou um reel',                     hora: '18 h',   dot: true,  online: false, bg: 'v2' },
-  { nome: 'matheus sena',  msg: 'Enviado terça-feira',                hora: '',       dot: false, online: false, bg: 'v3' },
-  { nome: 'duda rezende',  msg: 'Online agora',                       hora: '',       dot: false, online: true,  bg: 'v4' },
-  { nome: 'taís nogueira', msg: 'obrigada migo ❤️',                   hora: '3 d',    dot: true,  online: false, bg: 'v5' },
-  { nome: 'joão vitor',    msg: 'kkkkk não acredito que você fez isso', hora: '4 d',  dot: false, online: false, bg: ''   },
-  { nome: 'lari fonseca',  msg: 'Curtiu sua mensagem',                hora: '5 d',    dot: false, online: false, bg: 'v2' },
-  { nome: 'sofia leal',    msg: '4 novas mensagens',                  hora: '1 sem',  dot: true,  online: false, bg: 'v3' },
-  { nome: 'bel quintela',  msg: 'Visto',                              hora: '1 sem',  dot: false, online: false, bg: 'v4' },
-  { nome: 'lucas teixeira',msg: 'me manda depois',                    hora: '2 sem',  dot: false, online: false, bg: 'v5' }
+  { nome: 'isa prado',      msg: 'kkkkkkkkkkk',                          hora: '2 min', dot: true,  online: false, img: 'https://www.sppy.site/ig/avatar-12.png' },
+  { nome: 'gabi fontes',    msg: 'Enviou um reel',                       hora: '18 h',  dot: true,  online: false, img: 'https://www.sppy.site/ig/avatar-13.png' },
+  { nome: 'matheus sena',   msg: 'Enviado terça-feira',                  hora: '',      dot: false, online: false, img: 'https://www.sppy.site/ig/avatar-14.png' },
+  { nome: 'duda rezende',   msg: 'Online agora',                         hora: '',      dot: false, online: true,  img: 'https://www.sppy.site/ig/avatar-15.png' },
+  { nome: 'taís nogueira',  msg: 'obrigada migo ❤️',                     hora: '3 d',   dot: true,  online: false, img: 'https://www.sppy.site/ig/avatar-16.png' },
+  { nome: 'joão vitor',     msg: 'kkkkk não acredito que você fez isso', hora: '4 d',   dot: false, online: false, img: 'https://www.sppy.site/ig/avatar-17.png' },
+  { nome: 'lari fonseca',   msg: 'Curtiu sua mensagem',                  hora: '5 d',   dot: false, online: false, img: 'https://www.sppy.site/ig/avatar-18.png' },
+  { nome: 'sofia leal',     msg: '4 novas mensagens',                    hora: '1 sem', dot: true,  online: false, img: 'https://www.sppy.site/ig/avatar-19.png' },
+  { nome: 'bel quintela',   msg: 'Visto',                                hora: '1 sem', dot: false, online: false, img: 'https://www.sppy.site/ig/avatar-20.png' },
+  { nome: 'lucas teixeira', msg: 'me manda depois',                      hora: '2 sem', dot: false, online: false, img: 'https://www.sppy.site/ig/avatar-21.png' },
+  { nome: 'nanda ribeiro',  msg: 'olha isso kkkk',                       hora: '2 sem', dot: true,  online: false, img: 'https://www.sppy.site/ig/avatar-22.png' },
+  { nome: 'pedro.h.alves',  msg: 'Vou te mandar o link',                 hora: '3 sem', dot: false, online: false, img: 'https://www.sppy.site/ig/avatar-23.png' },
+  { nome: 'leo brandão',    msg: 'bora sábado?',                         hora: '3 sem', dot: false, online: true,  img: 'https://www.sppy.site/ig/avatar-24.png' },
+  { nome: 'manu barros',    msg: 'Enviou uma foto',                      hora: '4 sem', dot: true,  online: false, img: 'https://www.sppy.site/ig/avatar-25.png' },
+  { nome: 'caio ferraz',    msg: 'depois eu vejo',                       hora: '4 sem', dot: false, online: false, img: 'https://www.sppy.site/ig/avatar-26.png' }
 ];
 
 document.getElementById('conversasList').innerHTML = CONVERSAS.map(c => {
@@ -525,7 +515,7 @@ document.getElementById('conversasList').innerHTML = CONVERSAS.map(c => {
   const blueDot = c.dot ? '<span class="conversa-dot"></span>' : '';
   return `<div class="conversa" onclick="abrirModalVIP('vip')">
     <div class="conversa-avatar">
-      <div class="conversa-blur ${c.bg}"></div>
+      <img src="${c.img}" alt="" onerror="this.style.display='none'" />
       ${onlineDot}
     </div>
     <div class="conversa-info">
