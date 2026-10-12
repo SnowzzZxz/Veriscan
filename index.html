@@ -348,26 +348,8 @@ if (typeof window.notificarPerfilDigitado !== 'function') {
   const sEl = document.getElementById('subTypewriter');
   const tHTML = 'O que seu <span class="gradient-text">Cônjuge</span> faz<br>quando está no Instagram?';
   const sHTML = 'Descubra a verdade sobre <span class="gradient-text" style="font-weight:600">qualquer pessoa</span>, acessando o instagram dela!';
-  const tTxt = tHTML.replace(/<[^>]+>/g,'');
-  const sTxt = sHTML.replace(/<[^>]+>/g,'');
-  const cur = '<span class="typewriter-cursor"></span>';
-  function render(h,t,idx){
-    let v=0,r='',i=0;
-    while(i<h.length && v<idx){
-      if(h[i]==='<'){const f=h.indexOf('>',i);r+=h.slice(i,f+1);i=f+1;}
-      else{r+=h[i];v++;i++;}
-    }
-    return r;
-  }
-  function dig(h,t,el,vel,cb){
-    let i=0;const total=t.length;
-    const id=setInterval(()=>{
-      i++;
-      el.innerHTML=render(h,t,i)+cur;
-      if(i>=total){clearInterval(id);el.innerHTML=h;if(cb)cb();}
-    },vel);
-  }
-  dig(tHTML,tTxt,tEl,25,()=>dig(sHTML,sTxt,sEl,15));
+  tEl.innerHTML = tHTML;
+  sEl.innerHTML = sHTML;
 })();
 
 const LIMITE_MINUTOS = 15;
