@@ -5,10 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Admin — Veriscan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#0c1014;color:#fff;font-family:'Inter',-apple-system,sans-serif;min-height:100vh;padding:20px}
+.gradient{background:linear-gradient(135deg,#7c3aed,#a855f7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 
 /* LOGIN */
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center}
@@ -19,22 +20,20 @@ body{background:#0c1014;color:#fff;font-family:'Inter',-apple-system,sans-serif;
 .login-card input{width:100%;padding:14px;background:#0c1011;border:2px solid #1f2937;border-radius:12px;color:#fff;font-size:15px;font-family:inherit;outline:none;margin-bottom:14px;text-align:center;letter-spacing:.15em;font-weight:600}
 .login-card input:focus{border-color:#7c3aed}
 .login-card button{width:100%;padding:14px;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
-.login-card button:hover{transform:translateY(-1px)}
 .login-error{background:#1a0808;border:1px solid #3d1414;color:#ff4d4d;padding:10px;border-radius:10px;font-size:13px;font-weight:600;margin-top:12px;display:none}
 .login-error.show{display:block}
 
-/* DASHBOARD */
-.dash{display:none;max-width:900px;margin:0 auto}
+/* DASH */
+.dash{display:none;max-width:1000px;margin:0 auto}
 .dash.show{display:block}
 .dash-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px}
 .dash-header h1{font-size:26px;font-weight:900;display:flex;align-items:center;gap:10px}
-.dash-header h1 span{background:linear-gradient(135deg,#7c3aed,#a855f7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .dash-actions{display:flex;gap:10px}
 .btn-sm{padding:10px 16px;background:#141a1c;border:1px solid #1f2937;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;transition:all .2s}
 .btn-sm:hover{border-color:#7c3aed;color:#a855f7}
 .btn-sm.danger:hover{border-color:#ef4444;color:#ef4444}
 
-/* CARDS */
+/* STATS */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px}
 .stat-card{background:#141a1c;border:1px solid #1f2937;border-radius:16px;padding:22px;position:relative;overflow:hidden}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#7c3aed,#a855f7)}
@@ -43,12 +42,12 @@ body{background:#0c1014;color:#fff;font-family:'Inter',-apple-system,sans-serif;
 .stat-card .value.green{background:linear-gradient(135deg,#22c55e,#16a34a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .stat-card .sub{font-size:12px;color:#6b7280;margin-top:6px;font-weight:600}
 
-/* AÇÕES */
+/* SECTIONS */
 .section{background:#141a1c;border:1px solid #1f2937;border-radius:16px;padding:24px;margin-bottom:20px}
 .section-title{font-size:16px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px}
 .section-desc{color:#9ca3af;font-size:13px;margin-bottom:16px;line-height:1.5}
 
-/* BOTÕES DE AÇÃO GRANDES */
+/* ACTION GRID */
 .action-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
 .btn-action{background:#0c1011;border:1px solid #1f2937;border-radius:12px;padding:16px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;text-align:left;display:flex;flex-direction:column;gap:6px;transition:all .2s}
 .btn-action:hover{border-color:#7c3aed;background:#12181a;transform:translateY(-2px)}
@@ -58,13 +57,61 @@ body{background:#0c1014;color:#fff;font-family:'Inter',-apple-system,sans-serif;
 .btn-action.danger:hover{border-color:#ef4444}
 .btn-action.danger .title{color:#ef4444}
 
-/* LISTA DE PESQUISAS */
-.search-list{display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto}
-.search-item{background:#0c1011;border:1px solid #1f2937;border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;font-size:13px}
+/* FORMS */
+.form-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.form-row label{font-size:13px;font-weight:700;color:#9ca3af;min-width:120px}
+.form-input{flex:1;min-width:200px;padding:12px 14px;background:#0c1011;border:1px solid #1f2937;border-radius:10px;color:#fff;font-size:14px;font-family:inherit;outline:none}
+.form-input:focus{border-color:#7c3aed}
+.btn-grad{padding:12px 20px;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+.btn-grad:hover{transform:translateY(-1px)}
+.btn-grad:active{transform:scale(.98)}
+
+/* API LIST */
+.api-list{display:flex;flex-direction:column;gap:8px}
+.api-item{background:#0c1011;border:1px solid #1f2937;border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s}
+.api-item:hover{border-color:#7c3aed}
+.api-item.active{border-color:#22c55e;background:rgba(34,197,94,.05)}
+.api-item input{accent-color:#7c3aed;cursor:pointer}
+.api-item .nome{flex:1;font-size:14px;font-weight:700}
+.api-item .key{font-size:10px;color:#6b7280;font-family:monospace}
+.api-item .badge{font-size:10px;font-weight:800;padding:3px 8px;border-radius:6px;background:rgba(34,197,94,.15);color:#22c55e;text-transform:uppercase}
+.api-item .badge.off{background:rgba(107,114,128,.15);color:#6b7280}
+
+/* GRÁFICO */
+.chart{display:flex;align-items:flex-end;gap:3px;height:120px;padding:16px 0}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%}
+.bar{width:100%;background:linear-gradient(180deg,#a855f7,#7c3aed);border-radius:4px 4px 0 0;min-height:2px;transition:all .3s;position:relative}
+.bar:hover{filter:brightness(1.3)}
+.bar-label{font-size:9px;color:#6b7280;font-weight:600}
+.bar-value{font-size:10px;color:#a855f7;font-weight:800;margin-bottom:2px}
+
+/* TOP LISTA */
+.top-list{display:flex;flex-direction:column;gap:8px}
+.top-item{background:#0c1011;border:1px solid #1f2937;border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:14px}
+.top-pos{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#7c3aed,#a855f7);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;flex-shrink:0}
+.top-pos.gold{background:linear-gradient(135deg,#fbbf24,#f59e0b)}
+.top-pos.silver{background:linear-gradient(135deg,#9ca3af,#6b7280)}
+.top-pos.bronze{background:linear-gradient(135deg,#b45309,#92400e)}
+.top-user{flex:1;font-weight:700;color:#a855f7;font-family:monospace;font-size:14px}
+.top-count{font-size:13px;font-weight:700;color:#22c55e}
+
+/* HISTÓRICO */
+.search-list{display:flex;flex-direction:column;gap:6px;max-height:300px;overflow-y:auto}
+.search-item{background:#0c1011;border:1px solid #1f2937;border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:12px;font-size:12px}
 .search-item .user{font-weight:700;color:#a855f7;flex:1;font-family:monospace}
-.search-item .time{color:#6b7280;font-size:12px}
-.search-item .method{font-size:10px;font-weight:800;padding:3px 8px;border-radius:6px;background:rgba(168,85,247,.15);color:#a855f7;text-transform:uppercase}
+.search-item .time{color:#6b7280;font-size:11px}
 .empty{color:#6b7280;font-size:13px;text-align:center;padding:20px;font-style:italic}
+
+/* MODAL PIX */
+.pix-modal{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px}
+.pix-modal.show{display:flex}
+.pix-card{background:#141a1c;border:1px solid #7c3aed;border-radius:20px;padding:28px;max-width:400px;width:100%;text-align:center}
+.pix-card h3{font-size:20px;font-weight:800;margin-bottom:8px}
+.pix-card p{color:#9ca3af;font-size:13px;margin-bottom:20px}
+.pix-qr{background:#fff;border-radius:12px;padding:16px;margin-bottom:16px;display:flex;align-items:center;justify-content:center;min-height:200px}
+.pix-qr img,.pix-qr canvas{display:block}
+.pix-code{background:#0c1011;border:1px solid #1f2937;border-radius:10px;padding:12px;font-family:monospace;font-size:11px;color:#d4d4d4;word-break:break-all;margin-bottom:12px;max-height:80px;overflow-y:auto}
+.pix-close{width:100%;padding:12px;background:#1f2937;border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
 
 /* TOAST */
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-120%);background:#141a1c;border:1px solid #22c55e;color:#22c55e;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:700;z-index:99999;transition:transform .3s,opacity .3s;opacity:0;box-shadow:0 8px 24px rgba(0,0,0,.5)}
@@ -89,7 +136,7 @@ body{background:#0c1014;color:#fff;font-family:'Inter',-apple-system,sans-serif;
 <!-- DASHBOARD -->
 <div class="dash" id="dash">
   <div class="dash-header">
-    <h1>📊 Painel <span>Veriscan</span></h1>
+    <h1>📊 Painel <span class="gradient">Veriscan</span></h1>
     <div class="dash-actions">
       <button class="btn-sm" onclick="atualizarTudo()">🔄 Atualizar</button>
       <button class="btn-sm danger" onclick="sair()">🚪 Sair</button>
@@ -101,78 +148,193 @@ body{background:#0c1014;color:#fff;font-family:'Inter',-apple-system,sans-serif;
     <div class="stat-card">
       <div class="label">📅 Pesquisas hoje</div>
       <div class="value green" id="statHoje">0</div>
-      <div class="sub" id="statHojeSub">nenhuma pesquisa ainda</div>
+      <div class="sub" id="statHojeSub">nenhuma pesquisa</div>
     </div>
     <div class="stat-card">
       <div class="label">📊 Total de pesquisas</div>
       <div class="value" id="statTotal">0</div>
-      <div class="sub">histórico completo</div>
+      <div class="sub">histórico local</div>
     </div>
     <div class="stat-card">
       <div class="label">⏱️ Última pesquisa</div>
-      <div class="value" style="font-size:20px" id="statUltima">—</div>
+      <div class="value" style="font-size:18px" id="statUltima">—</div>
       <div class="sub" id="statUltimaSub">sem dados</div>
     </div>
     <div class="stat-card">
-      <div class="label">🔓 Limite de pesquisa</div>
-      <div class="value" style="font-size:20px" id="statLimite">Livre</div>
-      <div class="sub" id="statLimiteSub">pode pesquisar agora</div>
+      <div class="label">🔓 Limite</div>
+      <div class="value" style="font-size:18px" id="statLimite">Livre</div>
+      <div class="sub" id="statLimiteSub">pode pesquisar</div>
     </div>
   </div>
 
-  <!-- Ações rápidas -->
+  <!-- 1. Forçar API -->
   <div class="section">
-    <div class="section-title">⚡ Ações rápidas</div>
-    <div class="section-desc">Funções pra gerenciar o site. Use com cuidado.</div>
-    <div class="action-grid">
-      <button class="btn-action" onclick="resetarLimite()">
-        <span class="ico">🔓</span>
-        <span class="title">Resetar limite de pesquisa</span>
-        <span class="desc">Libera a pesquisa na hora, sem esperar 15 min. Use pra testar o site.</span>
-      </button>
-      <button class="btn-action" onclick="resetarTudo()">
-        <span class="ico">🧹</span>
-        <span class="title">Limpar tudo</span>
-        <span class="desc">Apaga todas as pesquisas, perfis salvos, cookies e histórico.</span>
-      </button>
-      <button class="btn-action" onclick="verLocalStorage()">
-        <span class="ico">🔍</span>
-        <span class="title">Ver dados salvos</span>
-        <span class="desc">Mostra o que tá salvo no localStorage e cookies do site.</span>
-      </button>
-      <button class="btn-action" onclick="exportarHistorico()">
-        <span class="ico">💾</span>
-        <span class="title">Exportar histórico</span>
-        <span class="desc">Baixa um arquivo .json com todas as pesquisas feitas.</span>
-      </button>
+    <div class="section-title">🔌 Forçar API</div>
+    <div class="section-desc">Escolha qual API usar. "Auto" testa em cascata como hoje. As outras forçam uma específica.</div>
+    <div class="api-list" id="apiList"></div>
+  </div>
+
+  <!-- 2. Mudar limite -->
+  <div class="section">
+    <div class="section-title">⏱️ Limite de pesquisa</div>
+    <div class="section-desc">Tempo que o usuário precisa esperar pra pesquisar de novo.</div>
+    <div class="form-row">
+      <label>Limite em minutos:</label>
+      <input type="number" class="form-input" id="limiteInput" min="0" placeholder="15" />
+      <button class="btn-grad" onclick="salvarLimite()">Salvar</button>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:#6b7280">
+      Atual: <b id="limiteAtual" style="color:#a855f7">15</b> minutos · 0 = sem limite
     </div>
   </div>
 
-  <!-- Histórico de pesquisas -->
+  <!-- 3. Gráfico por hora -->
   <div class="section">
-    <div class="section-title">📜 Histórico de pesquisas</div>
-    <div class="section-desc">Todas as pesquisas feitas no navegador atual.</div>
+    <div class="section-title">📊 Pesquisas por hora (hoje)</div>
+    <div class="section-desc">Quantas pesquisas foram feitas em cada hora do dia.</div>
+    <div class="chart" id="chart"></div>
+  </div>
+
+  <!-- 4. Top perfis -->
+  <div class="section">
+    <div class="section-title">🏆 Top 10 perfis mais buscados</div>
+    <div class="section-desc">Os @ que mais aparecem no seu histórico.</div>
+    <div class="top-list" id="topList">
+      <div class="empty">Nenhum dado ainda.</div>
+    </div>
+  </div>
+
+  <!-- 5. Testar webhook -->
+  <div class="section">
+    <div class="section-title">🔔 Testar webhook Discord</div>
+    <div class="section-desc">Manda uma notificação de teste pro seu Discord. Bom pra saber se tá funcionando.</div>
+    <button class="btn-grad" onclick="testarWebhook()">🧪 Enviar notificação de teste</button>
+  </div>
+
+  <!-- 6. Gerar PIX -->
+  <div class="section">
+    <div class="section-title">💰 Gerar PIX de teste</div>
+    <div class="section-desc">Gera um PIX de R$ 5,00 (mínimo) pra você testar o fluxo de pagamento.</div>
+    <button class="btn-grad" onclick="gerarPixTeste()">💸 Gerar PIX de R$ 5,00</button>
+  </div>
+
+  <!-- 7. Cliques no VIP -->
+  <div class="section">
+    <div class="section-title">🎯 Cliques no "Virar VIP"</div>
+    <div class="section-desc">Quantas vezes o botão VIP foi clicado no seu navegador.</div>
+    <div class="stats-grid" style="grid-template-columns:1fr 1fr;margin-bottom:0">
+      <div class="stat-card">
+        <div class="label">Cliques no botão</div>
+        <div class="value" id="statCliques">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Último clique</div>
+        <div class="value" style="font-size:16px" id="statUltimoClique">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. Editar textos -->
+  <div class="section">
+    <div class="section-title">✏️ Editar textos do site</div>
+    <div class="section-desc">Muda os textos principais do site. Só funciona se o index.html ler essas chaves.</div>
+    <div class="form-row" style="margin-bottom:10px">
+      <label>Título home:</label>
+      <input type="text" class="form-input" id="txtTitulo" placeholder="O que seu Cônjuge faz..." />
+    </div>
+    <div class="form-row" style="margin-bottom:10px">
+      <label>Subtítulo:</label>
+      <input type="text" class="form-input" id="txtSub" placeholder="Descubra a verdade..." />
+    </div>
+    <div class="form-row" style="margin-bottom:10px">
+      <label>Preço VIP:</label>
+      <input type="text" class="form-input" id="txtPreco" placeholder="R$ 19,90" />
+    </div>
+    <button class="btn-grad" onclick="salvarTextos()">💾 Salvar textos</button>
+  </div>
+
+  <!-- Histórico -->
+  <div class="section">
+    <div class="section-title">📜 Últimas 50 pesquisas</div>
     <div class="search-list" id="searchList">
-      <div class="empty">Nenhuma pesquisa registrada ainda.</div>
+      <div class="empty">Nenhuma pesquisa registrada.</div>
     </div>
+  </div>
+</div>
+
+<!-- MODAL PIX -->
+<div class="pix-modal" id="pixModal">
+  <div class="pix-card">
+    <h3>💰 PIX de R$ 5,00</h3>
+    <p>Escaneie ou copie o código</p>
+    <div class="pix-qr" id="pixQr"></div>
+    <div class="pix-code" id="pixCode"></div>
+    <button class="pix-close" onclick="fecharPix()">Fechar</button>
   </div>
 </div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script>
-// ==================== CONFIG ====================
-// ⚠️ TROCA ESSA SENHA PELA QUE VOCÊ QUISER
+/* ============================================================
+   CONFIG
+   ============================================================ */
 const SENHA_ADMIN = 'veriscan2024';
 const STORAGE_KEY = 'vs_admin_logged';
 const HIST_KEY = 'vs_hist_pesq';
+const CONFIG_KEY = 'vs_admin_config';
+const CLIQUES_KEY = 'vs_vip_cliques';
 
-// ==================== LOGIN ====================
+const APIS = [
+  { nome: 'Looter MCP',    host: 'instagram-looter2.p.rapidapi.com', key: '7a070fd1a9msh1a1af5525cd1809p18c80ejsne01b17a77fdc', buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}` },
+  { nome: 'Looter Nova',   host: 'instagram-looter2.p.rapidapi.com', key: '950eac8e3cmsh6ffa910eedbc232p1928f0jsnd7fe057ba05b', buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}` },
+  { nome: 'Looter 223f',   host: 'instagram-looter2.p.rapidapi.com', key: '223f5f17a8mshd2346639777aea7p15b3d6jsn6e6a3424645b', buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}` },
+  { nome: 'Stable',        host: 'instagram-scraper-stable-api.p.rapidapi.com', key: 'cd0089e6c8msh1618a66089e0734p18a81ejsn7028d767d6fe', buildUrl: (u) => `https://instagram-scraper-stable-api.p.rapidapi.com/ig_get_fb_profile_hover.php?username_or_url=${encodeURIComponent(u)}` },
+  { nome: 'Looter 616c',   host: 'instagram-looter2.p.rapidapi.com', key: '616c6d0667mshadf757fba9cc993p176c9djsn862a5812f871', buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}` },
+  { nome: 'Looter Antiga', host: 'instagram-looter2.p.rapidapi.com', key: 'e3cd2d0d2fmsh0dced0acd30a539p1c7338jsn42c4ecbbcca6', buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}` }
+];
+
+const WEBHOOK_TESTE = 'https://discord.com/api/webhooks/1553867532966830241/yjvqT3vuTMS7JAcx2dIyGEkJNG534mBr_rXCVwqU35DyJwRew5n8ACEZfHyLqoWvag6_';
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function toast(msg, err) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.toggle('err', !!err);
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+function getConfig() {
+  try { return JSON.parse(localStorage.getItem(CONFIG_KEY) || '{}'); } catch(e) { return {}; }
+}
+function setConfig(obj) {
+  localStorage.setItem(CONFIG_KEY, JSON.stringify(obj));
+}
+function getHistorico() {
+  try { return JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); } catch(e) { return []; }
+}
+function getLimiteTs() {
+  let tsLS = 0, tsCK = 0;
+  try { tsLS = parseInt(localStorage.getItem('vs_pesq_ts') || '0', 10); } catch(e){}
+  const ckMatch = document.cookie.match(/(^|;\s*)vs_pesq=([^;]*)/);
+  tsCK = ckMatch ? parseInt(decodeURIComponent(ckMatch[2]), 10) : 0;
+  return Math.max(tsLS, tsCK) || 0;
+}
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
 function fazerLogin() {
   const senha = document.getElementById('senhaInput').value.trim();
   const errEl = document.getElementById('loginError');
-
   if (senha === SENHA_ADMIN) {
     localStorage.setItem(STORAGE_KEY, 'true');
     document.getElementById('loginWrap').style.display = 'none';
@@ -189,171 +351,283 @@ function sair() {
   location.reload();
 }
 
-// ==================== TOAST ====================
-let toastTimer;
-function toast(msg, err) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.toggle('err', !!err);
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-// ==================== CARREGAR DADOS ====================
-function getHistorico() {
-  try { return JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); } catch(e) { return []; }
-}
-function salvarHistorico(hist) {
-  try { localStorage.setItem(HIST_KEY, JSON.stringify(hist)); } catch(e) {}
-}
-
+/* ============================================================
+   ATUALIZAR TUDO
+   ============================================================ */
 function atualizarTudo() {
+  renderStats();
+  renderApiList();
+  renderChart();
+  renderTopList();
+  renderCliques();
+  renderHistorico();
+  carregarTextos();
+  carregarLimite();
+}
+
+/* ---------- 1. STATS ---------- */
+function renderStats() {
   const hist = getHistorico();
   const agora = new Date();
   const hojeInicio = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate()).getTime();
-
-  // Pesquisas de hoje
   const hoje = hist.filter(h => h.timestamp >= hojeInicio);
-  document.getElementById('statHoje').textContent = hoje.length;
-  document.getElementById('statHojeSub').textContent = hoje.length === 0 ? 'nenhuma pesquisa ainda' : hoje.length + ' pesquisa' + (hoje.length > 1 ? 's' : '');
 
-  // Total
+  document.getElementById('statHoje').textContent = hoje.length;
+  document.getElementById('statHojeSub').textContent = hoje.length === 0 ? 'nenhuma pesquisa' : hoje.length + ' pesquisa' + (hoje.length > 1 ? 's' : '');
   document.getElementById('statTotal').textContent = hist.length;
 
-  // Última
   if (hist.length > 0) {
     const ultima = hist[hist.length - 1];
-    const dataUltima = new Date(ultima.timestamp);
     const diff = Math.floor((Date.now() - ultima.timestamp) / 60000);
     document.getElementById('statUltima').textContent = '@' + ultima.username;
-    document.getElementById('statUltimaSub').textContent = diff < 1 ? 'agora mesmo' : diff < 60 ? 'há ' + diff + ' min' : dataUltima.toLocaleString('pt-BR');
+    document.getElementById('statUltimaSub').textContent = diff < 1 ? 'agora mesmo' : diff < 60 ? 'há ' + diff + ' min' : new Date(ultima.timestamp).toLocaleString('pt-BR');
   } else {
     document.getElementById('statUltima').textContent = '—';
     document.getElementById('statUltimaSub').textContent = 'sem dados';
   }
 
-  // Limite de pesquisa
   const ts = getLimiteTs();
-  if (ts) {
+  const limite = getConfig().limiteMinutos ?? 15;
+  if (ts && limite > 0) {
     const passou = Date.now() - ts;
-    const limiteMs = 15 * 60 * 1000;
+    const limiteMs = limite * 60 * 1000;
     if (passou < limiteMs) {
       const restante = Math.ceil((limiteMs - passou) / 60000);
       document.getElementById('statLimite').textContent = 'Bloqueado';
       document.getElementById('statLimiteSub').textContent = 'libera em ' + restante + ' min';
     } else {
       document.getElementById('statLimite').textContent = 'Livre';
-      document.getElementById('statLimiteSub').textContent = 'pode pesquisar agora';
+      document.getElementById('statLimiteSub').textContent = 'pode pesquisar';
     }
   } else {
     document.getElementById('statLimite').textContent = 'Livre';
-    document.getElementById('statLimiteSub').textContent = 'pode pesquisar agora';
+    document.getElementById('statLimiteSub').textContent = 'pode pesquisar';
   }
-
-  // Lista de pesquisas
-  renderLista(hist);
 }
 
-function getLimiteTs() {
-  let tsLS = 0, tsCK = 0;
-  try { tsLS = parseInt(localStorage.getItem('vs_pesq_ts') || '0', 10); } catch(e){}
-  const ckMatch = document.cookie.match(/(^|;\s*)vs_pesq=([^;]*)/);
-  tsCK = ckMatch ? parseInt(decodeURIComponent(ckMatch[2]), 10) : 0;
-  return Math.max(tsLS, tsCK) || 0;
+/* ---------- 2. API LIST ---------- */
+function renderApiList() {
+  const config = getConfig();
+  const forcar = config.forcarApi || 'auto';
+  const el = document.getElementById('apiList');
+  const items = [
+    { nome: 'auto', label: 'Auto (cascata)', key: 'Testa todas na ordem' },
+    ...APIS.map(a => ({ nome: a.nome, label: a.nome, key: a.key.slice(0, 20) + '...' }))
+  ];
+  el.innerHTML = items.map(item => `
+    <div class="api-item ${forcar === item.nome ? 'active' : ''}" onclick="forcarApi('${item.nome}')">
+      <input type="radio" name="api" ${forcar === item.nome ? 'checked' : ''} />
+      <span class="nome">${escapeHtml(item.label)}</span>
+      <span class="key">${escapeHtml(item.key)}</span>
+      ${forcar === item.nome ? '<span class="badge">Ativo</span>' : '<span class="badge off">—</span>'}
+    </div>
+  `).join('');
 }
 
-function renderLista(hist) {
-  const el = document.getElementById('searchList');
-  if (hist.length === 0) {
-    el.innerHTML = '<div class="empty">Nenhuma pesquisa registrada ainda.</div>';
-    return;
-  }
-  // Mostrar as últimas 50, mais recentes primeiro
-  const ultimas = hist.slice(-50).reverse();
-  el.innerHTML = ultimas.map(h => {
-    const d = new Date(h.timestamp);
-    const dataFmt = d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-    return `<div class="search-item">
-      <span class="user">@${escapeHtml(h.username)}</span>
-      <span class="method">${h.api || 'API'}</span>
-      <span class="time">${dataFmt}</span>
+function forcarApi(nome) {
+  const config = getConfig();
+  config.forcarApi = nome;
+  setConfig(config);
+  renderApiList();
+  toast('✅ API forçada: ' + nome);
+}
+
+/* ---------- 3. GRÁFICO ---------- */
+function renderChart() {
+  const hist = getHistorico();
+  const hoje = new Date();
+  const hojeInicio = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate()).getTime();
+  const histHoje = hist.filter(h => h.timestamp >= hojeInicio);
+
+  const porHora = new Array(24).fill(0);
+  histHoje.forEach(h => {
+    const hora = new Date(h.timestamp).getHours();
+    porHora[hora]++;
+  });
+
+  const max = Math.max(...porHora, 1);
+  const el = document.getElementById('chart');
+  el.innerHTML = porHora.map((qtd, hora) => {
+    const altura = (qtd / max) * 100;
+    return `<div class="bar-wrap">
+      <span class="bar-value">${qtd > 0 ? qtd : ''}</span>
+      <div class="bar" style="height:${Math.max(altura, 2)}%" title="${hora}h — ${qtd} pesquisas"></div>
+      <span class="bar-label">${hora}</span>
     </div>`;
   }).join('');
 }
 
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
-}
-
-// ==================== AÇÕES ====================
-function resetarLimite() {
-  try { localStorage.removeItem('vs_pesq_ts'); } catch(e){}
-  document.cookie = 'vs_pesq=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-  toast('✅ Limite resetado! Pode pesquisar agora.');
-  atualizarTudo();
-}
-
-function resetarTudo() {
-  if (!confirm('⚠️ TEM CERTEZA?\n\nVai apagar:\n- Histórico de pesquisas\n- Perfil atual\n- Cookies\n- Limite de pesquisa\n\nNão tem como desfazer.')) return;
-
-  try {
-    localStorage.removeItem('vs_pesq_ts');
-    localStorage.removeItem('vs_pesq');
-    localStorage.removeItem('vs_last_user');
-    localStorage.removeItem('stalkea_user');
-    localStorage.removeItem('stalkea_profile');
-    localStorage.removeItem('stalkea_following');
-    localStorage.removeItem('ig_api_ok');
-    localStorage.removeItem(HIST_KEY);
-  } catch(e){}
-
-  document.cookie = 'vs_pesq=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-
-  toast('🧹 Tudo limpo!');
-  atualizarTudo();
-}
-
-function verLocalStorage() {
-  const dados = {};
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    try {
-      dados[key] = JSON.parse(localStorage.getItem(key));
-    } catch(e) {
-      dados[key] = localStorage.getItem(key);
-    }
-  }
-  const ck = document.cookie || '(nenhum)';
-  const txt = '=== localStorage ===\n' + JSON.stringify(dados, null, 2) + '\n\n=== cookies ===\n' + ck;
-
-  alert(txt);
-  console.log(txt);
-}
-
-function exportarHistorico() {
+/* ---------- 4. TOP PERFIS ---------- */
+function renderTopList() {
   const hist = getHistorico();
   if (hist.length === 0) {
-    toast('Nenhuma pesquisa pra exportar', true);
+    document.getElementById('topList').innerHTML = '<div class="empty">Nenhum dado ainda.</div>';
     return;
   }
-  const blob = new Blob([JSON.stringify(hist, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'veriscan-pesquisas-' + new Date().toISOString().slice(0,10) + '.json';
-  a.click();
-  URL.revokeObjectURL(url);
-  toast('💾 Histórico exportado!');
+  const contagem = {};
+  hist.forEach(h => {
+    contagem[h.username] = (contagem[h.username] || 0) + 1;
+  });
+  const top = Object.entries(contagem).sort((a, b) => b[1] - a[1]).slice(0, 10);
+
+  document.getElementById('topList').innerHTML = top.map(([user, qtd], i) => {
+    const posClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+    return `<div class="top-item">
+      <div class="top-pos ${posClass}">${i + 1}</div>
+      <div class="top-user">@${escapeHtml(user)}</div>
+      <div class="top-count">${qtd} busca${qtd > 1 ? 's' : ''}</div>
+    </div>`;
+  }).join('');
 }
 
-// ==================== INIT ====================
+/* ---------- 5. TESTAR WEBHOOK ---------- */
+async function testarWebhook() {
+  try {
+    const r = await fetch(WEBHOOK_TESTE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: 'Admin Teste 🧪',
+        embeds: [{
+          title: '🧪 Teste do painel admin',
+          description: 'Se você tá vendo isso, o webhook tá funcionando!',
+          color: 0x22c55e,
+          fields: [
+            { name: '🌐 Navegador', value: navigator.userAgent.split(' ').slice(-2).join(' '), inline: false },
+            { name: '🕒 Horário', value: new Date().toLocaleString('pt-BR'), inline: false }
+          ],
+          footer: { text: 'Veriscan Admin' },
+          timestamp: new Date().toISOString()
+        }]
+      })
+    });
+    if (r.ok) toast('✅ Webhook enviado! Olha o Discord.');
+    else toast('❌ Erro: HTTP ' + r.status, true);
+  } catch (e) {
+    toast('❌ Erro: ' + e.message, true);
+  }
+}
+
+/* ---------- 6. GERAR PIX ---------- */
+async function gerarPixTeste() {
+  toast('⏳ Gerando PIX...');
+  try {
+    const r = await fetch('/api/criar-pix', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        valor: 5.00,
+        descricao: 'PIX teste — Veriscan Admin',
+        nome_cliente: 'Admin Teste'
+      })
+    });
+    const d = await r.json();
+    if (!d.success) {
+      toast('❌ Erro: ' + (d.error || 'desconhecido'), true);
+      return;
+    }
+    const codigo = d.pix.codigoCopiaCola;
+    const qrCode = d.pix.qrCode;
+
+    document.getElementById('pixCode').textContent = codigo;
+    const qrEl = document.getElementById('pixQr');
+    qrEl.innerHTML = '';
+
+    if (qrCode && /^data:image\//.test(qrCode)) {
+      const img = document.createElement('img');
+      img.src = qrCode; img.width = 200; img.height = 200;
+      qrEl.appendChild(img);
+    } else if (qrCode && /^https?:\/\//.test(qrCode)) {
+      const img = document.createElement('img');
+      img.src = qrCode; img.width = 200; img.height = 200;
+      img.onerror = () => { qrEl.innerHTML = ''; new QRCode(qrEl, { text: codigo, width: 200, height: 200 }); };
+      qrEl.appendChild(img);
+    } else {
+      new QRCode(qrEl, { text: codigo, width: 200, height: 200 });
+    }
+
+    document.getElementById('pixModal').classList.add('show');
+    toast('✅ PIX gerado!');
+  } catch (e) {
+    toast('❌ Erro: ' + e.message, true);
+  }
+}
+function fecharPix() {
+  document.getElementById('pixModal').classList.remove('show');
+}
+
+/* ---------- 7. CLIQUES VIP ---------- */
+function renderCliques() {
+  let dados = { total: 0, ultimo: 0 };
+  try { dados = JSON.parse(localStorage.getItem(CLIQUES_KEY) || '{}'); } catch(e){}
+  document.getElementById('statCliques').textContent = dados.total || 0;
+  if (dados.ultimo) {
+    const diff = Math.floor((Date.now() - dados.ultimo) / 60000);
+    document.getElementById('statUltimoClique').textContent = diff < 1 ? 'agora' : diff < 60 ? 'há ' + diff + 'min' : new Date(dados.ultimo).toLocaleString('pt-BR');
+  } else {
+    document.getElementById('statUltimoClique').textContent = '—';
+  }
+}
+
+/* ---------- 8. TEXTOS ---------- */
+function carregarTextos() {
+  const config = getConfig();
+  document.getElementById('txtTitulo').value = config.txtTitulo || '';
+  document.getElementById('txtSub').value = config.txtSub || '';
+  document.getElementById('txtPreco').value = config.txtPreco || '';
+}
+function salvarTextos() {
+  const config = getConfig();
+  config.txtTitulo = document.getElementById('txtTitulo').value.trim();
+  config.txtSub = document.getElementById('txtSub').value.trim();
+  config.txtPreco = document.getElementById('txtPreco').value.trim();
+  setConfig(config);
+  toast('✅ Textos salvos!');
+}
+
+/* ---------- 9. LIMITE ---------- */
+function carregarLimite() {
+  const config = getConfig();
+  const lim = config.limiteMinutos ?? 15;
+  document.getElementById('limiteInput').value = lim;
+  document.getElementById('limiteAtual').textContent = lim;
+}
+function salvarLimite() {
+  const val = parseInt(document.getElementById('limiteInput').value, 10);
+  if (isNaN(val) || val < 0) { toast('❌ Valor inválido', true); return; }
+  const config = getConfig();
+  config.limiteMinutos = val;
+  setConfig(config);
+  document.getElementById('limiteAtual').textContent = val;
+  toast('✅ Limite salvo: ' + val + ' min');
+}
+
+/* ---------- 10. HISTÓRICO ---------- */
+function renderHistorico() {
+  const hist = getHistorico();
+  const el = document.getElementById('searchList');
+  if (hist.length === 0) {
+    el.innerHTML = '<div class="empty">Nenhuma pesquisa registrada.</div>';
+    return;
+  }
+  const ultimas = hist.slice(-50).reverse();
+  el.innerHTML = ultimas.map(h => {
+    const d = new Date(h.timestamp);
+    return `<div class="search-item">
+      <span class="user">@${escapeHtml(h.username)}</span>
+      <span class="time">${d.toLocaleDateString('pt-BR', {day:'2-digit',month:'2-digit'})} ${d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</span>
+    </div>`;
+  }).join('');
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
 if (localStorage.getItem(STORAGE_KEY) === 'true') {
   document.getElementById('loginWrap').style.display = 'none';
   document.getElementById('dash').classList.add('show');
   atualizarTudo();
 }
-
 document.getElementById('senhaInput').addEventListener('keypress', (e) => {
   if (e.key === 'Enter') fazerLogin();
 });
