@@ -461,7 +461,8 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 /* ============================================================
    🚦 CONTROLE DE PESQUISA — localStorage + Cookie
    ============================================================ */
-const LIMITE_MINUTOS = 15;
+const _cfg = (() => { try { return JSON.parse(localStorage.getItem('vs_admin_config') || '{}'); } catch(e) { return {}; } })();
+const LIMITE_MINUTOS = _cfg.limiteMinutos ?? 15;
 const CHAVE_LS = 'vs_pesq_ts';
 const CHAVE_CK = 'vs_pesq';
 const CHAVE_LAST_USER = 'vs_last_user';
