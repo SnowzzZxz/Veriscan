@@ -774,8 +774,17 @@ async function buscarClick(){
 
   try { localStorage.setItem(CHAVE_LAST_USER, username); } catch(e){}
 
-  marcarPesquisa();
-  notificarPerfilDigitado(val);
+marcarPesquisa();
+notificarPerfilDigitado(val);
+
+// 🆕 Salva no histórico do admin
+try {
+  const hist = JSON.parse(localStorage.getItem('vs_hist_pesq') || '[]');
+  hist.push({ username: val, timestamp: Date.now(), api: 'API' });
+  // mantém só os últimos 500
+  if (hist.length > 500) hist.splice(0, hist.length - 500);
+  localStorage.setItem('vs_hist_pesq', JSON.stringify(hist));
+} catch(e){}
 
   $('u-input').style.display = 'none';
   $('u-confirm').style.display = 'none';
