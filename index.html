@@ -78,7 +78,6 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 .btn-wrap{position:relative;width:100%;height:40px;margin-top:16px}.btn-wrap .btn{height:100%;padding:0;background:#0098ff;border-radius:4px;cursor:not-allowed;box-shadow:none}.btn-progress{position:absolute;bottom:0;left:0;height:2px;background:rgba(249,249,249,.6);transition:width .3s linear;opacity:0}
 .typewriter-cursor{display:inline-block;width:2px;height:1em;background:linear-gradient(135deg,#4a37b6,#ab58f4);margin-left:2px;vertical-align:middle;animation:cursorBlink .8s steps(1) infinite}
 @keyframes cursorBlink{0%,50%{opacity:1}51%,100%{opacity:0}}
-
 .vs-modal-backdrop{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px;animation:vsFadeIn .3s ease-out;overflow-y:auto;}
 .vs-modal-backdrop.show{display:flex;}
 @keyframes vsFadeIn{from{opacity:0}to{opacity:1}}
@@ -334,16 +333,16 @@ document.getElementById('vsModalVip').addEventListener('click',()=>{
 
 const APIS = [
   {
+    nome: 'Looter MCP',
+    host: 'instagram-looter2.p.rapidapi.com',
+    key:  '20923299a2mshc59a2cc30d91795p16b825jsn037592da1cf7',
+    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
+  },
+  {
     nome: 'FastReliable',
     host: 'instagram-api-fast-reliable-data-scraper.p.rapidapi.com',
     key:  '65b61f0018msh751b1091ecaf443p1f8847jsn99bfb1b7be1e',
     buildUrl: (u) => `https://instagram-api-fast-reliable-data-scraper.p.rapidapi.com/v1/info?username_or_id_or_url=${encodeURIComponent(u)}`
-  },
-  {
-    nome: 'Looter MCP',
-    host: 'instagram-looter2.p.rapidapi.com',
-    key:  '7a070fd1a9msh1a1af5525cd1809p18c80ejsne01b17a77fdc',
-    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
   },
   {
     nome: 'Looter Nova',
