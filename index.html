@@ -367,18 +367,20 @@ async function buscar(u) {
 function normalizar(user, usernameFallback) {
   const u = user.user || (user.data && user.data.user) || user;
   
-  let foto = '';
-  const rawFoto = u.profile_pic_url || u.profile_pic_url_hd || (u.hd_profile_pic_url_info && u.hd_profile_pic_url_info.url) || u.profile_picture || '';
+  // Tenta pegar a URL da foto em todos os lugares possíveis
+  let rawFoto = u.profile_pic_url || u.profile_pic_url_hd || (u.hd_profile_pic_url_info && u.hd_profile_pic_url_info.url) || u.profile_picture || '';
 
-  if (rawFoto) {
-    if (rawFoto.includes('cdninstagram.com') || rawFoto.includes('fbcdn.net')) {
-      // AQUI ESTÁ A CORREÇÃO: tiramos o "/api/" da frente
-      foto = `https://viuspy.site/image-proxy.php?url=${encodeURIComponent(rawFoto)}`;
-    } else {
-      foto = rawFoto;
-    }
+  // Remove aspas ou barras invertidas que às vezes vêm no JSON
+  if (typeof rawFoto === 'string') {
+      rawFoto = rawFoto.replace(/\\/g, '').replace(/"/g, '');
+  }
+
+  let foto = '';
+  if (rawFoto && rawFoto.startsWith('http')) {
+      // Usa o proxy público para baixar a imagem do Instagram sem bloqueio
+      foto = `https://images.weserv.nl/?url=${encodeURIComponent(rawFoto)}`;
   } else {
-    foto = 'https://unavatar.io/instagram/' + usernameFallback;
+      foto = `https://unavatar.io/instagram/${usernameFallback}`;
   }
 
   const bioRaw = u.biography || u.bio || u.about || u.description || '';
