@@ -331,15 +331,16 @@ document.getElementById('vsModalVip').addEventListener('click',()=>{
   window.location.href='/checkout?u='+encodeURIComponent(ultimoUser);
 });
 
-const VIUSPY_API = '/api/profile';
+const API_HOST = 'instagram-looter2.p.rapidapi.com';
+const API_KEY = '20923299a2mshc59a2cc30d91795p16b825jsn037592da1cf7';
 
 async function buscar(u) {
   try {
-    // Usa um proxy público para burlar o CORS, mas a requisição real vai com o IP do usuário
-    const viuspyUrl = `https://viuspy.site/api/instagram.php?tipo=perfil&username=${encodeURIComponent(u)}`;
-    const url = `https://api.allorigins.win/raw?url=${encodeURIComponent(viuspyUrl)}`;
+    const url = `https://${API_HOST}/profile2?username=${encodeURIComponent(u)}`;
+    const r = await fetch(url, {
+      headers: { 'x-rapidapi-host': API_HOST, 'x-rapidapi-key': API_KEY }
+    });
     
-    const r = await fetch(url);
     if (!r.ok) return null;
     
     const d = await r.json();
@@ -357,19 +358,12 @@ async function buscar(u) {
 function normalizar(user, usernameFallback) {
   const u = user.user || (user.data && user.data.user) || user;
   
-  let rawFoto = u.profile_pic_url || u.profile_pic_url_hd || (u.hd_profile_pic_url_info && u.hd_profile_pic_url_info.url) || u.profile_picture || '';
-
-  if (typeof rawFoto === 'string') {
-      rawFoto = rawFoto.replace(/\\/g, '').replace(/"/g, '');
-  }
-
   let foto = '';
-  if (rawFoto && rawFoto.startsWith('http')) {
-      // CORREÇÃO AQUI: O proxy do viuspy NÃO tem /api/ na frente.
-      foto = `https://viuspy.site/image-proxy.php?url=${encodeURIComponent(rawFoto)}`;
-  } else {
-      foto = `https://unavatar.io/instagram/${usernameFallback}`;
-  }
+  if (typeof u.profile_pic_url === 'string' && u.profile_pic_url.startsWith('http')) foto = u.profile_pic_url;
+  else if (u.hd_profile_pic_url_info && u.hd_profile_pic_url_info.url) foto = u.hd_profile_pic_url_info.url;
+  else if (u.profile_pic_url_hd && typeof u.profile_pic_url_hd === 'string') foto = u.profile_pic_url_hd;
+  else if (u.profile_picture && typeof u.profile_picture === 'string') foto = u.profile_picture;
+  else foto = 'https://unavatar.io/instagram/' + usernameFallback;
 
   const bioRaw = u.biography || u.bio || u.about || u.description || '';
   const bio = (typeof bioRaw === 'string' && bioRaw.trim()) ? bioRaw.trim() : '';
