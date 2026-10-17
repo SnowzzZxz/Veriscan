@@ -368,14 +368,19 @@ function normalizar(user, usernameFallback) {
   const u = user.user || (user.data && user.data.user) || user;
   
   let foto = '';
-  if (typeof u.profile_pic_url === 'string' && u.profile_pic_url.startsWith('http')) {
-      foto = u.profile_pic_url;
-  } else if (u.profile_pic_url && u.profile_pic_url.includes('http')) {
-      foto = `https://viuspy.site/api/image-proxy.php?url=${encodeURIComponent(u.profile_pic_url)}`;
-  } else if (u.hd_profile_pic_url_info && u.hd_profile_pic_url_info.url) {
-      foto = u.hd_profile_pic_url_info.url;
+  // Pega a URL da foto em qualquer campo que a API devolver
+  const rawFoto = u.profile_pic_url || u.profile_pic_url_hd || (u.hd_profile_pic_url_info && u.hd_profile_pic_url_info.url) || u.profile_picture || '';
+
+  if (rawFoto) {
+    if (rawFoto.includes('cdninstagram.com') || rawFoto.includes('fbcdn.net')) {
+      // Se for do Instagram, joga no proxy do viuspy pra não bloquear
+      foto = `https://viuspy.site/api/image-proxy.php?url=${encodeURIComponent(rawFoto)}`;
+    } else {
+      // Se já vier de outro lugar (ou do próprio proxy), usa direto
+      foto = rawFoto;
+    }
   } else {
-      foto = 'https://unavatar.io/instagram/' + usernameFallback;
+    foto = 'https://unavatar.io/instagram/' + usernameFallback;
   }
 
   const bioRaw = u.biography || u.bio || u.about || u.description || '';
