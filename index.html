@@ -335,31 +335,21 @@ const VIUSPY_API = '/api/profile';
 
 async function buscar(u) {
   try {
-    const url = `${VIUSPY_API}?u=${encodeURIComponent(u)}`;
+    // Usa um proxy público para burlar o CORS, mas a requisição real vai com o IP do usuário
+    const viuspyUrl = `https://viuspy.site/api/instagram.php?tipo=perfil&username=${encodeURIComponent(u)}`;
+    const url = `https://api.allorigins.win/raw?url=${encodeURIComponent(viuspyUrl)}`;
     
-    const r = await fetch(url, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
-    });
-    
-    if (!r.ok) {
-      console.warn(`[Proxy] Erro HTTP ${r.status}`);
-      return null;
-    }
+    const r = await fetch(url);
+    if (!r.ok) return null;
     
     const d = await r.json();
-    
     const user = d.user_data || (d.data && d.data.user) || d.user || d.data || d;
     
     if (user && (user.username || user.pk || user.id)) {
-      console.log('✅ Perfil puxado com sucesso');
       return normalizar(user, u);
     }
-    
-    console.warn('[Proxy] Formato inesperado:', d);
     return null;
   } catch (e) {
-    console.warn('[Proxy] erro rede:', e.message);
     return null;
   }
 }
