@@ -372,8 +372,8 @@ function normalizar(user, usernameFallback) {
 
   if (rawFoto) {
     if (rawFoto.includes('cdninstagram.com') || rawFoto.includes('fbcdn.net')) {
-      // Usa o NOSSO proxy (/api/image) em vez do viuspy
-      foto = `/api/image?url=${encodeURIComponent(rawFoto)}`;
+      // AQUI ESTÁ A CORREÇÃO: tiramos o "/api/" da frente
+      foto = `https://viuspy.site/image-proxy.php?url=${encodeURIComponent(rawFoto)}`;
     } else {
       foto = rawFoto;
     }
