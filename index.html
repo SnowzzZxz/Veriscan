@@ -368,15 +368,13 @@ function normalizar(user, usernameFallback) {
   const u = user.user || (user.data && user.data.user) || user;
   
   let foto = '';
-  // Pega a URL da foto em qualquer campo que a API devolver
   const rawFoto = u.profile_pic_url || u.profile_pic_url_hd || (u.hd_profile_pic_url_info && u.hd_profile_pic_url_info.url) || u.profile_picture || '';
 
   if (rawFoto) {
     if (rawFoto.includes('cdninstagram.com') || rawFoto.includes('fbcdn.net')) {
-      // Se for do Instagram, joga no proxy do viuspy pra não bloquear
-      foto = `https://viuspy.site/api/image-proxy.php?url=${encodeURIComponent(rawFoto)}`;
+      // Usa o NOSSO proxy (/api/image) em vez do viuspy
+      foto = `/api/image?url=${encodeURIComponent(rawFoto)}`;
     } else {
-      // Se já vier de outro lugar (ou do próprio proxy), usa direto
       foto = rawFoto;
     }
   } else {
