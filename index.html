@@ -331,11 +331,15 @@ document.getElementById('vsModalVip').addEventListener('click',()=>{
   window.location.href='/checkout?u='+encodeURIComponent(ultimoUser);
 });
 
-const VIUSPY_API = 'https://viuspy.site/api/instagram.php';
-
+const VIUSPY_API = '/api/profile';
+  
 async function buscar(u) {
   try {
-    const url = `${VIUSPY_API}?tipo=perfil&username=${encodeURIComponent(u)}`;
+    // Agora a URL fica apenas /api/profile?u=...
+    const url = `${VIUSPY_API}?u=${encodeURIComponent(u)}`;
+    
+    const r = await fetch(url); // Tira os headers, não precisa mais
+    // ... o resto fica igual
     
     const r = await fetch(url, {
       method: 'GET',
