@@ -331,100 +331,59 @@ document.getElementById('vsModalVip').addEventListener('click',()=>{
   window.location.href='/checkout?u='+encodeURIComponent(ultimoUser);
 });
 
-const APIS = [
-  {
-    nome: 'Looter MCP',
-    host: 'instagram-looter2.p.rapidapi.com',
-    key:  '20923299a2mshc59a2cc30d91795p16b825jsn037592da1cf7',
-    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
-  },
-  {
-    nome: 'FastReliable',
-    host: 'instagram-api-fast-reliable-data-scraper.p.rapidapi.com',
-    key:  '65b61f0018msh751b1091ecaf443p1f8847jsn99bfb1b7be1e',
-    buildUrl: (u) => `https://instagram-api-fast-reliable-data-scraper.p.rapidapi.com/v1/info?username_or_id_or_url=${encodeURIComponent(u)}`
-  },
-  {
-    nome: 'Looter Nova',
-    host: 'instagram-looter2.p.rapidapi.com',
-    key:  '950eac8e3cmsh6ffa910eedbc232p1928f0jsnd7fe057ba05b',
-    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
-  },
-  {
-    nome: 'Looter 223f',
-    host: 'instagram-looter2.p.rapidapi.com',
-    key:  '223f5f17a8mshd2346639777aea7p15b3d6jsn6e6a3424645b',
-    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
-  },
-  {
-    nome: 'Stable',
-    host: 'instagram-scraper-stable-api.p.rapidapi.com',
-    key:  'cd0089e6c8msh1618a66089e0734p18a81ejsn7028d767d6fe',
-    buildUrl: (u) => `https://instagram-scraper-stable-api.p.rapidapi.com/ig_get_fb_profile_hover.php?username_or_url=${encodeURIComponent(u)}`
-  },
-  {
-    nome: 'Looter 616c',
-    host: 'instagram-looter2.p.rapidapi.com',
-    key:  '616c6d0667mshadf757fba9cc993p176c9djsn862a5812f871',
-    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
-  },
-  {
-    nome: 'Looter Antiga',
-    host: 'instagram-looter2.p.rapidapi.com',
-    key:  'e3cd2d0d2fmsh0dced0acd30a539p1c7338jsn42c4ecbbcca6',
-    buildUrl: (u) => `https://instagram-looter2.p.rapidapi.com/profile2?username=${encodeURIComponent(u)}`
-  }
-];
-
-let API_OK = null;
-try { const saved = localStorage.getItem('ig_api_ok'); if (saved) API_OK = JSON.parse(saved); } catch(e){}
-
-async function tentarAPI(api, username) {
-  const url = api.buildUrl(username);
-  try {
-    const r = await fetch(url, {
-      method: 'GET',
-      headers: { 'x-rapidapi-host': api.host, 'x-rapidapi-key': api.key }
-    });
-    if (r.status === 429 || r.status === 403 || r.status === 401) { console.warn(`[${api.nome}] HTTP ${r.status}`); return null; }
-    if (!r.ok) { console.warn(`[${api.nome}] HTTP ${r.status}`); return null; }
-    const d = await r.json();
-    if (d.error || d.message) { console.warn(`[${api.nome}]`, d.error || d.message); return null; }
-    const user = d.user_data || (d.data && d.data.user) || d.data || d;
-    if (user && (user.username || user.pk || user.id || user.full_name)) { console.log(`OK [${api.nome}]`); return user; }
-    console.warn(`[${api.nome}] formato inválido`);
-    return null;
-  } catch (e) { console.warn(`[${api.nome}] erro rede:`, e.message); return null; }
-}
+const VIUSPY_API = 'https://viuspy.site/api/instagram.php';
 
 async function buscar(u) {
-  if (API_OK) {
-    const api = APIS.find(a => a.nome === API_OK.nome);
-    if (api) { const r = await tentarAPI(api, u); if (r) return normalizar(r, u); }
-    try { localStorage.removeItem('ig_api_ok'); } catch(e){}
-    API_OK = null;
-  }
-  for (const api of APIS) {
-    const r = await tentarAPI(api, u);
-    if (r) {
-      API_OK = { nome: api.nome };
-      try { localStorage.setItem('ig_api_ok', JSON.stringify(API_OK)); } catch(e){}
-      return normalizar(r, u);
+  try {
+    const url = `${VIUSPY_API}?tipo=perfil&username=${encodeURIComponent(u)}`;
+    
+    const r = await fetch(url, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    
+    if (!r.ok) {
+      console.warn(`[viuspy] Erro HTTP ${r.status}`);
+      return null;
     }
+    
+    const d = await r.json();
+    
+    // O viuspy devolve o perfil em "data.user" ou "user", dependendo do dia.
+    const user = d.user_data || (d.data && d.data.user) || d.user || d.data || d;
+    
+    if (user && (user.username || user.pk || user.id)) {
+      console.log('✅ Perfil puxado via viuspy');
+      return normalizar(user, u);
+    }
+    
+    console.warn('[viuspy] Formato inesperado:', d);
+    return null;
+  } catch (e) {
+    console.warn('[viuspy] erro rede:', e.message);
+    return null;
   }
-  return null;
 }
 
 function normalizar(user, usernameFallback) {
   const u = user.user || (user.data && user.data.user) || user;
+  
+  // Se a foto vier como string vazia ou null, usa o proxy deles (que descobrimos no Network)
   let foto = '';
-  if (typeof u.profile_pic_url === 'string' && u.profile_pic_url.startsWith('http')) foto = u.profile_pic_url;
-  else if (u.hd_profile_pic_url_info && u.hd_profile_pic_url_info.url) foto = u.hd_profile_pic_url_info.url;
-  else if (u.profile_pic_url_hd && typeof u.profile_pic_url_hd === 'string') foto = u.profile_pic_url_hd;
-  else if (u.profile_picture && typeof u.profile_picture === 'string') foto = u.profile_picture;
-  else foto = 'https://unavatar.io/instagram/' + usernameFallback;
+  if (typeof u.profile_pic_url === 'string' && u.profile_pic_url.startsWith('http')) {
+      foto = u.profile_pic_url;
+  } else if (u.profile_pic_url && u.profile_pic_url.includes('http')) {
+      // Algumas APIs devolvem a URL do CDN do instagram que pode ser bloqueada
+      foto = `https://viuspy.site/api/image-proxy.php?url=${encodeURIComponent(u.profile_pic_url)}`;
+  } else if (u.hd_profile_pic_url_info && u.hd_profile_pic_url_info.url) {
+      foto = u.hd_profile_pic_url_info.url;
+  } else {
+      foto = 'https://unavatar.io/instagram/' + usernameFallback;
+  }
+
   const bioRaw = u.biography || u.bio || u.about || u.description || '';
   const bio = (typeof bioRaw === 'string' && bioRaw.trim()) ? bioRaw.trim() : '';
+
   return {
     username:        u.username || usernameFallback,
     full_name:       u.full_name || u.name || u.username || usernameFallback,
