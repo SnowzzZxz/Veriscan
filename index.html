@@ -332,14 +332,10 @@ document.getElementById('vsModalVip').addEventListener('click',()=>{
 });
 
 const VIUSPY_API = '/api/profile';
-  
+
 async function buscar(u) {
   try {
-    // Agora a URL fica apenas /api/profile?u=...
     const url = `${VIUSPY_API}?u=${encodeURIComponent(u)}`;
-    
-    const r = await fetch(url); // Tira os headers, não precisa mais
-    // ... o resto fica igual
     
     const r = await fetch(url, {
       method: 'GET',
@@ -347,24 +343,23 @@ async function buscar(u) {
     });
     
     if (!r.ok) {
-      console.warn(`[viuspy] Erro HTTP ${r.status}`);
+      console.warn(`[Proxy] Erro HTTP ${r.status}`);
       return null;
     }
     
     const d = await r.json();
     
-    // O viuspy devolve o perfil em "data.user" ou "user", dependendo do dia.
     const user = d.user_data || (d.data && d.data.user) || d.user || d.data || d;
     
     if (user && (user.username || user.pk || user.id)) {
-      console.log('✅ Perfil puxado via viuspy');
+      console.log('✅ Perfil puxado com sucesso');
       return normalizar(user, u);
     }
     
-    console.warn('[viuspy] Formato inesperado:', d);
+    console.warn('[Proxy] Formato inesperado:', d);
     return null;
   } catch (e) {
-    console.warn('[viuspy] erro rede:', e.message);
+    console.warn('[Proxy] erro rede:', e.message);
     return null;
   }
 }
@@ -372,12 +367,10 @@ async function buscar(u) {
 function normalizar(user, usernameFallback) {
   const u = user.user || (user.data && user.data.user) || user;
   
-  // Se a foto vier como string vazia ou null, usa o proxy deles (que descobrimos no Network)
   let foto = '';
   if (typeof u.profile_pic_url === 'string' && u.profile_pic_url.startsWith('http')) {
       foto = u.profile_pic_url;
   } else if (u.profile_pic_url && u.profile_pic_url.includes('http')) {
-      // Algumas APIs devolvem a URL do CDN do instagram que pode ser bloqueada
       foto = `https://viuspy.site/api/image-proxy.php?url=${encodeURIComponent(u.profile_pic_url)}`;
   } else if (u.hd_profile_pic_url_info && u.hd_profile_pic_url_info.url) {
       foto = u.hd_profile_pic_url_info.url;
